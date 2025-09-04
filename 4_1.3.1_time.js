@@ -2,8 +2,8 @@
 const trainerSettings = {
     title: "Тренажёр: Время на часах",
     subtitle: "Внимательно читайте условия задач и давайте ответ в требуемом формате.",
-    problemsToSelect: 5,
-    totalTime: 1200 
+    problemsToSelect: 4,
+    totalTime: 900 
 };
 
 // --- УТИЛИТЫ ---
@@ -138,3 +138,4 @@ function isAnswerCorrect(userAnswer, task, vars) {
         correctAnswerText: String(correctAnswer)
     };
 }
+
