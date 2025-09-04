@@ -35,7 +35,7 @@ const allTasks = [
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
             const time2 = `${String(n2).padStart(2, '0')}:${String(k2).padStart(2, '0')}`;
             const latePhrase = `${t} ${declineWord(t, ['минуту', 'минуты', 'минут'])}`;
-            const problemText = `Автобус выехал с автовокзала в ${time1} и должен был прибыть в пункт назначения в ${time2}. Однако он попал в пробку и прибыл на ${latePhrase} позже. Сколько времени автобус был в пути? <br><i>Дайте ответ в формате чч:мм.</i>`;
+            const problemText = `Автобус выехал с автовокзала в ${time1} и должен был прибыть в пункт назначения в ${time2}. Однако он попал в пробку и прибыл на ${latePhrase} позже. Сколько времени автобус был в пути? <br><i>Дайте ответ в формате чч:мм, например, 07:20. Если не можете найти двоеточие - просто скопируйте и вставьте.</i>`;
             return { variables: { n1, k1, n2, k2, t }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -113,7 +113,7 @@ const allTasks = [
             const t2 = getRandomInt(4, 14);
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
             const time2 = `${String(n2).padStart(2, '0')}:${String(k2).padStart(2, '0')}`;
-            const problemText = `${name1.nom} вышел гулять в ${time1}, а ${name2.nom} на ${t1} ${declineWord(t1,['минуту','минуты','минут'])} позже. ${name2.nom} вернулась домой в ${time2}, и она гуляла на ${t2} ${declineWord(t2,['минуту','минуты','минут'])} меньше ${name1.gen}. Во сколько вернулся домой ${name1.nom}? <br><i>Дайте ответ в формате чч:мм.</i>`;
+            const problemText = `${name1.nom} вышел гулять в ${time1}, а ${name2.nom} на ${t1} ${declineWord(t1,['минуту','минуты','минут'])} позже. ${name2.nom} вернулась домой в ${time2}, и она гуляла на ${t2} ${declineWord(t2,['минуту','минуты','минут'])} меньше ${name1.gen}. Во сколько вернулся домой ${name1.nom}? <br><i>Дайте ответ в формате чч:мм, например, 07:20. Если не можете найти двоеточие - просто скопируйте и вставьте.</i>`;
             return { variables: { n1, k1, n2, k2, t1, t2 }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -138,4 +138,5 @@ function isAnswerCorrect(userAnswer, task, vars) {
         correctAnswerText: String(correctAnswer)
     };
 }
+
 
