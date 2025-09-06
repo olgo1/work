@@ -9,11 +9,10 @@ function generateProblem() {
     task: 1
   };
   const mValues = [3, 4, 6, 7, 8, 9];
-  const kValues = [5, 6];
-  let m, k, a, b, n, result;
+  const k = 5;
+  let m, a, b, n, result;
   while (true) {
     m = mValues[Math.floor(Math.random() * mValues.length)];
-    k = kValues[Math.floor(Math.random() * kValues.length)];
     a = Math.floor(Math.random() * 90) + 10;
     const mBig = BigInt(m);
     const aBig = BigInt(a);
@@ -27,8 +26,16 @@ function generateProblem() {
       while (bCandidate < 10n) {
         bCandidate += mBig;
       }
-      if (bCandidate <= 99n) {
-        b = bCandidate;
+      let foundB = false;
+      while (bCandidate <= 99n) {
+        if (bCandidate % 10n !== 0n) {
+          b = bCandidate;
+          foundB = true;
+          break;
+        }
+        bCandidate += mBig;
+      }
+      if (foundB) {
         n = aTimesPowerOf10 + b;
         result = n / mBig;
         break;
@@ -71,12 +78,11 @@ function generateProblem() {
       const mBig = BigInt(m);
       const aBig = BigInt(a);
       const aTimesPowerOf10 = aBig * (10n ** BigInt(k));
-      const remainder = aTimesPowerOf10 % mBig;
-      let bCandidate = (mBig - remainder) % mBig;
-      if (bCandidate === 0n) {
+      let bCandidate = (mBig - (aTimesPowerOf10 % mBig)) % mBig;
+      if (bCandidate === 0n) { 
         bCandidate = mBig;
       }
-      if (bCandidate < 10n && bCandidate % 10n !== 0n) {
+      if (bCandidate < 10n && bCandidate !== 0n) {
         b = bCandidate;
         n = aTimesPowerOf10 + b;
         result = n / mBig;
@@ -94,8 +100,6 @@ function generateProblem() {
     answer: result.toString(),
   };
 }
-const problem = generateProblem();
-console.log(problem);
 
 function generateMultiplicationProblem() {
   const problemInfo = {
@@ -108,7 +112,47 @@ function generateMultiplicationProblem() {
     task: 1
   };
   const nValues = [3, 4, 6, 7, 8, 9];
-  const kValues = [5, 6];
+  const kValues = [4, 5];
+  let n, k, a, m, result;
+  while (true) {
+    n = nValues[Math.floor(Math.random() * nValues.length)];
+    k = kValues[Math.floor(Math.random() * kValues.length)];
+    a = Math.floor(Math.random() * 80) + 11;
+    const req1Passed = a % n !== 0;
+    const req2Passed = a % 10 !== 0;
+    if (req1Passed && req2Passed) {
+      const nBig = BigInt(n);
+      const aBig = BigInt(a);
+      const aTimesPowerOf10 = aBig * (10n ** BigInt(k));
+      m = aTimesPowerOf10 / nBig + 1n;
+      result = nBig * m;
+      break;
+    }
+  }
+  return {
+    n: n,
+    k: k,
+    a: a,
+    m: m.toString(),
+    task: `${n} * ${m.toString()}`,
+    answer: result.toString(),
+  };
+}
+const problem = generateMultiplicationProblem();
+console.log(problem);
+
+function generateMultiplicationProblem() {
+  const problemInfo = {
+    type: "4_1.1.3_2.2",
+    class: 4,
+    course: "1 (арифметика натуральных чисел)",
+    module: "1 (счёт. Сложение и вычитание многозначных, деление и умножение на однозначное)",
+    lesson: "3 (числа с большим количеством нулей)",
+    taskType: "2 (умножение многозначного на однозначное = sparse number)",
+    task: 2
+  };
+  const nValues = [3, 4, 6, 7, 8, 9];
+  const kValues = [4, 5]; // Изменено здесь
   let n, k, a, m, result;
   while (true) {
     n = nValues[Math.floor(Math.random() * nValues.length)];
@@ -139,53 +183,12 @@ console.log(problem);
 
 function generateInverseMultiplication() {
   const problemInfo = {
-    type: "4_1.1.3_2.2",
-    class: 4,
-    course: "1 (арифметика натуральных чисел)",
-    module: "1 (счёт. Сложение и вычитание многозначных, деление и умножение на однозначное)",
-    lesson: "3 (числа с большим количеством нулей)",
-    taskType: "2 (умножение многозначного на однозначное =  sparse number)",
-    task: 2
-  };
-  const nValues = [3, 4, 6, 7, 8, 9];
-  const kValues = [3, 4];
-  let n, k, a, b, p, m;
-  while (true) {
-    n = nValues[Math.floor(Math.random() * nValues.length)];
-    k = kValues[Math.floor(Math.random() * kValues.length)];
-    a = Math.floor(Math.random() * 900) + 100;
-    const digits = a.toString().split('');
-    const uniqueDigits = new Set(digits);
-    if (uniqueDigits.size >= 2) {
-      const nBig = BigInt(n);
-      const kBig = BigInt(k);
-      const aBig = BigInt(a);
-      const aTimesPowerOf10 = aBig * (10n ** kBig);
-      b = (nBig - (aTimesPowerOf10 % nBig)) % nBig;
-      p = aTimesPowerOf10 + b;
-      m = p / nBig;
-      break;
-    }
-  }
-  return {
-    n: n,
-    m: m.toString(),
-    task: `${m.toString()} * ${n}`,
-    answer: p.toString(),
-    details: { k: k, a: a, b: b.toString() }
-  };
-}
-const problem = generateInverseMultiplication();
-console.log(problem);
-
-function generateInverseMultiplication() {
-  const problemInfo = {
     type: "4_1.1.3_2.3",
     class: 4,
     course: "1 (арифметика натуральных чисел)",
     module: "1 (счёт. Сложение и вычитание многозначных, деление и умножение на однозначное)",
     lesson: "3 (числа с большим количеством нулей)",
-    taskType: "2 (умножение многозначного на однозначное =  sparse number)",
+    taskType: "2 (умножение многозначного на однозначное = sparse number)",
     task: 3
   };
   const nValues = [3, 6, 7, 9];
@@ -196,7 +199,7 @@ function generateInverseMultiplication() {
     k = kValues[Math.floor(Math.random() * kValues.length)];
     a = Math.floor(Math.random() * 89) + 11;
     const digits = a.toString().split('');
-    if (digits[0] !== digits[1]) {
+    if (digits[0] !== digits[1]) { // Условие на разные цифры в "голове"
       const nBig = BigInt(n);
       const kBig = BigInt(k);
       const aBig = BigInt(a);
@@ -211,12 +214,9 @@ function generateInverseMultiplication() {
     n: n,
     m: m.toString(),
     task: `${m.toString()} * ${n}`,
-    answer: p.toString(),
-    details: { k: k, a: a, b: b.toString() }
+    answer: p.toString()
   };
 }
-const problem = generateInverseMultiplication();
-console.log(problem);
 
 function generateProblem() {
   const problemInfo = {
@@ -260,35 +260,24 @@ function generateAdditionProblem() {
     course: "1 (арифметика натуральных чисел)",
     module: "1 (счёт. Сложение и вычитание многозначных, деление и умножение на однозначное)",
     lesson: "3 (числа с большим количеством нулей)",
-    taskType: "3 (сумма или разность =  sparse number)",
+    taskType: "3 (сумма или разность = sparse number)",
     task: 1
   };
-  const kZerosValues = [3, 4];
-  let kZeros, s1Head, s2Head, s1Tail, s2Tail, s1, s2, S;
-  while (true) {
-    kZeros = kZerosValues[Math.floor(Math.random() * kZerosValues.length)];
-    s1Head = Math.floor(Math.random() * 99) + 1;
-    s2Head = Math.floor(Math.random() * 99) + 1;
-    if ((s1Head + s2Head + 1) % 10 !== 0) {
-      const powerOf10 = 10 ** kZeros;
-      s1Tail = Math.floor(Math.random() * (powerOf10 - 1)) + 1;
-      s2Tail = powerOf10 - s1Tail;
-      s1 = s1Head * powerOf10 + s1Tail;
-      s2 = s2Head * powerOf10 + s2Tail;
-      S = s1 + s2;
-      break;
-    }
-  }
+  const kZeros = [3, 4][Math.floor(Math.random() * 2)];
+  const S_head = Math.floor(Math.random() * 180) + 20;
+  const S_tail = Math.floor(Math.random() * 989) + 10;
+  const S = BigInt(S_head) * (10n ** BigInt(kZeros)) + BigInt(S_tail);
+  const a1_min = 1000n;
+  const a1_max = S - 1000n;
+  const a1 = a1_min + BigInt(Math.floor(Math.random() * Number(a1_max - a1_min + 1n)));
+  const a2 = S - a1;
   return {
-    s1: s1,
-    s2: s2,
-    task: `${s1} + ${s2}`,
-    answer: S,
-    details: { kZeros, s1Head, s2Head, s1Tail, s2Tail },
+    s1: a1.toString(),
+    s2: a2.toString(),
+    task: `${a1.toString()} + ${a2.toString()}`,
+    answer: S.toString(),
   };
 }
-const problem = generateAdditionProblem();
-console.log(problem);
 
 function generateSubtractionProblem() {
   const problemInfo = {
