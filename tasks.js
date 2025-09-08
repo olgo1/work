@@ -146,10 +146,12 @@ function p_4$1_1_3$2_4() {
 }
 
 function p_4$1_1_3$3_1() {
-  const problemInfo = { type: "4_1.1.3_3.1", class: 4, course: "1 (арифметика натуральных чисел)", module: "1 (счёт. Сложение и вычитание многозначных, деление и умножение на однозначное)", lesson: "3 (числа с большим количеством нулей)", taskType: "3 (сумма или разность = sparse number)", task: 1 };
-  const kZeros = getRandomElement([3, 4]);
+  const problemInfo = { type: "4_1.1.3_3.1", class: 4, course: "1 (арифметика натуральных чисел)", module: "1 (счёт. Сложение и вычитание многозначных, деление и умножение на однозначное)", lesson: "3 (числа с большим количеством нулей)", taskType: "3 (сумма или разность = sparse number, новое правило)", task: 1 };
+  const kZeros = getRandomElement([5, 6]);
+  const maxTailDigits = kZeros - 3;
+  const maxTailValue = (10 ** maxTailDigits) - 1;
+  const S_tail = getRandomInt(1, maxTailValue);
   const S_head = getRandomInt(20, 199);
-  const S_tail = getRandomInt(10, 999);
   const S = BigInt(S_head) * (10n ** BigInt(kZeros)) + BigInt(S_tail);
   const a1_min = 1000n;
   const a1_max = S - 1000n;
