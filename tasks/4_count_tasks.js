@@ -1,3 +1,76 @@
+
+
+{
+    number: "4_count_4",
+
+    // Примеры вида a : b : c + d (b кратно c)
+
+    tags: ["4_класс", "счёт", "натуральные_числа", "многозначное_плюс_многозначное", "многозначное_минус_многозначное", "многозначное_делить_однозначное"],
+    generate: () => {
+        const generateConstrainedNumber = (min, max, nonMultipleOf = 1) => {
+            let num;
+            if (min > max) return min; // Failsafe
+            do {
+                num = getRandomInt(min, max);
+            } while (num % nonMultipleOf === 0);
+            return num;
+        };
+
+        let a, b, c, d, q, opSign;
+        
+        // Карта возможных значений c для каждого b (c не равно 2, c - делитель b)
+        const c_options = {
+            6: [3, 6],
+            8: [4, 8],
+            9: [3, 9]
+        };
+
+        let lower_bound_q, upper_bound_q;
+        
+        // Внешний цикл для редких случаев, когда сгенерировать пример с первого раза невозможно
+        do {
+            // 1. Генерируем b, c, d и оператор
+            b = getRandomElement([6, 8, 9]);
+            c = getRandomElement(c_options[b]);
+            d = generateConstrainedNumber(1000, 9999, 10); // d - четырехзначное, не кратное 10
+            opSign = getRandomElement([-1, 1]);
+
+            // 2. Вычисляем корректный диапазон для "базового частного" q
+            const product_bc = b * c;
+            upper_bound_q = Math.floor(99999 / product_bc); // Верхняя граница, чтобы a было 5-значным
+            
+            let lower_bound_op = 1;
+            if (opSign === -1) {
+                lower_bound_op = d + 1; // Нижняя граница, чтобы результат вычитания был > 0
+            }
+            
+            const lower_bound_digits = Math.ceil(10000 / product_bc); // Нижняя граница, чтобы a было 5-значным
+            lower_bound_q = Math.max(lower_bound_digits, lower_bound_op);
+
+        } while (lower_bound_q >= upper_bound_q); // Перезапуск, если нет валидного диапазона для q
+
+        // 3. Генерируем a из гарантированно правильного диапазона
+        do {
+            q = getRandomInt(lower_bound_q, upper_bound_q);
+            a = q * b * c;
+        } while (a % 100 === 0);
+
+        // 4. Формируем текст задачи
+        const opString = opSign === 1 ? '+' : '-';
+        const problemText = `${a} : ${b} : ${c} ${opString} ${d}`;
+        
+        return { variables: { a, b, c, d, opSign }, problemText };
+    },
+    calculateAnswer: (vars) => {
+        const intermediateResult = (vars.a / vars.b) / vars.c;
+        if (vars.opSign === 1) {
+            return intermediateResult + vars.d;
+        } else {
+            return intermediateResult - vars.d;
+        }
+    }
+}
+
 {
     number: "4_count_3",
 
