@@ -1,4 +1,66 @@
 {
+    number: "4_count_6",
+
+    // Примеры вида a : b - c (a шестизначное)
+        
+    tags: ["4_класс", "счёт", "вычитание_многозначных", "деление_на_однозначное", "перенос_разряда"],
+    generate: () => {
+        // Вспомогательная функция для проверки, есть ли перенос разряда при вычитании
+        const hasBorrow = (minuend, subtrahend) => {
+            const mStr = String(minuend);
+            // Дополняем c нулями спереди, чтобы длины строк совпадали
+            const sStr = String(subtrahend).padStart(mStr.length, '0');
+            
+            let borrow = 0;
+            for (let i = mStr.length - 1; i >= 0; i--) {
+                let mDigit = parseInt(mStr[i]) - borrow;
+                let sDigit = parseInt(sStr[i]);
+                if (mDigit < sDigit) {
+                    return true; // Найден перенос разряда!
+                }
+                borrow = mDigit < sDigit ? 1 : 0;
+            }
+            return false; // Переносов не было
+        };
+
+        let a, b, c, q;
+        let attempts = 0;
+        
+        do {
+            // 1. Генерируем делитель b и частное q
+            b = getRandomElement([5, 6, 7, 8, 9]);
+            // Выбираем q так, чтобы a было шестизначным
+            const min_q = Math.ceil(100000 / b);
+            const max_q = Math.floor(999999 / b);
+            q = getRandomInt(min_q, max_q);
+
+            // 2. Вычисляем a, которое гарантированно делится на b
+            a = q * b;
+
+            // 3. Генерируем c, которое меньше q, и проверяем условие переноса разряда
+            // Генерируем c в диапазоне, где перенос вероятен (от половины q до q)
+            c = getRandomInt(Math.floor(q / 2), q - 1);
+            
+            attempts++;
+            // Если за 50 попыток не нашлось c с переносом, начинаем всю генерацию заново
+            if (attempts > 50) {
+                attempts = 0;
+                continue;
+            }
+
+        } while (!hasBorrow(q, c));
+
+        const problemText = `${a} : ${b} - ${c}`;
+        
+        return { variables: { a, b, c }, problemText };
+    },
+    calculateAnswer: (vars) => {
+        return (vars.a / vars.b) - vars.c;
+    }
+}
+
+
+{
     number: "4_count_5",
 
     // Примеры вида a : b + c + d + e со всеми перестановками
