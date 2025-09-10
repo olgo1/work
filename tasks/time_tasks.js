@@ -97,14 +97,7 @@ const timeTasks = [
     }
 ];
 
-// --- CHECK FUNCTION (required by trainer.js) ---
-function isAnswerCorrect(userAnswer, task, vars) {
-    const correctAnswer = task.calculateAnswer(vars);
-    return {
-        correct: String(userAnswer).trim() === String(correctAnswer),
-        correctAnswerText: String(correctAnswer)
-    };
-}
+
 
 // Add these tasks to the global registry
 window.taskRegistry.push(...timeTasks);

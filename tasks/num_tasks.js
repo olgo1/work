@@ -37,7 +37,7 @@ const numTasks = [
             return String(result);
         }
     },
-]
+];
 
 // Add these tasks to the global registry
 window.taskRegistry.push(...numTasks);

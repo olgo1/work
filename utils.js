@@ -10,6 +10,16 @@ function declineWord(number, words) {
     return words[2];
 }
 
+// --- CHECK FUNCTION (required by trainer.js) ---
+function isAnswerCorrect(userAnswer, task, vars) {
+    const correctAnswer = task.calculateAnswer(vars);
+    return {
+        correct: String(userAnswer).trim() === String(correctAnswer),
+        correctAnswerText: String(correctAnswer)
+    };
+}
+
 window.getRandomInt = getRandomInt;
 window.getRandomElement = getRandomElement;
 window.declineWord = declineWord;
+window.isAnswerCorrect = isAnswerCorrect;
