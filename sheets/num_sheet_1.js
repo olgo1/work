@@ -11,7 +11,7 @@ const problemSelectors = [
     {
         count: 1, // Взять 1 случайную задачу...
         filter: {
-            number: 3.1
+            number: "3.1"
         }
     },
 

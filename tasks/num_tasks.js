@@ -1,7 +1,7 @@
 const numTasks = [
     {
         type: "Деление (многозначный делитель)",
-        number: 3.1,
+        number: "3.1",
         generate: () => {
             // --- Шаг 1: Выбор частного (q) ---
             const possibleQuotients = [3, 4, 6, 7, 8, 9];

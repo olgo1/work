@@ -4,7 +4,7 @@
 const timeTasks = [
     {
         type: "Время в пути (позже)",
-        number: 1.1,
+        number: "1.1",
         tags: ["время", "автобус", "пробки", "2_действия"],
         generate: () => {
             const n1 = getRandomInt(17, 20);
@@ -29,7 +29,7 @@ const timeTasks = [
     },
     {
         type: "Время в пути (раньше)",
-        number: 1.2,
+        number: "1.2",
         tags: ["время", "автобус", "2_действия"],
         generate: () => {
             const n1 = getRandomInt(17, 20);
@@ -51,7 +51,7 @@ const timeTasks = [
     },
     {
         type: "Логика: Время прогулки (1)",
-        number: 2.1,
+        number: "2.1",
         tags: ["время", "логика", "много_действий"],
         generate: () => {
             const N1 = [{ nom: "Маша", gen: "Маши" }, { nom: "Лена", gen: "Лены" }];
@@ -71,7 +71,7 @@ const timeTasks = [
     },
     {
         type: "Логика: Время прогулки (2)",
-        number: 2.2,
+        number: "2.2",
         tags: ["время", "логика", "много_действий", "формат_чч:мм"],
         generate: () => {
             const N1 = [{ nom: "Ратмир", gen: "Ратмира" }, { nom: "Егор", gen: "Егора" }];
