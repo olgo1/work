@@ -40,4 +40,4 @@ const numTasks = [
 ]
 
 // Add these tasks to the global registry
-window.taskRegistry.push(...timeTasks);
+window.taskRegistry.push(...numTasks);
