@@ -93,23 +93,37 @@ document.addEventListener('DOMContentLoaded', () => {
             return `${m}:${s}`;
         }
 
+        // --- ИЗМЕНЁННЫЙ БЛОК ТАЙМЕРА ---
         function startTimer() {
-            if (state.timerId) clearInterval(state.timerId);
+            if (state.timerId) clearInterval(state.timerId); // Очищаем старый таймер
             state.isFinished = false;
-            let timeLeft = trainerSettings.totalTime || 600;
-            elements.timer.textContent = formatTime(timeLeft);
+
+            const totalTimeMs = (trainerSettings.totalTime || 600) * 1000;
+            const startTime = Date.now();
+
+            elements.timer.textContent = formatTime(totalTimeMs / 1000);
+
             state.timerId = setInterval(() => {
                 if (state.isFinished) {
                     clearInterval(state.timerId);
                     return;
                 }
-                timeLeft--;
-                elements.timer.textContent = formatTime(timeLeft);
-                if (timeLeft <= 0) {
+                
+                const elapsedTime = Date.now() - startTime;
+                const remainingTimeMs = totalTimeMs - elapsedTime;
+
+                if (remainingTimeMs <= 0) {
                     clearInterval(state.timerId);
+                    elements.timer.textContent = '00:00';
                     checkAnswers();
+                    return;
                 }
-            }, 1000);
+
+                // Округляем до ближайшей секунды вверх для отображения
+                const remainingSeconds = Math.ceil(remainingTimeMs / 1000);
+                elements.timer.textContent = formatTime(remainingSeconds);
+                
+            }, 250); // Интервал обновления для плавности
         }
 
         /**
