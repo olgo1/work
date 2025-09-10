@@ -1,4 +1,122 @@
+{
+    number: "4_count_5",
 
+    // Примеры вида a : b + c + d + e со всеми перестановками
+        
+    tags: ["4_класс", "счёт", "натуральные_числа", "многозначное_плюс_многозначное", "многозначное_минус_многозначное", "многозначное_делить_однозначное", "порядок_действий"],
+    generate: () => {
+        const generateConstrainedNumber = (min, max) => {
+            if (min > max) throw new Error("Invalid range for number generation");
+            return getRandomInt(min, max);
+        };
+
+        let a, b, c, d, e, orderIds, operators, problemText;
+        let success = false;
+
+        while (!success) {
+            try {
+                const cde_blocks = ['c', 'd', 'e'];
+                const first_block_id = getRandomElement(cde_blocks);
+                const remaining_ids = ['div', ...cde_blocks.filter(id => id !== first_block_id)];
+                
+                for (let i = remaining_ids.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [remaining_ids[i], remaining_ids[j]] = [remaining_ids[j], remaining_ids[i]];
+                }
+                
+                orderIds = [first_block_id, ...remaining_ids];
+
+                const opChoices = [['+', '+', '-'], ['+', '-', '+'], ['-', '+', '+'], ['+', '-', '-'], ['-', '+', '-'], ['-', '-', '+'], ['-', '-', '-']];
+                operators = getRandomElement(opChoices);
+                
+                // Designate which of c, d, e will be three-digit
+                const threeDigitBlock = getRandomElement(['c', 'd', 'e']);
+
+                let currentValue = 0;
+                const generatedValues = {};
+
+                for (let i = 0; i < orderIds.length; i++) {
+                    const blockId = orderIds[i];
+                    const op = (i === 0) ? '+' : operators[i - 1];
+                    let newValue;
+
+                    const isThreeDigit = (blockId === threeDigitBlock);
+                    const minVal = isThreeDigit ? 100 : 10;
+                    const maxVal = isThreeDigit ? 999 : 99;
+
+                    if (op === '+') {
+                        if (blockId === 'div') {
+                            b = getRandomElement([6, 7, 8, 9]);
+                            const min_q = Math.ceil(1000 / b);
+                            const max_q = Math.floor(9999 / b);
+                            const q = generateConstrainedNumber(min_q, max_q);
+                            a = q * b;
+                            newValue = q;
+                        } else {
+                            newValue = generateConstrainedNumber(minVal, maxVal);
+                        }
+                    } else { // op === '-'
+                        const maxSubtract = currentValue - 1;
+                        if (maxSubtract < minVal) throw new Error("Intermediate value too small");
+
+                        if (blockId === 'div') {
+                             b = getRandomElement([6, 7, 8, 9]);
+                             const min_q = Math.ceil(1000 / b);
+                             const max_q = Math.min(Math.floor(9999 / b), maxSubtract);
+                             const q = generateConstrainedNumber(min_q, max_q);
+                             a = q * b;
+                             newValue = q;
+                        } else {
+                             newValue = generateConstrainedNumber(minVal, Math.min(maxVal, maxSubtract));
+                        }
+                    }
+                    
+                    generatedValues[blockId] = newValue;
+                    if (op === '+') currentValue += newValue; else currentValue -= newValue;
+                }
+                
+                c = generatedValues['c'];
+                d = generatedValues['d'];
+                e = generatedValues['e'];
+
+                const strings = {
+                    div: `${a} : ${b}`,
+                    c: `${c}`,
+                    d: `${d}`,
+                    e: `${e}`
+                };
+                problemText = strings[orderIds[0]];
+                problemText += ` ${operators[0]} ${strings[orderIds[1]]}`;
+                problemText += ` ${operators[1]} ${strings[orderIds[2]]}`;
+                problemText += ` ${operators[2]} ${strings[orderIds[3]]}`;
+                
+                success = true;
+
+            } catch (error) {
+                success = false;
+            }
+        }
+
+        return { variables: { a, b, c, d, e, orderIds, operators }, problemText };
+    },
+    calculateAnswer: (vars) => {
+        const values = {
+            div: vars.a / vars.b,
+            c: vars.c,
+            d: vars.d,
+            e: vars.e
+        };
+
+        let result = values[vars.orderIds[0]];
+        const [op1, op2, op3] = vars.operators;
+        
+        if (op1 === '+') result += values[vars.orderIds[1]]; else result -= values[vars.orderIds[1]];
+        if (op2 === '+') result += values[vars.orderIds[2]]; else result -= values[vars.orderIds[2]];
+        if (op3 === '+') result += values[vars.orderIds[3]]; else result -= values[vars.orderIds[3]];
+
+        return result;
+    }
+}
 
 {
     number: "4_count_4",
