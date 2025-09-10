@@ -1,3 +1,5 @@
+const 4countTasks = [
+
 {
     number: "4_count_6",
 
@@ -530,3 +532,6 @@
         return result;
     }
 }
+];
+
+window.taskRegistry.push(...4countTasks);
