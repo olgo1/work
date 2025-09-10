@@ -1,6 +1,427 @@
 const _4countTasks = [
 
 {
+    number: "4_count_12",
+
+    // Сложение и вычитание трёх чисел; одно из них либо промежуточный результат - spare num
+
+    tags: ["4_класс", "счёт", "сложение_многозначных", "вычитание_многозначных", "перенос_разряда", "sparse_nums", "натуральные числа"],
+    
+    generate: () => {
+        // --- Вспомогательные функции ---
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
+        const generateConstrainedNumber = (min, max, nonMultipleOf = 1) => {
+            let num;
+            if (min > max) return null;
+            do {
+                num = getRandomInt(min, max);
+            } while (num % nonMultipleOf === 0);
+            return num;
+        };
+        const countBorrows = (minuend, subtrahend) => {
+            const mStr = String(minuend);
+            const sStr = String(subtrahend).padStart(mStr.length, '0');
+            let borrowCount = 0;
+            let borrow = 0;
+            for (let i = mStr.length - 1; i >= 0; i--) {
+                let mDigit = parseInt(mStr[i]) - borrow;
+                let sDigit = parseInt(sStr[i]);
+                if (mDigit < sDigit) {
+                    borrowCount++;
+                    borrow = 1;
+                } else {
+                    borrow = 0;
+                }
+            }
+            return borrowCount;
+        };
+
+        const variant = getRandomInt(1, 3);
+        let a, b, c, problemText;
+
+        if (variant === 1) {
+            // --- ИСПРАВЛЕННЫЙ АЛГОРИТМ ДЛЯ ТИПА 1 ---
+            let S;
+            do {
+                // 1. Конструируем ПЯТИЗНАЧНУЮ сумму S вида X000Y
+                const S_head = getRandomInt(2, 9); // Голова от 2 до 9
+                const S_tail = getRandomInt(1, 9);   // Хвост от 1 до 9
+                S = S_head * 10000 + S_tail;       // Например, 80003
+
+                // 2. Генерируем 'a' как 5-значное число, 'b' получится 4-значным
+                // (S - 1000) гарантирует, что b будет не меньше 1000
+                a = getRandomInt(10000, S - 1000); 
+                b = S - a;
+
+                // 3. Генерируем 'c' с проверкой на 2 заёма и положительный результат
+                let attempts = 0;
+                do {
+                    // Убеждаемся, что диапазон для c валиден
+                    if (S - 5001 < 1000) { S = null; break; }
+                    c = getRandomInt(1000, S - 5001); // c - 4-х или 5-значное
+                    attempts++;
+                    if (attempts > 50) { S = null; break; }
+                } while (countBorrows(S, c) < 2);
+
+            } while (!S);
+            
+            problemText = `${a} + ${b} - ${c}`;
+
+        } else if (variant === 2) {
+            // --- ТИП 2: a - b - c (без изменений) ---
+            let R1;
+            do {
+                a = getRandomInt(10, 99) * 1000;
+                b = generateConstrainedNumber(100, 999, 10);
+                R1 = a - b;
+            } while (!String(R1).includes('00'));
+
+            let attempts = 0;
+            do {
+                const min_c = 1000;
+                const max_c = R1 - 1;
+                if(max_c < min_c) { R1 = null; break; }
+                c = getRandomInt(min_c, max_c);
+                attempts++;
+                if (attempts > 50) { R1 = null; break; }
+            } while (countBorrows(R1, c) < 1);
+            if (!R1) { return this.generate(); }
+
+            problemText = `${a} - ${b} - ${c}`;
+
+        } else {
+            // --- ТИП 3: a - b + c (без изменений) ---
+            do {
+                a = getRandomInt(20, 99) * 1000;
+                b = generateConstrainedNumber(1000, 9999, 10);
+                if (a <= b) continue;
+
+                const R_final_head = getRandomInt(10, 99);
+                const R_final_tail = getRandomInt(1, 999);
+                const R_final = R_final_head * 10000 + R_final_tail;
+                
+                const R1 = a - b;
+                c = R_final - R1;
+            } while (c < 1000 || c > 99999);
+            
+            problemText = `${a} - ${b} + ${c}`;
+        }
+        
+        return { variables: { a, b, c, variant }, problemText };
+    },
+
+    calculateAnswer: (vars) => {
+        if (vars.variant === 1) {
+            return vars.a + vars.b - vars.c;
+        } else if (vars.variant === 2) {
+            return vars.a - vars.b - vars.c;
+        } else { // variant === 3
+            return vars.a - vars.b + vars.c;
+        }
+    }
+},
+
+{
+    number: "4_count_11",
+    tags: ["4_класс", "счёт", "вычитание_многозначных", "перенос_разряда", "sparse_nums", "натуральные_числа"],
+    
+    generate: () => {
+        const u_digits = []; // Цифры уменьшаемого
+        const v_digits = []; // Цифры вычитаемого
+        const r_digits = []; // Цифры итоговой разности
+        let borrow = 0; // Флаг заёма из старшего разряда
+
+        // --- Конструируем цифры с 0-го по 5-й разряд (справа налево) ---
+
+        // Разряд 0 (единицы): ЗАЁМ, результат НЕ НОЛЬ
+        r_digits[0] = getRandomInt(1, 9);
+        u_digits[0] = getRandomInt(0, r_digits[0] - 1);
+        v_digits[0] = 10 + u_digits[0] - r_digits[0];
+        borrow = 1;
+
+        // Разряд 1 (десятки): БЕЗ ЗАЁМА, результат НОЛЬ
+        r_digits[1] = 0;
+        u_digits[1] = getRandomInt(borrow + 1, 9); // u_digit должен быть > borrow
+        v_digits[1] = u_digits[1] - r_digits[1] - borrow;
+        borrow = 0;
+
+        // Разряд 2 (сотни): ЗАЁМ, результат НЕ НОЛЬ
+        r_digits[2] = getRandomInt(1, 9);
+        u_digits[2] = getRandomInt(borrow, r_digits[2] - 1);
+        v_digits[2] = 10 + u_digits[2] - r_digits[2] - borrow;
+        borrow = 1;
+
+        // Разряд 3 (тысячи): БЕЗ ЗАЁМА, результат НОЛЬ
+        r_digits[3] = 0;
+        u_digits[3] = getRandomInt(borrow + 1, 9);
+        v_digits[3] = u_digits[3] - r_digits[3] - borrow;
+        borrow = 0;
+
+        // Разряд 4 (десятки тысяч): ЗАЁМ, результат НЕ НОЛЬ
+        r_digits[4] = getRandomInt(1, 9);
+        u_digits[4] = getRandomInt(borrow, r_digits[4] - 1);
+        v_digits[4] = 10 + u_digits[4] - r_digits[4] - borrow;
+        borrow = 1;
+
+        // Разряд 5 (сотни тысяч): БЕЗ ЗАЁМА, результат НЕ НОЛЬ
+        r_digits[5] = getRandomInt(1, 8); // Первая цифра не может быть 9, чтобы u не стало 7-значным
+        // u_digits[5] должен быть больше v_digits[5] + borrow
+        v_digits[5] = getRandomInt(1, 8 - r_digits[5]); // v - тоже большое число
+        u_digits[5] = v_digits[5] + r_digits[5] + borrow;
+        
+        // Собираем итоговые числа из массивов цифр
+        const u = parseInt(u_digits.reverse().join(''));
+        const v = parseInt(v_digits.reverse().join(''));
+
+        const problemText = `Вычислите: ${u} - ${v}`;
+        
+        return { variables: { u, v }, problemText };
+    },
+
+    calculateAnswer: (vars) => {
+        return vars.u - vars.v;
+    }
+},
+
+{
+    number: "4_count_10", 
+
+    // Сложение двух многозначных чисел = разреженное число
+    tags: ["4_класс", "сложение_многозначных", "круглые_числа", "счёт", "натуральные_числа", "sparse_nums"],
+
+    // Функция генерации задачи
+    generate: () => {
+        // Задаём переменные согласно вашему алгоритму
+        const k_zeros = getRandomElement([3, 4]); // 3 или 4 нуля в итоговой сумме
+        const powerOf10 = Math.pow(10, k_zeros);
+
+        // Генерируем "хвосты" слагаемых так, чтобы их сумма была равна 10^k_zeros
+        const s1_tail = getRandomInt(1, powerOf10 - 1);
+        const s2_tail = powerOf10 - s1_tail;
+
+        let s1_head, s2_head;
+        // Генерируем "головы" слагаемых, пока их сумма не будет равна 9
+        // Это предотвращает появление лишнего нуля в сумме (например, 5 + 4 + 1 = 10)
+        do {
+            s1_head = getRandomInt(1, 99);
+            s2_head = getRandomInt(1, 99);
+        } while (s1_head + s2_head === 9);
+
+        // Конструируем итоговые слагаемые
+        const s1 = s1_head * powerOf10 + s1_tail;
+        const s2 = s2_head * powerOf10 + s2_tail;
+
+        // Формируем текст задачи
+        const problemText = `Вычислите: ${s1} + ${s2}`;
+
+        // Возвращаем переменные и текст
+        return { variables: { s1, s2 }, problemText };
+    },
+
+    // Функция для вычисления правильного ответа
+    calculateAnswer: (vars) => {
+        return vars.s1 + vars.s2;
+    }
+},
+
+{
+    number: "4_count_9", 
+    
+    // Произведение многозначного на однозначное = разреженное число
+    tags: ["4_класс", "sparse_nums", "счёт", "натуральные_числа", "умножение_на_однозначное"],
+    
+    generate: () => {
+        const variant = getRandomInt(1, 4); // Случайно выбираем один из 4 алгоритмов
+        let factor1, factor2, problemText;
+
+        switch (variant) {
+            case 1: {
+                // --- Логика из Задачи 2.1 ---
+                const n = getRandomElement([3, 4, 6, 7, 8, 9]);
+                const k = getRandomElement([5, 6]);
+                let a;
+                do {
+                    a = getRandomInt(11, 90);
+                } while (a % n === 0 || a % 10 === 0);
+                
+                const m = Math.floor((a * Math.pow(10, k)) / n) + 1;
+                
+                factor1 = n;
+                factor2 = m;
+                problemText = `Вычислите: ${factor1} · ${factor2}`;
+                break;
+            }
+            case 2: {
+                // --- Логика из Задачи 2.2 ---
+                const n = getRandomElement([3, 4, 6, 7, 8, 9]);
+                const k = getRandomElement([3, 4]);
+                const a = getRandomInt(100, 999);
+                const term = a * Math.pow(10, k);
+                const b = (n - (term % n)) % n;
+                const p = term + b;
+                const m = p / n;
+
+                factor1 = m;
+                factor2 = n;
+                problemText = `Вычислите: ${factor1} · ${factor2}`;
+                break;
+            }
+            case 3: {
+                // --- Логика из Задачи 2.3 ---
+                const n = getRandomElement([3, 6, 7, 9]);
+                const k = getRandomElement([4, 5]);
+                const a = getRandomInt(11, 99);
+                const term = a * Math.pow(10, k);
+                const b = (n - (term % n)) % n;
+                const p = term + b;
+                const m = p / n;
+                
+                factor1 = m;
+                factor2 = n;
+                problemText = `Вычислите: ${factor1} · ${factor2}`;
+                break;
+            }
+            case 4: {
+                // --- Логика из Задачи 2.4 ---
+                const m2 = 8;
+                let m1;
+                do {
+                    // Выбираем нечётный коэффициент, чтобы m1 было 4-х или 5-значным
+                    const c_min = Math.ceil(1000 / 1250); // c >= 1
+                    const c_max = Math.floor(99999 / 1250); // c <= 79
+                    const c = getRandomInt(c_min, c_max) * 2 - 1; // генерируем нечётное число
+                    m1 = 1250 * c;
+                } while (m1 % 100 === 0);
+
+                factor1 = m1;
+                factor2 = m2;
+                problemText = `Вычислите: ${factor1} · ${factor2}`;
+                break;
+            }
+        }
+
+        // Чтобы сделать пример интереснее, можем поменять множители местами
+        if (getRandomInt(0, 1) === 1) {
+            [factor1, factor2] = [factor2, factor1];
+            problemText = `Вычислите: ${factor1} · ${factor2}`;
+        }
+        
+        return { variables: { factor1, factor2 }, problemText };
+    },
+
+    calculateAnswer: (vars) => {
+        return vars.factor1 * vars.factor2;
+    }
+},
+
+{
+    number: "4_count_8",
+
+    // Деление многозначного разреженного на однозначное
+    tags: ["4_класс", "деление_на_однозначное", "sparse_nums", "счёт", "натуральные_числа"],
+
+    // Функция генерации задачи
+    generate: () => {
+        // Задаём переменные согласно вашему алгоритму
+        const m = getRandomElement([3, 4, 6, 7, 8, 9]);
+        const k = getRandomElement([4, 5]);
+
+        let a;
+        // Генерируем "голову" `a`, удовлетворяющую требованиям
+        do {
+            a = getRandomInt(11, 99);
+        } while (a % m === 0 || a % 10 === 0);
+
+        // Находим все возможные значения для "хвоста" b
+        // b должно быть однозначным (1-9) и делать всё число n кратным m
+        const candidates_b = [];
+        const term = a * Math.pow(10, k);
+        
+        // Находим базовое значение для остатка
+        let b_base = (m - (term % m)) % m;
+        
+        // Так как b не может быть 0, если b_base=0, начинаем с b=m
+        if (b_base === 0) {
+            b_base = m;
+        }
+
+        // Собираем всех кандидатов: b_base, b_base + m, b_base + 2m и т.д., пока они однозначные
+        for (let b_candidate = b_base; b_candidate < 10; b_candidate += m) {
+            candidates_b.push(b_candidate);
+        }
+        
+        // Выбираем случайного кандидата из возможных
+        const b = getRandomElement(candidates_b);
+        
+        // Конструируем итоговое число n
+        const n = a * Math.pow(10, k) + b;
+
+        // Формируем текст задачи
+        const problemText = `Вычислите: ${n} : ${m}`;
+
+        // Возвращаем переменные и текст
+        return { variables: { n, m }, problemText };
+    },
+
+    // Функция для вычисления правильного ответа
+    calculateAnswer: (vars) => {
+        return vars.n / vars.m;
+    }
+},
+
+{
+    
+    number: "4_count_7",
+    
+    // Деление многозначного разреженного числа на однозначное
+
+    tags: ["4_класс", "деление_на_однозначное", "sparse_nums", "счёт", "натуральные_числа"],
+
+    // Функция генерации задачи
+    generate: () => {
+        // Задаём переменные согласно вашему алгоритму
+        // Исключаем m = 4, 8, так как для них требование 2 невыполнимо
+        const m = getRandomElement([3, 6, 7, 9]);
+        const k = getRandomElement([5, 6]);
+
+        let a;
+        // Генерируем "голову" `a`, удовлетворяющую требованиям
+        do {
+            a = getRandomInt(10, 99);
+            // Требование 1: a не делится на m
+            // Требование 2: (a * 10^k) не делится на m.
+            // Это требование имеет значение только для m=6, где оно сводится к "a не делится на 3".
+        } while (a % m === 0 || (m === 6 && a % 3 === 0));
+
+        // Вычисляем базовое значение для "хвоста" `b`
+        const term = a * Math.pow(10, k);
+        const b_base = (m - (term % m)) % m;
+
+        // Находим итоговый двузначный "хвост" `b`
+        let b = b_base;
+        while (b < 10) {
+            b += m;
+        }
+        // Этот цикл гарантирует, что b >= 10. Так как m <= 9, b всегда будет <= 99.
+
+        // Конструируем итоговое число n
+        const n = a * Math.pow(10, k) + b;
+
+        // Формируем текст задачи
+        const problemText = `Вычислите: ${n} : ${m}`;
+
+        // Возвращаем переменные и текст
+        return { variables: { n, m }, problemText };
+    },
+
+    // Функция для вычисления правильного ответа
+    calculateAnswer: (vars) => {
+        return vars.n / vars.m;
+    }
+},
+
+{
     number: "4_count_6",
 
     // Примеры вида a : b - c (a шестизначное)
