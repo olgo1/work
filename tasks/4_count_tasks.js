@@ -59,7 +59,7 @@ const _4countTasks = [
     calculateAnswer: (vars) => {
         return (vars.a / vars.b) - vars.c;
     }
-}
+},
 
 
 {
@@ -180,7 +180,7 @@ const _4countTasks = [
 
         return result;
     }
-}
+},
 
 {
     number: "4_count_4",
@@ -251,7 +251,7 @@ const _4countTasks = [
             return intermediateResult - vars.d;
         }
     }
-}
+},
 
 {
     number: "4_count_3",
@@ -333,7 +333,7 @@ const _4countTasks = [
 
         return result;
     }
-}
+},
 
 
 {
@@ -442,7 +442,7 @@ const _4countTasks = [
             return result - vars.d;
         }
     }
-}
+},
 
 {
     number: "4_count_1",
@@ -531,7 +531,7 @@ const _4countTasks = [
 
         return result;
     }
-}
+},
 ];
 
 window.taskRegistry.push(..._4countTasks);
