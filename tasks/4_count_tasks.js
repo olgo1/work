@@ -1,4 +1,4 @@
-const 4countTasks = [
+const _4countTasks = [
 
 {
     number: "4_count_6",
@@ -534,4 +534,4 @@ const 4countTasks = [
 }
 ];
 
-window.taskRegistry.push(...4countTasks);
+window.taskRegistry.push(..._4countTasks);
