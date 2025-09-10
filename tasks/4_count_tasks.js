@@ -1,4 +1,87 @@
 {
+    number: "4_count_3",
+
+    // Примеры вида: a : b + c + d с перестановками
+        
+    tags: ["4_класс", "счёт", "натуральные_числа", "многозначное_плюс_многозначное", "многозначное_минус_многозначное", "многозначное_делить_однозначное"],
+    generate: () => {
+        const generateConstrainedNumber = (min, max, nonMultipleOf = 1) => {
+            let num;
+            if (min > max) return min; // Failsafe
+            do {
+                num = getRandomInt(min, max);
+            } while (num % nonMultipleOf === 0);
+            return num;
+        };
+
+        let a, b, c, d, q_a;
+        
+        // ИСПРАВЛЕНИЕ: Добавлен внешний цикл для обработки редких случаев, когда нет решения
+        let lower_bound_q, upper_bound_q;
+        do {
+            // 1. Генерируем два "меньших" блока: c и d
+            c = generateConstrainedNumber(10000, 90000, 100); // Снижен верхний предел для стабильности
+            d = generateConstrainedNumber(1000, 9000, 100);
+            const sum_cd = c + d;
+            b = getRandomElement([4, 5, 6, 7, 8, 9]);
+
+            // ИСПРАВЛЕНИЕ: Заранее вычисляем корректный диапазон для q_a
+            upper_bound_q = Math.floor(99999 / b); // q_a не может быть больше этого, чтобы a было 5-значным
+            lower_bound_q = Math.max(Math.ceil(10000 / b), sum_cd + 1); // q_a должен быть больше sum_cd и давать 5-значное a
+
+        } while (lower_bound_q >= upper_bound_q); // Перезапускаем, если условия несовместимы (c и d слишком большие)
+
+        // 2. Генерируем "якорной" блок (a:b) из гарантированно правильного диапазона
+        do {
+            q_a = getRandomInt(lower_bound_q, upper_bound_q);
+            a = q_a * b;
+        } while (a % 100 === 0); // Эта проверка теперь очень быстрая
+
+        // 3. Создаём объекты, описывающие каждый блок
+        const term_div = { id: 'div', str: `${a} : ${b}` };
+        const term_c = { id: 'c', str: `${c}` };
+        const term_d = { id: 'd', str: `${d}` };
+
+        // 4. Составляем и перемешиваем выражение
+        const firstTerm = term_div;
+        const remainingTerms = [term_c, term_d];
+        if (getRandomInt(0, 1) === 1) {
+            [remainingTerms[0], remainingTerms[1]] = [remainingTerms[1], remainingTerms[0]];
+        }
+        const finalOrder = [firstTerm, ...remainingTerms];
+        const orderIds = finalOrder.map(t => t.id);
+
+        // 5. Выбираем операторы (гарантируем хотя бы один минус)
+        const opPairs = [['+', '-'], ['-', '+'], ['-', '-']];
+        const operators = getRandomElement(opPairs);
+
+        // 6. Формируем текст задачи
+        let problemText = `${finalOrder[0].str} ${operators[0]} ${finalOrder[1].str} ${operators[1]} ${finalOrder[2].str}`;
+
+        return { variables: { a, b, c, d, orderIds, operators }, problemText };
+    },
+    calculateAnswer: (vars) => {
+        const values = {
+            div: vars.a / vars.b,
+            c: vars.c,
+            d: vars.d
+        };
+
+        const term1_val = values[vars.orderIds[0]];
+        const term2_val = values[vars.orderIds[1]];
+        const term3_val = values[vars.orderIds[2]];
+        const [op1, op2] = vars.operators;
+
+        let result = term1_val;
+        if (op1 === '+') result += term2_val; else result -= term2_val;
+        if (op2 === '+') result += term3_val; else result -= term3_val;
+
+        return result;
+    }
+}
+
+
+{
     number: "4_count_2",
 
     // примеры вида a : b * c + d с перестановками
