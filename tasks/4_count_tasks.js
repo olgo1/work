@@ -1,6 +1,60 @@
 const _4countTasks = [
 
 {
+    type: " ",
+    number: "4_count_13", // Задача 1: a + (b*c+d):e + f
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type1"],
+    generate: () => {
+        // --- Шаг 1: Генерируем основу для деления ---
+        const e = getRandomInt(2, 9);
+        const divisionResult = getRandomInt(20, 100); // Результат деления
+        const dividend = divisionResult * e; // Это число, которое должно получиться в скобках
+
+        // --- Шаг 2: Конструктивно генерируем b, c и d ---
+        let b, c;
+        if (Math.random() > 0.5) {
+            // b - трёхзначное, c - однозначное
+            b = getRandomInt(100, 300);
+            // Вычисляем максимальное значение для c, чтобы d осталось двузначным (>= 10)
+            const max_c = Math.floor((dividend - 10) / b);
+            if (max_c < 2) return newTasks.find(t => t.number === "27").generate(); // Редкий случай, если b слишком большое. Проще перегенерировать.
+            c = getRandomInt(2, max_c);
+
+        } else {
+            // c - трёхзначное, b - однозначное
+            c = getRandomInt(100, 300);
+            const max_b = Math.floor((dividend - 10) / c);
+            if (max_b < 2) return newTasks.find(t => t.number === "27").generate();
+            b = getRandomInt(2, max_b);
+        }
+
+        // Теперь d гарантированно будет натуральным и как минимум двузначным
+        const d = dividend - b * c;
+
+        // --- Шаг 3: Генерируем остальные числа и знаки ---
+        const a = getRandomInt(100, 999);
+        const f = getRandomInt(50, 200);
+        
+        const sign1 = Math.random() > 0.5 ? '+' : '-';
+        const sign2 = (sign1 === '+') ? '-' : (Math.random() > 0.5 ? '+' : '-');
+
+        // Проверяем, чтобы промежуточный результат a +/- divisionResult был натуральным
+        if (sign1 === '-' && a < divisionResult) {
+            return newTasks.find(t => t.number === "27").generate();
+        }
+
+        const problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} (${b} * ${c} + ${d}) : ${e} ${sign2} ${f}</h3>`;
+        return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
+    },
+    calculateAnswer: (vars) => {
+        let result = (vars.b * vars.c + vars.d) / vars.e;
+        result = (vars.sign1 === '+') ? vars.a + result : vars.a - result;
+        result = (vars.sign2 === '+') ? result + vars.f : result - vars.f;
+        return result;
+    }
+},
+
+{
     number: "4_count_12",
 
     // Сложение и вычитание трёх чисел; одно из них либо промежуточный результат - spare num
