@@ -10,6 +10,19 @@ function declineWord(number, words) {
     return words[2];
 }
 
+// Простое склонение имён в родительный падеж
+function toGenitive(name) {
+    const lastChar = name.slice(-1);
+    if (['а', 'я'].includes(lastChar)) {
+        return name.slice(0, -1) + 'и';
+    }
+    if (['ь'].includes(lastChar)) {
+        return name.slice(0, -1) + 'я';
+    }
+    // Для простых случаев согласных
+    return name + 'а';
+}
+
 // --- CHECK FUNCTION (required by trainer.js) ---
 function isAnswerCorrect(userAnswer, task, vars) {
     const correctAnswer = task.calculateAnswer(vars);
@@ -23,3 +36,4 @@ window.getRandomInt = getRandomInt;
 window.getRandomElement = getRandomElement;
 window.declineWord = declineWord;
 window.isAnswerCorrect = isAnswerCorrect;
+window.toGenitive = toGenitive;
