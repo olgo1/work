@@ -2,54 +2,68 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_13", // Задача 1: a + (b*c+d):e + f
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type1"],
-    generate: () => {
-        // --- Шаг 1: Генерируем основу для деления ---
+    number: "27", // Задача 1: a + (b*c+d):e + f
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "1"],
+    generate: function() {
         const e = getRandomInt(2, 9);
-        const divisionResult = getRandomInt(20, 100); // Результат деления
+        const divisionResult = getRandomInt(20, 100);
         const dividend = divisionResult * e; // Это число, которое должно получиться в скобках
 
-        // --- Шаг 2: Конструктивно генерируем b, c и d ---
-        let b, c;
-        if (Math.random() > 0.5) {
-            // b - трёхзначное, c - однозначное
-            b = getRandomInt(100, 300);
-            // Вычисляем максимальное значение для c, чтобы d осталось двузначным (>= 10)
-            const max_c = Math.floor((dividend - 10) / b);
-            if (max_c < 2) return newTasks.find(t => t.number === "27").generate(); // Редкий случай, если b слишком большое. Проще перегенерировать.
-            c = getRandomInt(2, max_c);
+        let b, c, d;
+        let attempts = 0;
 
-        } else {
-            // c - трёхзначное, b - однозначное
-            c = getRandomInt(100, 300);
-            const max_b = Math.floor((dividend - 10) / c);
-            if (max_b < 2) return newTasks.find(t => t.number === "27").generate();
-            b = getRandomInt(2, max_b);
+        // Используем цикл вместо рекурсии, чтобы избежать ошибок
+        while (attempts < 20) {
+            if (Math.random() > 0.5) {
+                b = getRandomInt(100, 200); // b - трёхзначное
+                c = getRandomInt(2, 9);     // c - однозначное
+            } else {
+                b = getRandomInt(2, 9);     // b - однозначное
+                c = getRandomInt(100, 200); // c - трёхзначное
+            }
+            
+            d = dividend - b * c;
+            // Проверяем, что 'd' получилось подходящим (двузначное или трёхзначное)
+            if (d >= 10 && d < 1000) {
+                break; // Если всё хорошо, выходим из цикла
+            }
+            attempts++;
+        }
+        // Если за 20 попыток не нашли, ставим d=10 и пересчитываем b*c
+        if (d < 10 || d >= 1000) {
+             d = getRandomInt(10, 99);
+             const bc = dividend - d;
+             b = 2;
+             c = Math.floor(bc/2);
+             if (c < 100) return this.generate(); // Аварийный перезапуск
         }
 
-        // Теперь d гарантированно будет натуральным и как минимум двузначным
-        const d = dividend - b * c;
-
-        // --- Шаг 3: Генерируем остальные числа и знаки ---
         const a = getRandomInt(100, 999);
         const f = getRandomInt(50, 200);
         
         const sign1 = Math.random() > 0.5 ? '+' : '-';
         const sign2 = (sign1 === '+') ? '-' : (Math.random() > 0.5 ? '+' : '-');
 
-        // Проверяем, чтобы промежуточный результат a +/- divisionResult был натуральным
         if (sign1 === '-' && a < divisionResult) {
-            return newTasks.find(t => t.number === "27").generate();
+            return this.generate(); // Простой перезапуск, если 'a' слишком маленькое
         }
 
         const problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} (${b} * ${c} + ${d}) : ${e} ${sign2} ${f}</h3>`;
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
-    calculateAnswer: (vars) => {
+    calculateAnswer: function(vars) {
         let result = (vars.b * vars.c + vars.d) / vars.e;
-        result = (vars.sign1 === '+') ? vars.a + result : vars.a - result;
-        result = (vars.sign2 === '+') ? result + vars.f : result - vars.f;
+        if (vars.sign1 === '+') {
+            result = vars.a + result;
+        } else {
+            result = vars.a - result;
+        }
+        
+        if (vars.sign2 === '+') {
+            result = result + vars.f;
+        } else {
+            result = result - vars.f;
+        }
         return result;
     }
 },
