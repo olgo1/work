@@ -2,7 +2,82 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "27", // Задача 1: a + (b*c+d):e + f
+    number: "4_count_14", // Задача 2: (b*c+d):e + f+a
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type1"],
+    generate: function() {
+        const e = getRandomInt(2, 9);
+        // Берём результат деления побольше, чтобы избежать отрицательных ответов
+        const divisionResult = getRandomInt(200, 500); 
+        const dividend = divisionResult * e; 
+
+        let b, c, d;
+        let attempts = 0;
+
+        // Используем цикл, чтобы найти подходящие b, c, d
+        while (attempts < 20) {
+            if (Math.random() > 0.5) {
+                b = getRandomInt(100, 400); 
+                c = getRandomInt(2, 9);
+            } else {
+                b = getRandomInt(2, 9);
+                c = getRandomInt(100, 400);
+            }
+            
+            d = dividend - b * c;
+            // Проверяем, что 'd' получилось подходящим
+            if (d >= 10 && d < 1000) {
+                break; // Успех
+            }
+            attempts++;
+        }
+        
+        // Аварийный случай, если не нашли подходящие числа
+        if (d < 10 || d >= 1000) {
+             d = getRandomInt(10, 99);
+             const bc = dividend - d;
+             b = 3; // Простое число для деления
+             c = Math.floor(bc / 3);
+             if (c < 100) return this.generate(); 
+        }
+
+        const a = getRandomInt(100, 999);
+        const f = getRandomInt(50, 200);
+        
+        const sign1 = Math.random() > 0.5 ? '+' : '-';
+        const sign2 = (sign1 === '+') ? '-' : (Math.random() > 0.5 ? '+' : '-');
+
+        // Проверяем, чтобы итоговый результат не был отрицательным
+        let tempResult = divisionResult;
+        if (sign1 === '-') tempResult -= f;
+        if (sign2 === '-') tempResult -= a;
+
+        if (tempResult < 0) {
+            return this.generate(); // Перезапускаем, если ответ отрицательный
+        }
+
+        const problemText = `Вычислите значение выражения: <br> <h3>(${b} * ${c} + ${d}) : ${e} ${sign1} ${f} ${sign2} ${a}</h3>`;
+        return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
+    },
+    calculateAnswer: function(vars) {
+        let result = (vars.b * vars.c + vars.d) / vars.e;
+        if (vars.sign1 === '+') {
+            result = result + vars.f;
+        } else {
+            result = result - vars.f;
+        }
+        
+        if (vars.sign2 === '+') {
+            result = result + vars.a;
+        } else {
+            result = result - vars.a;
+        }
+        return result;
+    }
+},
+
+{
+    type: " ",
+    number: "4_сount_13", // Задача 1: a + (b*c+d):e + f
     tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "1"],
     generate: function() {
         const e = getRandomInt(2, 9);
