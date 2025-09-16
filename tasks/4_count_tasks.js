@@ -2,53 +2,689 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_14", // Задачи 2 и 3 объединены
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type1"],
+    number: "4_count_24",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type6"],
     generate: function() {
-        // --- Шаг 1: Генерируем основу ---
-        const e = getRandomInt(2, 9);
-        const a = getRandomInt(100, 999);
-        const f = getRandomInt(50, 200);
-
-        const sign1 = Math.random() > 0.5 ? '+' : '-';
-        const sign2 = (sign1 === '+') ? '-' : (Math.random() > 0.5 ? '+' : '-');
-
-        // --- Шаг 2: Конструируем результат деления ---
-        // Задаём минимальное значение для divisionResult, чтобы итоговый ответ был натуральным числом.
-        let minDivisionResult = 100;
-        let tempResult = 0;
-        if (sign1 === '-') tempResult -= f;
-        if (sign2 === '-') tempResult -= a;
+        // --- Шаг 1: Конструктивно создаём компоненты ---
         
-        if (tempResult < 0) {
-            minDivisionResult = Math.abs(tempResult) + 1;
-        }
+        // (a - b) -> однозначный результат
+        const paren1_result = getRandomInt(2, 9);
+        const a = getRandomInt(301, 899);
+        const b = a - paren1_result;
 
-        const divisionResult = getRandomInt(minDivisionResult, minDivisionResult + 300);
-        const dividend = divisionResult * e; // Это число, которое должно получиться в скобках
+        // (c : d) -> деление нацело
+        const d = getRandomInt(2, 9);
+        const div_res_lower = Math.ceil(201 / d);
+        let div_res_upper = Math.floor(899 / d);
 
-        // --- Шаг 3: Конструктивно создаём b, c, d ---
-        let b, c;
-        // Генерируем 'b' и 'c' в безопасных границах, чтобы их произведение было меньше 'dividend'
+        // --- Ключевое изменение: Ограничиваем второй сомножитель ---
+        const max_paren2_result = Math.floor(999 / paren1_result);
+        div_res_upper = Math.min(div_res_upper, max_paren2_result);
+        
+        if (div_res_lower >= div_res_upper) return this.generate(); // Перезапуск, если диапазон стал некорректным
+        const paren2_result = getRandomInt(div_res_lower, div_res_upper);
+        const c = paren2_result * d;
+
+        // e * f
+        let e, f;
         if (Math.random() > 0.5) {
-            b = getRandomInt(2, 9); // b - однозначное
-            const max_c = Math.floor((dividend - 10) / b); // d должно быть >= 10
-            c = getRandomInt(100, max_c > 100 ? max_c : 150);
+            e = getRandomInt(2, 9); f = getRandomInt(10, 99);
         } else {
-            c = getRandomInt(2, 9); // c - однозначное
-            const max_b = Math.floor((dividend - 10) / c);
-            b = getRandomInt(100, max_b > 100 ? max_b : 150);
+            e = getRandomInt(10, 99); f = getRandomInt(2, 9);
+        }
+
+        // --- Шаг 2: Вычисляем два основных члена выражения ---
+        const term1_result = paren1_result * paren2_result; // Теперь < 1000
+        const term2_result = e * f; // Всегда < 1000
+        
+        const sign = '-'; // Гарантируем, что в примере есть минус
+
+        // --- Шаг 3: Формируем текст, избегая отрицательного ответа ---
+        const term1_text = Math.random() > 0.5 ? `(${a} - ${b}) · (${c} : ${d})` : `(${c} : ${d}) · (${a} - ${b})`;
+        const term2_text = `${e} · ${f}`;
+        
+        let problemText;
+        // Ставим большее число на первое место
+        if (term1_result > term2_result) {
+            problemText = `Вычислите значение выражения: <br> <h3>${term1_text} - ${term2_text}</h3>`;
+        } else { // term2_result >= term1_result
+            problemText = `Вычислите значение выражения: <br> <h3>${term2_text} - ${term1_text}</h3>`;
+        }
+
+        return { variables: { a, b, c, d, e, f, term1_result, term2_result }, problemText };
+    },
+    calculateAnswer: function(vars) {
+        // Ответ всегда будет разностью большего и меньшего члена
+        return Math.abs(vars.term1_result - vars.term2_result);
+    }
+},
+
+{
+    type: " ",
+    number: "4_count_23", 
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type5"],
+    generate: function() {
+        // --- Шаг 1: Генерируем основу - делители ---
+        const c = getRandomInt(4, 9);
+        const d = getRandomInt(4, 9);
+        const f = getRandomInt(2, 9);
+        const sign = '-'; // Гарантируем, что в примере всегда есть минус
+
+        // --- Шаг 2: Конструктивно создаём оба члена выражения ---
+        let term1_result, term2_result, a, b, e;
+
+        // Создаём Term 2 (e : f)
+        const e_div_f = getRandomInt(10, 50);
+        e = e_div_f * f;
+        term2_result = e_div_f;
+        
+        // Создаём Term 1 ((a + b:c):d), убеждаясь, что вычитание корректно
+        if (Math.random() > 0.5) { // Случай Term1 - Term2
+            term1_result = getRandomInt(term2_result + 1, term2_result + 50);
+        } else { // Случай Term2 - Term1
+            if (term2_result <= 10) return this.generate();
+            term1_result = getRandomInt(1, term2_result - 1);
         }
         
-        // 'd' теперь гарантированно натуральное и дву- или трёхзначное.
-        const d = dividend - (b * c);
+        // Теперь, зная результат Term1, конструируем его компоненты a и b
+        const parenValue = term1_result * d; 
+        if (parenValue <= 20) return this.generate(); 
+        
+        // --- Ключевое изменение: вычисляем верхнюю границу для сомножителя 'b' ---
+        const max_b_div_c = Math.min(Math.floor(999 / c), parenValue - 10);
+        if (max_b_div_c <= 10) return this.generate(); // Диапазон слишком мал, перезапуск
+
+        const b_div_c = getRandomInt(10, max_b_div_c);
+        b = b_div_c * c;
+        a = parenValue - b_div_c;
+
+        // --- Шаг 3: Проверяем финальное условие по разрядам ---
+        let twoDigitCount = 0;
+        if (a < 100) twoDigitCount++;
+        if (b < 100) twoDigitCount++;
+        if (e < 100) twoDigitCount++;
+        if (twoDigitCount > 1) return this.generate(); 
 
         // --- Шаг 4: Формируем текст ---
+        const term1_text = Math.random() > 0.5 ? `(${a} + ${b} : ${c}) : ${d}` : `(${b} : ${c} + ${a}) : ${d}`;
+        const term2_text = `${e} : ${f}`;
+
+        let problemText;
+        if (term1_result > term2_result) {
+             problemText = `Вычислите значение выражения: <br> <h3>${term1_text} - ${term2_text}</h3>`;
+        } else {
+             problemText = `Вычислите значение выражения: <br> <h3>${term2_text} - ${term1_text}</h3>`;
+        }
+        
+        return { variables: { a, b, c, d, e, f, term1_result, term2_result}, problemText };
+    },
+    calculateAnswer: function(vars) {
+        return Math.max(vars.term1_result, vars.term2_result) - Math.min(vars.term1_result, vars.term2_result);
+    }
+},
+
+{
+    type: " ",
+    number: "4_count_22", // a : (c·d - b) ± e·f  И  e·f ± a : (c·d - b)
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type3"],
+    generate: function() {
+        // --- Шаг 1: Генерируем основу ---
+        const parenResult = getRandomInt(2, 9);
+        let c, d;
+        if (Math.random() > 0.5) {
+            d = getRandomInt(2, 9);
+            const c_lower = Math.ceil(100 / d), c_upper = Math.floor(999 / d);
+            if (c_lower >= c_upper) return this.generate();
+            c = getRandomInt(c_lower, c_upper);
+        } else {
+            c = getRandomInt(2, 9);
+            const d_lower = Math.ceil(100 / c), d_upper = Math.floor(999 / c);
+            if (d_lower >= d_upper) return this.generate();
+            d = getRandomInt(d_lower, d_upper);
+        }
+        const cd_product = c * d;
+        const b = cd_product - parenResult; 
+
+        let e, f;
+        if (Math.random() > 0.5) {
+            e = getRandomInt(10, 99); f = getRandomInt(2, 9);
+        } else {
+            e = getRandomInt(2, 9); f = getRandomInt(10, 99);
+        }
+        const ef_product = e * f;
+        
+        // --- Шаг 2: Связываем генерацию и отображение ---
+        const sign = Math.random() > 0.5 ? '+' : '-';
+        const isADivFirst = Math.random() > 0.5; // Определяем порядок слагаемых
+
+        const divResultLower = Math.ceil(100 / parenResult);
+        const divResultUpper = Math.floor(999 / parenResult);
+        if (divResultLower >= divResultUpper) return this.generate();
+        
+        let divResult_a;
+        if (sign === '+') {
+            divResult_a = getRandomInt(divResultLower, divResultUpper);
+        } else { // sign === '-'
+            if (isADivFirst) { // Генерируем для a:(...) - e·f
+                if (ef_product >= divResultUpper) return this.generate();
+                divResult_a = getRandomInt(ef_product + 1, divResultUpper);
+            } else { // Генерируем для e·f - a:(...)
+                 if (ef_product <= divResultLower) return this.generate();
+                 divResult_a = getRandomInt(divResultLower, ef_product - 1);
+            }
+        }
+        const a = divResult_a * parenResult;
+
+        // --- Шаг 3: Формируем текст согласно выбранному порядку ---
+        let problemText;
+        if (isADivFirst) {
+            problemText = `Вычислите значение выражения: <br> <h3>${a} : (${c} · ${d} - ${b}) ${sign} ${e} · ${f}</h3>`;
+        } else {
+            problemText = `Вычислите значение выражения: <br> <h3>${e} · ${f} ${sign} ${a} : (${c} · ${d} - ${b})</h3>`;
+        }
+
+        return { variables: { a, b, c, d, e, f, sign, isADivFirst }, problemText };
+    },
+    calculateAnswer: function(vars) {
+        const parenResult = (vars.c * vars.d) - vars.b;
+        const divResult = vars.a / parenResult;
+        const ef_product = vars.e * vars.f;
+        
+        let term1 = vars.isADivFirst ? divResult : ef_product;
+        let term2 = vars.isADivFirst ? ef_product : divResult;
+
+        return (vars.sign === '+') ? term1 + term2 : term1 - term2;
+    }
+},
+
+{
+    type: " ",
+    number: "4_count_21", // a : (b - c·d) ± e·f  И  e·f ± a : (b - c·d)
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type3"],
+    generate: function() {
+        // --- Шаг 1: Генерируем основу (логика идентична) ---
+        const parenResult = getRandomInt(2, 9);
+        let c, d;
+        if (Math.random() > 0.5) {
+            d = getRandomInt(2, 9);
+            const c_lower = Math.ceil(100 / d), c_upper = Math.floor(999 / d);
+            if (c_lower >= c_upper) return this.generate();
+            c = getRandomInt(c_lower, c_upper);
+        } else {
+            c = getRandomInt(2, 9);
+            const d_lower = Math.ceil(100 / c), d_upper = Math.floor(999 / c);
+            if (d_lower >= d_upper) return this.generate();
+            d = getRandomInt(d_lower, d_upper);
+        }
+        const cd_product = c * d;
+        const b = cd_product + parenResult;
+        if (b > 999) return this.generate();
+
+        let e, f;
+        if (Math.random() > 0.5) {
+            e = getRandomInt(10, 99); f = getRandomInt(2, 9);
+        } else {
+            e = getRandomInt(2, 9); f = getRandomInt(10, 99);
+        }
+        const ef_product = e * f;
+        
+        // --- Шаг 2: Связываем генерацию и отображение (логика идентична) ---
+        const sign = Math.random() > 0.5 ? '+' : '-';
+        const isADivFirst = Math.random() > 0.5;
+
+        const divResultLower = Math.ceil(100 / parenResult);
+        const divResultUpper = Math.floor(999 / parenResult);
+        if (divResultLower >= divResultUpper) return this.generate();
+        
+        let divResult_a;
+        if (sign === '+') {
+            divResult_a = getRandomInt(divResultLower, divResultUpper);
+        } else {
+            if (isADivFirst) {
+                if (ef_product >= divResultUpper) return this.generate();
+                divResult_a = getRandomInt(ef_product + 1, divResultUpper);
+            } else {
+                 if (ef_product <= divResultLower) return this.generate();
+                 divResult_a = getRandomInt(divResultLower, ef_product - 1);
+            }
+        }
+        const a = divResult_a * parenResult;
+
+        // --- Шаг 3: Формируем текст ---
+        let problemText;
+        if (isADivFirst) {
+            problemText = `Вычислите значение выражения: <br> <h3>${a} : (${b} - ${c} · ${d}) ${sign} ${e} · ${f}</h3>`;
+        } else {
+            problemText = `Вычислите значение выражения: <br> <h3>${e} · ${f} ${sign} ${a} : (${b} - ${c} · ${d})</h3>`;
+        }
+
+        return { variables: { a, b, c, d, e, f, sign, isADivFirst }, problemText };
+    },
+    calculateAnswer: function(vars) {
+        const parenResult = vars.b - (vars.c * vars.d);
+        const divResult = vars.a / parenResult;
+        const ef_product = vars.e * vars.f;
+
+        let term1 = vars.isADivFirst ? divResult : ef_product;
+        let term2 = vars.isADivFirst ? ef_product : divResult;
+
+        return (vars.sign === '+') ? term1 + term2 : term1 - term2;
+    }
+},
+
+{
+    type: " ",
+    number: "4_count_20", // Новый тип: a ± b · ((c-d):e) ± f
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type2"],
+    generate: function() {
+        // --- Шаг 1: Конструктивно создаём числа для скобок ((c-d):e) ---
+        const e = getRandomInt(10, 50); // e - двузначное, берём поменьше
+        const parenResult = getRandomInt(2, 20); // Результат выражения в скобках
+        const subtractionResult = parenResult * e; // Значение (c-d)
+
+        const d = getRandomInt(2, 9);
+        const c = subtractionResult + d;
+        if (c > 999 || c < 100) return this.generate(); // Перезапуск, если 'c' вышло за рамки 3 знаков
+
+        // --- Шаг 2: Конструктивно создаём остальные числа и знаки ---
+        const b = getRandomInt(2, 9);
+        const middleTerm = b * parenResult;
+        
+        const sign1 = Math.random() > 0.5 ? '+' : '-';
+        const sign2 = Math.random() > 0.5 ? '+' : '-';
+
+        let a, f;
+        if (sign1 === '+') { a = getRandomInt(100, 999); } 
+        else { if (middleTerm >= 999) return this.generate(); a = getRandomInt(middleTerm + 1, 999); }
+        
+        const intermediateResult = (sign1 === '+') ? a + middleTerm : a - middleTerm;
+        
+        if (sign2 === '+') { f = getRandomInt(100, 999); } 
+        else { if (intermediateResult <= 100) return this.generate(); f = getRandomInt(100, intermediateResult - 1); }
+
+        // --- Шаг 3: Формируем текст ---
+        const problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} ${b} · (${c} - ${d}) : ${e} ${sign2} ${f}</h3>`;
+        
+        return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
+    },
+    calculateAnswer: function(vars) {
+        const parenResult = (vars.c - vars.d) / vars.e;
+        const middleTerm = vars.b * parenResult;
+        let result = (vars.sign1 === '+') ? vars.a + middleTerm : vars.a - middleTerm;
+        result = (vars.sign2 === '+') ? result + vars.f : result - vars.f;
+        return result;
+    }
+},
+
+{
+    type: " ",
+    number: "4_count_19", // Новый тип: a ± b · (e - c:d) ± f
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type2"],
+    generate: function() {
+        // --- Шаг 1: Конструктивно создаём числа для скобок (e - c:d) ---
+        let c, d, e, divResult, parenResult;
+
+        while (true) {
+            d = getRandomInt(2, 9); 
+            
+            // Определяем допустимый диапазон для результата деления (c:d)
+            const divResultLower = Math.ceil(100 / d);
+            const divResultUpper = Math.floor(999 / d);
+            
+            // Убеждаемся, что можно подобрать двузначное 'e', которое будет больше результата деления
+            if (divResultLower >= 98 || divResultLower >= divResultUpper) continue;
+            
+            divResult = getRandomInt(divResultLower, Math.min(divResultUpper, 98));
+            c = divResult * d;
+            
+            // 'e' должно быть двузначным и больше результата деления
+            e = getRandomInt(divResult + 1, 99);
+            parenResult = e - divResult; 
+            break; 
+        }
+
+        // --- Шаг 2: Конструктивно создаём остальные числа и знаки ---
+        const b = getRandomInt(2, 9); 
+        const middleTerm = b * parenResult;
+        
+        const sign1 = Math.random() > 0.5 ? '+' : '-';
+        const sign2 = Math.random() > 0.5 ? '+' : '-';
+
+        let a, f;
+        if (sign1 === '+') { a = getRandomInt(100, 999); } 
+        else { if (middleTerm >= 999) return this.generate(); a = getRandomInt(middleTerm + 1, 999); }
+        
+        const intermediateResult = (sign1 === '+') ? a + middleTerm : a - middleTerm;
+        
+        if (sign2 === '+') { f = getRandomInt(100, 999); } 
+        else { if (intermediateResult <= 100) return this.generate(); f = getRandomInt(100, intermediateResult - 1); }
+
+        // --- Шаг 3: Формируем текст ---
+        const problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} ${b} · (${e} - ${c} : ${d}) ${sign2} ${f}</h3>`;
+        
+        return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
+    },
+    calculateAnswer: function(vars) {
+        const parenResult = vars.e - (vars.c / vars.d);
+        const middleTerm = vars.b * parenResult;
+        let result = (vars.sign1 === '+') ? vars.a + middleTerm : vars.a - middleTerm;
+        result = (vars.sign2 === '+') ? result + vars.f : result - vars.f;
+        return result;
+    }
+},
+
+{
+    type: " ",
+    number: "4_count_18", // a ± f ± b·(...)
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type2"],
+    generate: function() {
+        // --- Шаг 1: Конструктивно создаём a, f и знаки ---
+        const sign1 = Math.random() > 0.5 ? '+' : '-';
+        let a, f;
+        if (sign1 === '+') {
+            a = getRandomInt(100, 500); f = getRandomInt(100, 400);
+        } else { // sign1 === '-'
+            a = getRandomInt(500, 999); f = getRandomInt(100, 400);
+        }
+        const intermediateResult = (sign1 === '+') ? a + f : a - f;
+        const sign2 = (intermediateResult <= 100) ? '+' : (Math.random() > 0.5 ? '+' : '-');
+
+        // --- Шаг 2: Конструктивно создаём b и (...) под результат ---
+        const b = getRandomInt(2, 9);
+        let middleTerm;
+        if (sign2 === '+') {
+            middleTerm = getRandomInt(10, 200) * b;
+        } else { // sign2 === '-'
+            if (intermediateResult <= b) return this.generate();
+            middleTerm = getRandomInt(1, Math.floor((intermediateResult - 1) / b)) * b;
+        }
+        const parenResult = middleTerm / b;
+
+        // --- Шаг 3: Конструктивно создаём c, d, e под результат скобок ---
+        let c, d, e;
+        while (true) {
+            d = getRandomInt(2, 9);
+            // e должно быть таким, чтобы (parenResult + e) * d было трёхзначным
+            const max_e = Math.floor((999 / d) - parenResult);
+            if (max_e > 10) {
+                 e = getRandomInt(10, max_e);
+                 const divResult = parenResult + e;
+                 c = divResult * d;
+                 break;
+            }
+        }
+        
+        const problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} ${f} ${sign2} ${b} · (${c} : ${d} - ${e})</h3>`;
+        return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
+    },
+    calculateAnswer: function(vars) {
+        const parenResult = (vars.c / vars.d) - vars.e;
+        const middleTerm = vars.b * parenResult;
+        let result = (vars.sign1 === '+') ? vars.a + vars.f : vars.a - vars.f;
+        result = (vars.sign2 === '+') ? result + middleTerm : result - middleTerm;
+        return result;
+    }
+},
+
+{
+    type: " ",
+    number: "4_count_17", // a ± b·(...) ± f  ИЛИ  a ± (...)·b ± f
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type2"],
+    generate: function() {
+        // ... (вся внутренняя логика генерации остаётся той же, что и в предыдущем ответе)
+        let c, d, e, divResult, parenResult;
+        while (true) {
+            d = getRandomInt(2, 9); e = getRandomInt(10, 99);
+            const lowerBound = Math.max(e + 1, Math.ceil(100 / d));
+            const upperBound = Math.floor(999 / d);
+            if (lowerBound < upperBound) {
+                divResult = getRandomInt(lowerBound, upperBound);
+                c = divResult * d; parenResult = divResult - e;
+                break;
+            }
+        }
+        const b = getRandomInt(2, 9);
+        const middleTerm = b * parenResult;
+        const sign1 = Math.random() > 0.5 ? '+' : '-';
+        const sign2 = Math.random() > 0.5 ? '+' : '-';
+        let a, f;
+        if (sign1 === '+') { a = getRandomInt(100, 999); } 
+        else { if (middleTerm >= 999) return this.generate(); a = getRandomInt(middleTerm + 1, 999); }
+        const intermediateResult = (sign1 === '+') ? a + middleTerm : a - middleTerm;
+        if (sign2 === '+') { f = getRandomInt(100, 999); } 
+        else { if (intermediateResult <= 100) return this.generate(); f = getRandomInt(100, intermediateResult - 1); }
+
+        // --- Ключевое изменение: выбираем случайный формат текста ---
+        let problemText;
+        const parenText = `(${c} : ${d} - ${e})`;
+        if (Math.random() > 0.5) {
+            problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} ${b} · ${parenText} ${sign2} ${f}</h3>`;
+        } else {
+            problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} ${parenText} · ${b} ${sign2} ${f}</h3>`;
+        }
+        
+        return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
+    },
+    calculateAnswer: function(vars) {
+        const parenResult = (vars.c / vars.d) - vars.e;
+        const middleTerm = vars.b * parenResult;
+        let result = (vars.sign1 === '+') ? vars.a + middleTerm : vars.a - middleTerm;
+        result = (vars.sign2 === '+') ? result + vars.f : result - vars.f;
+        return result;
+    }
+},
+
+{
+    type: " ",
+    number: "4_count_16", // Задача 4: a+(d+b*c):e +f
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type1"],
+    generate: function() {
+        // --- Шаг 1: Генерируем основу для деления ---
+        const e = getRandomInt(2, 9);
+        const divisionResult = getRandomInt(50, 200); 
+        const dividend = divisionResult * e; 
+
+        // --- Шаг 2: Конструктивно создаём b, c, d ---
+        let b, c;
+        if (Math.random() > 0.5) {
+            b = getRandomInt(2, 9);
+            const max_c = Math.floor((dividend - 10) / b);
+            if (max_c <= 100) return this.generate(); 
+            c = getRandomInt(100, max_c);
+        } else {
+            c = getRandomInt(2, 9);
+            const max_b = Math.floor((dividend - 10) / c);
+            if (max_b <= 100) return this.generate();
+            b = getRandomInt(100, max_b);
+        }
+        const d = dividend - (b * c);
+
+        // --- Шаг 3: Конструктивно создаём a, f и знаки ---
+        let sign1 = Math.random() > 0.5 ? '+' : '-';
+        
+        let a, f;
+        
+        if (sign1 === '+') {
+            a = getRandomInt(100, 999);
+        } else { // sign1 === '-'
+            a = getRandomInt(divisionResult + 1, 999);
+        }
+
+        let intermediateResult = (sign1 === '+') ? a + divisionResult : a - divisionResult;
+        
+        let sign2 = (intermediateResult <= 50) ? '+' : (Math.random() > 0.5 ? '+' : '-');
+        
+        if (sign1 === '+' && sign2 === '+') {
+            sign2 = '-';
+             if (intermediateResult <= 50) {
+                 sign1 = '-';
+                 a = getRandomInt(divisionResult + 1, 999);
+             }
+        }
+        
+        if (sign2 === '+') {
+            f = getRandomInt(50, 200);
+        } else { // sign2 === '-'
+            f = getRandomInt(50, intermediateResult - 1);
+        }
+
+        // --- Шаг 4: Формируем текст (здесь только один вариант d+b*c) ---
+        const problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} (${d} + ${b} · ${c}) : ${e} ${sign2} ${f}</h3>`;
+        
+        return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
+    },
+    calculateAnswer: function(vars) {
+        let result = (vars.d + vars.b * vars.c) / vars.e;
+        if (vars.sign1 === '+') {
+            result = vars.a + result;
+        } else {
+            result = vars.a - result;
+        }
+        
+        if (vars.sign2 === '+') {
+            result += vars.f;
+        } else {
+            result -= vars.f;
+        }
+        return result;
+    }
+},
+
+{
+    type: " ",
+    number: "4_count_15", 
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type1"],
+    generate: function() {
+        // --- Шаг 1: Конструктивно создаём a, f и знаки ---
+        const sign1 = Math.random() > 0.5 ? '+' : '-';
+        
+        let a, f;
+        // Генерируем 'a' и 'f' так, чтобы вычитание всегда было корректным
+        if (sign1 === '+') {
+            a = getRandomInt(100, 500);
+            f = getRandomInt(50, 200);
+        } else { // sign1 === '-'
+            // Сначала генерируем f, затем 'a' которое гарантированно больше
+            f = getRandomInt(50, 800); 
+            a = getRandomInt(f + 1, 999);
+        }
+        
+        const intermediateResult = (sign1 === '+') ? a + f : a - f;
+
+        // Определяем второй знак, убеждаемся, что есть хоть один минус
+        let sign2 = (intermediateResult <= 50) ? '+' : (Math.random() > 0.5 ? '+' : '-');
+        if (sign1 === '+' && sign2 === '+') {
+            sign2 = '-';
+            // Если мы только что сделали знак "-", нужно проверить, возможно ли вычитание
+            if (intermediateResult <= 20) { // Допустим, минимальный результат деления 20
+                 return this.generate(); // Если нет, безопаснее всего перезапустить генерацию
+            }
+        }
+
+        // --- Шаг 2: Конструктивно создаём результат деления и его компоненты ---
+        let divisionResult;
+        if (sign2 === '+') {
+            divisionResult = getRandomInt(50, 200);
+        } else { // sign2 === '-'
+            // Результат деления должен быть меньше промежуточного результата
+             if (intermediateResult <= 21) return this.generate(); // Проверка на корректный диапазон
+            divisionResult = getRandomInt(20, intermediateResult - 1);
+        }
+
+        const e = getRandomInt(2, 9);
+        const dividend = divisionResult * e; 
+
+        let b, c;
+        if (Math.random() > 0.5) {
+            b = getRandomInt(2, 9);
+            const max_c = Math.floor((dividend - 10) / b);
+            if (max_c <= 100) return this.generate(); 
+            c = getRandomInt(100, max_c);
+        } else {
+            c = getRandomInt(2, 9);
+            const max_b = Math.floor((dividend - 10) / c);
+            if (max_b <= 100) return this.generate();
+            b = getRandomInt(100, max_b);
+        }
+        const d = dividend - (b * c);
+
+        // --- Шаг 3: Формируем текст ---
         let problemText;
         if (Math.random() > 0.5) {
-            problemText = `Вычислите значение выражения: <br> <h3>(${b} * ${c} + ${d}) : ${e} ${sign1} ${f} ${sign2} ${a}</h3>`;
+            problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} ${f} ${sign2} (${d} + ${b} · ${c}) : ${e}</h3>`;
         } else {
-            problemText = `Вычислите значение выражения: <br> <h3>(${d} + ${b} * ${c}) : ${e} ${sign1} ${f} ${sign2} ${a}</h3>`;
+            problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} ${f} ${sign2} (${b} · ${c} + ${d}) : ${e}</h3>`;
+        }
+        
+        return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
+    },
+    calculateAnswer: function(vars) {
+        const divisionResult = (vars.b * vars.c + vars.d) / vars.e;
+        let result = (vars.sign1 === '+') ? vars.a + vars.f : vars.a - vars.f;
+        result = (vars.sign2 === '+') ? result + divisionResult : result - divisionResult;
+        return result;
+    }
+},
+
+{
+    
+    type: " ",
+    number: "4_count_14", 
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type1"],
+    generate: function() {
+        // --- Шаг 1: Генерируем основу для деления ---
+        const e = getRandomInt(2, 9);
+        const dividendResult = getRandomInt(500, 1000); // Результат в скобках
+        const dividend = dividendResult * e; 
+
+        // --- Шаг 2: Конструктивно создаём b, c, d ---
+        let b, c;
+        if (Math.random() > 0.5) {
+            b = getRandomInt(2, 9);
+            const max_c = Math.floor((dividend - 10) / b);
+            if (max_c <= 100) return this.generate(); // Аварийный перезапуск для редких случаев
+            c = getRandomInt(100, max_c);
+        } else {
+            c = getRandomInt(2, 9);
+            const max_b = Math.floor((dividend - 10) / c);
+            if (max_b <= 100) return this.generate();
+            b = getRandomInt(100, max_b);
+        }
+        const d = dividend - (b * c);
+
+        // --- Шаг 3: Конструктивно создаём a, f и знаки ---
+        const sign1 = Math.random() > 0.5 ? '+' : '-';
+        const sign2 = (sign1 === '+') ? '-' : (Math.random() > 0.5 ? '+' : '-');
+        
+        let f, a;
+        let intermediateResult = dividendResult;
+
+        // Генерируем 'f' так, чтобы первое действие было корректным
+        if (sign1 === '+') {
+            f = getRandomInt(50, 200);
+            intermediateResult += f;
+        } else {
+            // Если знак "-", f должно быть меньше dividendResult
+            if (dividendResult <= 50) return this.generate(); // Перезапуск, если невозможно подобрать f
+            f = getRandomInt(50, dividendResult - 1);
+            intermediateResult -= f;
+        }
+
+        // Генерируем 'a' так, чтобы второе действие было корректным
+        if (sign2 === '+') {
+            a = getRandomInt(100, 999);
+        } else {
+            // Если знак "-", a должно быть меньше промежуточного результата
+            if (intermediateResult <= 100) return this.generate(); // Перезапуск
+            a = getRandomInt(100, intermediateResult - 1);
+        }
+
+        // --- Шаг 4: Формируем текст со знаком "·" ---
+        let problemText;
+        if (Math.random() > 0.5) {
+            problemText = `Вычислите значение выражения: <br> <h3>(${b} · ${c} + ${d}) : ${e} ${sign1} ${f} ${sign2} ${a}</h3>`;
+        } else {
+            problemText = `Вычислите значение выражения: <br> <h3>(${d} + ${b} · ${c}) : ${e} ${sign1} ${f} ${sign2} ${a}</h3>`;
         }
         
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
@@ -72,53 +708,68 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_сount_13", // Задача 1: a + (b*c+d):e + f
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "1"],
+    number: "4_count_13", 
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type1"],
     generate: function() {
+        // --- Шаг 1: Генерируем основу для деления ---
         const e = getRandomInt(2, 9);
-        const divisionResult = getRandomInt(20, 100);
-        const dividend = divisionResult * e; // Это число, которое должно получиться в скобках
+        const divisionResult = getRandomInt(50, 200); // Результат в скобках
+        const dividend = divisionResult * e; 
 
-        let b, c, d;
-        let attempts = 0;
-
-        // Используем цикл вместо рекурсии, чтобы избежать ошибок
-        while (attempts < 20) {
-            if (Math.random() > 0.5) {
-                b = getRandomInt(100, 200); // b - трёхзначное
-                c = getRandomInt(2, 9);     // c - однозначное
-            } else {
-                b = getRandomInt(2, 9);     // b - однозначное
-                c = getRandomInt(100, 200); // c - трёхзначное
-            }
-            
-            d = dividend - b * c;
-            // Проверяем, что 'd' получилось подходящим (двузначное или трёхзначное)
-            if (d >= 10 && d < 1000) {
-                break; // Если всё хорошо, выходим из цикла
-            }
-            attempts++;
+        // --- Шаг 2: Конструктивно создаём b, c, d ---
+        let b, c;
+        if (Math.random() > 0.5) {
+            b = getRandomInt(2, 9);
+            const max_c = Math.floor((dividend - 10) / b);
+            if (max_c <= 100) return this.generate(); 
+            c = getRandomInt(100, max_c);
+        } else {
+            c = getRandomInt(2, 9);
+            const max_b = Math.floor((dividend - 10) / c);
+            if (max_b <= 100) return this.generate();
+            b = getRandomInt(100, max_b);
         }
-        // Если за 20 попыток не нашли, ставим d=10 и пересчитываем b*c
-        if (d < 10 || d >= 1000) {
-             d = getRandomInt(10, 99);
-             const bc = dividend - d;
-             b = 2;
-             c = Math.floor(bc/2);
-             if (c < 100) return this.generate(); // Аварийный перезапуск
-        }
+        const d = dividend - (b * c);
 
-        const a = getRandomInt(100, 999);
-        const f = getRandomInt(50, 200);
+        // --- Шаг 3: Конструктивно создаём a, f и знаки ---
+        let sign1 = Math.random() > 0.5 ? '+' : '-';
         
-        const sign1 = Math.random() > 0.5 ? '+' : '-';
-        const sign2 = (sign1 === '+') ? '-' : (Math.random() > 0.5 ? '+' : '-');
-
-        if (sign1 === '-' && a < divisionResult) {
-            return this.generate(); // Простой перезапуск, если 'a' слишком маленькое
+        let a, f;
+        
+        // Генерируем 'a' так, чтобы первое действие было корректным
+        if (sign1 === '+') {
+            a = getRandomInt(100, 999);
+        } else {
+            // Если знак "-", 'a' должно быть больше результата деления
+            a = getRandomInt(divisionResult + 1, 999);
         }
 
-        const problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} (${b} * ${c} + ${d}) : ${e} ${sign2} ${f}</h3>`;
+        let intermediateResult = (sign1 === '+') ? a + divisionResult : a - divisionResult;
+        
+        // Определяем второй знак и генерируем 'f'
+        // Если промежуточный результат слишком мал для вычитания, второй знак может быть только "+"
+        let sign2 = (intermediateResult <= 50) ? '+' : (Math.random() > 0.5 ? '+' : '-');
+        
+        // Гарантируем, что хотя бы один минус есть в примере
+        if (sign1 === '+' && sign2 === '+') {
+            sign2 = '-';
+            // Проверяем, возможно ли вычитание
+             if (intermediateResult <= 50) {
+                 sign1 = '-'; // Если f вычесть нельзя, делаем первое действие вычитанием
+                 a = getRandomInt(divisionResult + 1, 999); // и пересчитываем 'a'
+             }
+        }
+        
+        if (sign2 === '+') {
+            f = getRandomInt(50, 200);
+        } else {
+            // Если знак "-", 'f' должно быть меньше промежуточного результата
+            f = getRandomInt(50, intermediateResult - 1);
+        }
+
+        // --- Шаг 4: Формируем текст ---
+        const problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} (${b} · ${c} + ${d}) : ${e} ${sign2} ${f}</h3>`;
+        
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
     calculateAnswer: function(vars) {
@@ -130,9 +781,9 @@ const _4countTasks = [
         }
         
         if (vars.sign2 === '+') {
-            result = result + vars.f;
+            result += vars.f;
         } else {
-            result = result - vars.f;
+            result -= vars.f;
         }
         return result;
     }
