@@ -7,7 +7,6 @@ const trainerSettings = {
 
 // --- ВЫБОРКА ЗАДАЧ ---
 const problemSelectors = [
-    const problemSelectors = [
     {
         // --- Правило 1: Взять ОДНУ задачу из первой группы ---
         count: 1, 
