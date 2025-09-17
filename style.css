@@ -125,3 +125,9 @@ button {
 .hidden {
     display: none;
 }
+
+.problem-expression {
+    font-size: 1.2em;      /* Размер шрифта чуть больше основного текста */
+    font-weight: normal;   /* Обычная толщина, не жирный */
+    margin: 10px 0;        /* Вертикальные отступы, как у .problem-title */
+}
