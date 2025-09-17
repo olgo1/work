@@ -2,6 +2,224 @@ const _4countTasks = [
 
 {
     type: " ",
+    number: "4_count_26",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "умножение на двузначное", "умножение на однозначное", "скобки", "type8"],
+
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+        // --- ШАГ 1: Конструируем блок в скобках (|b - c * d|) ---
+        const c = getRandomInt(10, 99);   // двузначное
+        const d = getRandomInt(4, 9);     // однозначное > 3
+        const cd_product = c * d;         // всегда < 1000 (max 99*9=891)
+
+        let b, paren_text, paren_res;
+        const b_is_larger = Math.random() > 0.5;
+
+        if (b_is_larger) {
+            // Формируем скобки вида (b - c * d)
+            // b должно быть > cd_product и быть трёхзначным
+            const b_lower_bound = Math.max(100, cd_product + 1);
+            if (b_lower_bound > 999) return this.generate(); // Невозможно подобрать b, перезапуск
+            b = getRandomInt(b_lower_bound, 999);
+            paren_res = b - cd_product;
+            paren_text = `(${b} - ${c} · ${d})`;
+        } else {
+            // Формируем скобки вида (c * d - b)
+            // b должно быть < cd_product и быть трёхзначным
+            const b_upper_bound = cd_product - 1;
+            if (b_upper_bound < 100) return this.generate(); // Невозможно подобрать b, перезапуск
+            b = getRandomInt(100, b_upper_bound);
+            paren_res = cd_product - b;
+            paren_text = `(${c} · ${d} - ${b})`;
+        }
+
+        // --- ШАГ 2: Конструируем блок произведения (e * f) ---
+        const f = getRandomInt(4, 9); // однозначное > 3
+        // e * f должно быть < 1000 => e < 1000 / f
+        const e_upper_bound = Math.floor(999 / f);
+        // e также должно быть трёхзначным
+        if (e_upper_bound < 100) return this.generate(); // Невозможно, перезапуск
+        const e = getRandomInt(100, e_upper_bound);
+        const product_res = e * f;
+        const product_text = Math.random() > 0.5 ? `${e} · ${f}` : `${f} · ${e}`;
+
+        // --- ШАГ 3: Генерируем 'a' и ищем все валидные комбинации ---
+        const a = getRandomInt(100, 999);
+
+        const terms = {
+            A: { val: a, txt: a.toString() },
+            P: { val: paren_res, txt: paren_text },
+            Pr: { val: product_res, txt: product_text }
+        };
+
+        const validExpressions = [];
+
+        // Проверяем все возможные шаблоны
+        // Шаблон: A ± Pr ± P
+        if (terms.A.val + terms.Pr.val < 1000 && terms.A.val + terms.Pr.val > terms.P.val) {
+            validExpressions.push({ text: `${terms.A.txt} + ${terms.Pr.txt} - ${terms.P.txt}`, answer: terms.A.val + terms.Pr.val - terms.P.val });
+        }
+        if (terms.A.val > terms.P.val && (terms.A.val - terms.P.val) + terms.Pr.val < 1000) {
+            validExpressions.push({ text: `${terms.A.txt} - ${terms.P.txt} + ${terms.Pr.txt}`, answer: terms.A.val - terms.P.val + terms.Pr.val });
+        }
+        if (terms.A.val > terms.P.val && (terms.A.val - terms.P.val) > terms.Pr.val) {
+            validExpressions.push({ text: `${terms.A.txt} - ${terms.P.txt} - ${terms.Pr.txt}`, answer: terms.A.val - terms.P.val - terms.Pr.val });
+        }
+        if (terms.A.val > terms.Pr.val && (terms.A.val - terms.Pr.val) > terms.P.val) {
+            validExpressions.push({ text: `${terms.A.txt} - ${terms.Pr.txt} - ${terms.P.txt}`, answer: terms.A.val - terms.Pr.val - terms.P.val });
+        }
+
+        // Шаблон: Pr ± A ± P
+        if (terms.Pr.val + terms.A.val < 1000 && terms.Pr.val + terms.A.val > terms.P.val) {
+            validExpressions.push({ text: `${terms.Pr.txt} + ${terms.A.txt} - ${terms.P.txt}`, answer: terms.Pr.val + terms.A.val - terms.P.val });
+        }
+        if (terms.Pr.val > terms.P.val && (terms.Pr.val - terms.P.val) + terms.A.val < 1000) {
+            validExpressions.push({ text: `${terms.Pr.txt} - ${terms.P.txt} + ${terms.A.txt}`, answer: terms.Pr.val - terms.P.val + terms.A.val });
+        }
+        if (terms.Pr.val > terms.P.val && (terms.Pr.val - terms.P.val) > terms.A.val) {
+            validExpressions.push({ text: `${terms.Pr.txt} - ${terms.P.txt} - ${terms.A.txt}`, answer: terms.Pr.val - terms.P.val - terms.A.val });
+        }
+        
+        // Если не нашлось ни одной валидной комбинации, перезапускаем
+        if (validExpressions.length === 0) {
+            return this.generate();
+        }
+
+        // Выбираем случайное выражение из списка возможных
+        const chosenExpression = validExpressions[getRandomInt(0, validExpressions.length - 1)];
+
+        return {
+            variables: { a, b, c, d, e, f, answer: chosenExpression.answer },
+            problemText: `Вычислите значение выражения: <br> <h3>${chosenExpression.text}</h3>`
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.answer;
+    }
+},
+
+{
+    type: " ",
+    number: "4_count_25",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type7"],
+
+    generate: function() {
+        // --- Вспомогательная функция для случайных чисел ---
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+        // --- ШАГ 1: Конструируем первый член (Term 1) ---
+        // Он имеет вид a * b : (c - d) или a : (c - d) * b
+
+        // Сначала создаём делитель (результат скобок)
+        const paren_res = getRandomInt(4, 9); // c - d, однозначное > 3
+
+        // Генерируем b, которое не кратно результату скобок
+        let b;
+        do {
+            b = getRandomInt(4, 9); // b, однозначное > 3
+        } while (b % paren_res === 0);
+
+        // Теперь подбираем 'a', чтобы все условия выполнялись:
+        // 1. 'a' - трёхзначное.
+        // 2. 'a' должно делиться на 'paren_res' нацело.
+        // 3. Промежуточный результат 'a * b' должен быть < 1000.
+
+        // Из п.3 следует, что a < 1000 / b.
+        const a_upper_bound = Math.floor(999 / b);
+
+        // Найдём первое трёхзначное число, кратное 'paren_res'.
+        const a_lower_bound = Math.ceil(100 / paren_res) * paren_res;
+
+        // Если диапазон для 'a' невозможен, перезапускаем генерацию.
+        if (a_lower_bound > a_upper_bound) return this.generate();
+
+        // Собираем все возможные значения 'a' в массив.
+        const possible_a = [];
+        for (let i = a_lower_bound; i <= a_upper_bound; i += paren_res) {
+            possible_a.push(i);
+        }
+
+        // Если не нашлось ни одного подходящего 'a', перезапускаем.
+        if (possible_a.length === 0) return this.generate();
+
+        const a = possible_a[getRandomInt(0, possible_a.length - 1)];
+
+        // Теперь, когда 'a' и 'paren_res' известны, находим 'c' и 'd'.
+        const c = getRandomInt(100, 999);
+        const d = c - paren_res;
+
+        // Вычисляем результат первого члена. Он гарантированно целый.
+        const term1_result = (a * b) / paren_res;
+
+
+        // --- ШАГ 2: Конструируем второй член (Term 2) ---
+        // Он имеет вид e : f
+
+        const f = getRandomInt(3, 9); // f, однозначное > 2
+
+        // Подбираем результат деления так, чтобы 'e' получилось трёхзначным.
+        // 100 <= term2_result * f <= 999  =>  100/f <= term2_result <= 999/f
+        const term2_lower = Math.ceil(100 / f);
+        const term2_upper = Math.floor(999 / f);
+        
+        // Если диапазон пуст, перезапускаем
+        if (term2_lower > term2_upper) return this.generate();
+        
+        const term2_result = getRandomInt(term2_lower, term2_upper);
+        const e = term2_result * f;
+
+
+        // --- ШАГ 3: Проверяем финальные ограничения и собираем пример ---
+
+        // Итоговый ответ при сложении не должен превышать 999.
+        if (term1_result + term2_result >= 1000) return this.generate();
+
+        // Готовим текстовые блоки для каждого члена
+        const term1_text_part1 = `${a} · ${b} : (${c} - ${d})`;
+        const term1_text_part2 = `${a} : (${c} - ${d}) · ${b}`;
+        const term1_text = Math.random() > 0.5 ? term1_text_part1 : term1_text_part2;
+        const term2_text = `${e} : ${f}`;
+
+        let problemText, sign;
+
+        // Случайно выбираем знак '+' или '-'
+        if (Math.random() > 0.5) { // Сложение
+            sign = '+';
+            // При сложении порядок не важен, поэтому тоже делаем его случайным
+            const final_text = Math.random() > 0.5 ? 
+                               `${term1_text} + ${term2_text}` : 
+                               `${term2_text} + ${term1_text}`;
+            problemText = `Вычислите значение выражения: <br> <h3>${final_text}</h3>`;
+        } else { // Вычитание
+            sign = '-';
+            // При вычитании ставим большее число на первое место, чтобы ответ был натуральным.
+            if (term1_result >= term2_result) {
+                problemText = `Вычислите значение выражения: <br> <h3>${term1_text} - ${term2_text}</h3>`;
+            } else {
+                problemText = `Вычислите значение выражения: <br> <h3>${term2_text} - ${term1_text}</h3>`;
+            }
+        }
+        
+        return {
+            variables: { a, b, c, d, e, f, term1_result, term2_result, sign },
+            problemText
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        if (vars.sign === '+') {
+            return vars.term1_result + vars.term2_result;
+        } else {
+            // Ответ всегда будет разностью большего и меньшего члена
+            return Math.abs(vars.term1_result - vars.term2_result);
+        }
+    }
+},
+
+{
+    type: " ",
     number: "4_count_24",
     tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение на однозначное", "скобки", "type6"],
     generate: function() {
