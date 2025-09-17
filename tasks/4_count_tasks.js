@@ -91,7 +91,7 @@ const _4countTasks = [
 
         return {
             variables: { a, b, c, d, e, f, answer: chosenExpression.answer },
-            problemText: `Вычислите значение выражения: <br> <h3>${chosenExpression.text}</h3>`
+            problemText: `Вычислите: <br> <h3>${chosenExpression.text}</h3>`
         };
     },
 
@@ -191,14 +191,14 @@ const _4countTasks = [
             const final_text = Math.random() > 0.5 ? 
                                `${term1_text} + ${term2_text}` : 
                                `${term2_text} + ${term1_text}`;
-            problemText = `Вычислите значение выражения: <br> <h3>${final_text}</h3>`;
+            problemText = `Вычислите: <br> <h3>${final_text}</h3>`;
         } else { // Вычитание
             sign = '-';
             // При вычитании ставим большее число на первое место, чтобы ответ был натуральным.
             if (term1_result >= term2_result) {
-                problemText = `Вычислите значение выражения: <br> <h3>${term1_text} - ${term2_text}</h3>`;
+                problemText = `Вычислите: <br> <h3>${term1_text} - ${term2_text}</h3>`;
             } else {
-                problemText = `Вычислите значение выражения: <br> <h3>${term2_text} - ${term1_text}</h3>`;
+                problemText = `Вычислите: <br> <h3>${term2_text} - ${term1_text}</h3>`;
             }
         }
         
@@ -264,9 +264,9 @@ const _4countTasks = [
         let problemText;
         // Ставим большее число на первое место
         if (term1_result > term2_result) {
-            problemText = `Вычислите значение выражения: <br> <h3>${term1_text} - ${term2_text}</h3>`;
+            problemText = `Вычислите: <br> <h3>${term1_text} - ${term2_text}</h3>`;
         } else { // term2_result >= term1_result
-            problemText = `Вычислите значение выражения: <br> <h3>${term2_text} - ${term1_text}</h3>`;
+            problemText = `Вычислите: <br> <h3>${term2_text} - ${term1_text}</h3>`;
         }
 
         return { variables: { a, b, c, d, e, f, term1_result, term2_result }, problemText };
@@ -329,9 +329,9 @@ const _4countTasks = [
 
         let problemText;
         if (term1_result > term2_result) {
-             problemText = `Вычислите значение выражения: <br> <h3>${term1_text} - ${term2_text}</h3>`;
+             problemText = `Вычислите: <br> <h3>${term1_text} - ${term2_text}</h3>`;
         } else {
-             problemText = `Вычислите значение выражения: <br> <h3>${term2_text} - ${term1_text}</h3>`;
+             problemText = `Вычислите: <br> <h3>${term2_text} - ${term1_text}</h3>`;
         }
         
         return { variables: { a, b, c, d, e, f, term1_result, term2_result}, problemText };
@@ -396,9 +396,9 @@ const _4countTasks = [
         // --- Шаг 3: Формируем текст согласно выбранному порядку ---
         let problemText;
         if (isADivFirst) {
-            problemText = `Вычислите значение выражения: <br> <h3>${a} : (${c} · ${d} - ${b}) ${sign} ${e} · ${f}</h3>`;
+            problemText = `Вычислите: <br> <h3>${a} : (${c} · ${d} - ${b}) ${sign} ${e} · ${f}</h3>`;
         } else {
-            problemText = `Вычислите значение выражения: <br> <h3>${e} · ${f} ${sign} ${a} : (${c} · ${d} - ${b})</h3>`;
+            problemText = `Вычислите: <br> <h3>${e} · ${f} ${sign} ${a} : (${c} · ${d} - ${b})</h3>`;
         }
 
         return { variables: { a, b, c, d, e, f, sign, isADivFirst }, problemText };
@@ -471,9 +471,9 @@ const _4countTasks = [
         // --- Шаг 3: Формируем текст ---
         let problemText;
         if (isADivFirst) {
-            problemText = `Вычислите значение выражения: <br> <h3>${a} : (${b} - ${c} · ${d}) ${sign} ${e} · ${f}</h3>`;
+            problemText = `Вычислите: <br> <h3>${a} : (${b} - ${c} · ${d}) ${sign} ${e} · ${f}</h3>`;
         } else {
-            problemText = `Вычислите значение выражения: <br> <h3>${e} · ${f} ${sign} ${a} : (${b} - ${c} · ${d})</h3>`;
+            problemText = `Вычислите: <br> <h3>${e} · ${f} ${sign} ${a} : (${b} - ${c} · ${d})</h3>`;
         }
 
         return { variables: { a, b, c, d, e, f, sign, isADivFirst }, problemText };
@@ -521,7 +521,7 @@ const _4countTasks = [
         else { if (intermediateResult <= 100) return this.generate(); f = getRandomInt(100, intermediateResult - 1); }
 
         // --- Шаг 3: Формируем текст ---
-        const problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} ${b} · (${c} - ${d}) : ${e} ${sign2} ${f}</h3>`;
+        const problemText = `Вычислите: <br> <h3>${a} ${sign1} ${b} · (${c} - ${d}) : ${e} ${sign2} ${f}</h3>`;
         
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
@@ -578,7 +578,7 @@ const _4countTasks = [
         else { if (intermediateResult <= 100) return this.generate(); f = getRandomInt(100, intermediateResult - 1); }
 
         // --- Шаг 3: Формируем текст ---
-        const problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} ${b} · (${e} - ${c} : ${d}) ${sign2} ${f}</h3>`;
+        const problemText = `Вычислите: <br> <h3>${a} ${sign1} ${b} · (${e} - ${c} : ${d}) ${sign2} ${f}</h3>`;
         
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
@@ -632,7 +632,7 @@ const _4countTasks = [
             }
         }
         
-        const problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} ${f} ${sign2} ${b} · (${c} : ${d} - ${e})</h3>`;
+        const problemText = `Вычислите: <br> <h3>${a} ${sign1} ${f} ${sign2} ${b} · (${c} : ${d} - ${e})</h3>`;
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
     calculateAnswer: function(vars) {
@@ -676,9 +676,9 @@ const _4countTasks = [
         let problemText;
         const parenText = `(${c} : ${d} - ${e})`;
         if (Math.random() > 0.5) {
-            problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} ${b} · ${parenText} ${sign2} ${f}</h3>`;
+            problemText = `Вычислите: <br> <h3>${a} ${sign1} ${b} · ${parenText} ${sign2} ${f}</h3>`;
         } else {
-            problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} ${parenText} · ${b} ${sign2} ${f}</h3>`;
+            problemText = `Вычислите: <br> <h3>${a} ${sign1} ${parenText} · ${b} ${sign2} ${f}</h3>`;
         }
         
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
@@ -747,7 +747,7 @@ const _4countTasks = [
         }
 
         // --- Шаг 4: Формируем текст (здесь только один вариант d+b*c) ---
-        const problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} (${d} + ${b} · ${c}) : ${e} ${sign2} ${f}</h3>`;
+        const problemText = `Вычислите: <br> <h3>${a} ${sign1} (${d} + ${b} · ${c}) : ${e} ${sign2} ${f}</h3>`;
         
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
@@ -829,9 +829,9 @@ const _4countTasks = [
         // --- Шаг 3: Формируем текст ---
         let problemText;
         if (Math.random() > 0.5) {
-            problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} ${f} ${sign2} (${d} + ${b} · ${c}) : ${e}</h3>`;
+            problemText = `Вычислите: <br> <h3>${a} ${sign1} ${f} ${sign2} (${d} + ${b} · ${c}) : ${e}</h3>`;
         } else {
-            problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} ${f} ${sign2} (${b} · ${c} + ${d}) : ${e}</h3>`;
+            problemText = `Вычислите: <br> <h3>${a} ${sign1} ${f} ${sign2} (${b} · ${c} + ${d}) : ${e}</h3>`;
         }
         
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
@@ -900,9 +900,9 @@ const _4countTasks = [
         // --- Шаг 4: Формируем текст со знаком "·" ---
         let problemText;
         if (Math.random() > 0.5) {
-            problemText = `Вычислите значение выражения: <br> <h3>(${b} · ${c} + ${d}) : ${e} ${sign1} ${f} ${sign2} ${a}</h3>`;
+            problemText = `Вычислите: <br> <h3>(${b} · ${c} + ${d}) : ${e} ${sign1} ${f} ${sign2} ${a}</h3>`;
         } else {
-            problemText = `Вычислите значение выражения: <br> <h3>(${d} + ${b} · ${c}) : ${e} ${sign1} ${f} ${sign2} ${a}</h3>`;
+            problemText = `Вычислите: <br> <h3>(${d} + ${b} · ${c}) : ${e} ${sign1} ${f} ${sign2} ${a}</h3>`;
         }
         
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
@@ -986,7 +986,7 @@ const _4countTasks = [
         }
 
         // --- Шаг 4: Формируем текст ---
-        const problemText = `Вычислите значение выражения: <br> <h3>${a} ${sign1} (${b} · ${c} + ${d}) : ${e} ${sign2} ${f}</h3>`;
+        const problemText = `Вычислите: <br> <h3>${a} ${sign1} (${b} · ${c} + ${d}) : ${e} ${sign2} ${f}</h3>`;
         
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
