@@ -8,7 +8,7 @@ const trainerSettings = {
 // --- ВЫБОРКА ЗАДАЧ ---
 const problemSelectors = [
     {
-        count: 10,
+        count: 3,
         filter: {
             tags: {
                 include: ["4_класс", "счёт", "без_скобок"], // ОБЯЗАТЕЛЬНО должны быть эти теги
