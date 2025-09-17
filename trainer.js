@@ -129,49 +129,65 @@ document.addEventListener('DOMContentLoaded', () => {
         /**
          * New task selection logic based on selectors.
          */
-        function pickTasks() {
-            const selectedTasks = [];
-            let availableTasks = [...allTasks]; // Create a mutable copy
+        /**
+ * Обновлённая функция выбора задач с поддержкой include/exclude для тегов.
+ */
+function pickTasks() {
+    const selectedTasks = [];
+    let availableTasks = [...allTasks]; // Создаём копию для работы
 
-            for (const selector of problemSelectors) {
-                const { count, filter } = selector;
+    for (const selector of problemSelectors) {
+        const { count, filter } = selector;
 
-                // Find all tasks that match the current filter
-                const candidates = availableTasks.filter(task => {
-                    if (!task) return false;
+        const candidates = availableTasks.filter(task => {
+            if (!task) return false;
 
-                    // Filter by type (can be a string or an array of strings)
-                    const typeMatch = filter.type ?
-                        (Array.isArray(filter.type) ? filter.type.includes(task.type) : task.type === filter.type) :
-                        true;
+            // --- Фильтрация по номеру и типу (без изменений) ---
+            const typeMatch = filter.type ?
+                (Array.isArray(filter.type) ? filter.type.includes(task.type) : task.type === filter.type) :
+                true;
 
-                    // Filter by number (can be a number or an array of numbers)
-                    const numberMatch = filter.number ?
-                        (Array.isArray(filter.number) ? filter.number.includes(task.number) : task.number === filter.number) :
-                        true;
+            const numberMatch = filter.number ?
+                (Array.isArray(filter.number) ? filter.number.includes(task.number) : task.number === filter.number) :
+                true;
 
-                    // Filter by tags (assumes AND logic: task must have ALL specified tags)
-                    const tagsMatch = filter.tags ?
-                        (Array.isArray(filter.tags) ? filter.tags.every(tag => task.tags && task.tags.includes(tag)) : false) :
-                        true;
+            // --- НОВАЯ ЛОГИКА ФИЛЬТРАЦИИ ПО ТЕГАМ ---
+            let tagsMatch = true; // По умолчанию считаем, что задача подходит
+            if (filter.tags) {
+                const taskTags = task.tags || [];
 
-                    return typeMatch && numberMatch && tagsMatch;
-                });
+                // Если filter.tags - это объект { include, exclude }
+                if (typeof filter.tags === 'object' && !Array.isArray(filter.tags)) {
+                    const include = filter.tags.include || [];
+                    const exclude = filter.tags.exclude || [];
 
-                // Shuffle candidates to get random tasks
-                const shuffledCandidates = candidates.sort(() => 0.5 - Math.random());
+                    // 1. Проверяем, есть ли все теги из списка include
+                    const meetsInclude = include.every(tag => taskTags.includes(tag));
 
-                // Select the required number of tasks
-                const picked = shuffledCandidates.slice(0, count);
-                selectedTasks.push(...picked);
+                    // 2. Проверяем, нет ли ни одного тега из списка exclude
+                    const meetsExclude = !exclude.some(tag => taskTags.includes(tag));
 
-                // Create a set of picked tasks for efficient lookup
-                const pickedSet = new Set(picked);
-                // Filter out the picked tasks from the available pool for the next selector
-                availableTasks = availableTasks.filter(task => !pickedSet.has(task));
+                    tagsMatch = meetsInclude && meetsExclude;
+                }
+                // Если filter.tags - это простой массив (для обратной совместимости)
+                else if (Array.isArray(filter.tags)) {
+                    tagsMatch = filter.tags.every(tag => taskTags.includes(tag));
+                }
             }
-            return selectedTasks;
-        }
+
+            return typeMatch && numberMatch && tagsMatch;
+        });
+
+        // --- Выбор случайных задач (без изменений) ---
+        const shuffledCandidates = candidates.sort(() => 0.5 - Math.random());
+        const picked = shuffledCandidates.slice(0, count);
+        selectedTasks.push(...picked);
+
+        const pickedSet = new Set(picked);
+        availableTasks = availableTasks.filter(task => !pickedSet.has(task));
+    }
+    return selectedTasks;
+}
 
 
         function createTaskCard(task) {
@@ -242,4 +258,5 @@ document.addEventListener('DOMContentLoaded', () => {
         render();
     }
 });
+
 
