@@ -130,7 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
          * New task selection logic based on selectors.
          */
         /**
- * Обновлённая функция выбора задач с поддержкой include/exclude для тегов.
+ /**
+ * Обновлённая функция выбора задач с поддержкой include, exclude и ANY для тегов.
  */
 function pickTasks() {
     const selectedTasks = [];
@@ -151,25 +152,29 @@ function pickTasks() {
                 (Array.isArray(filter.number) ? filter.number.includes(task.number) : task.number === filter.number) :
                 true;
 
-            // --- НОВАЯ ЛОГИКА ФИЛЬТРАЦИИ ПО ТЕГАМ ---
-            let tagsMatch = true; // По умолчанию считаем, что задача подходит
+            // --- ОБНОВЛЁННАЯ ЛОГИКА ФИЛЬТРАЦИИ ПО ТЕГАМ ---
+            let tagsMatch = true;
             if (filter.tags) {
                 const taskTags = task.tags || [];
 
-                // Если filter.tags - это объект { include, exclude }
                 if (typeof filter.tags === 'object' && !Array.isArray(filter.tags)) {
                     const include = filter.tags.include || [];
                     const exclude = filter.tags.exclude || [];
+                    const any = filter.tags.any || []; // <-- Новое свойство
 
-                    // 1. Проверяем, есть ли все теги из списка include
+                    // 1. Проверка на ВКЛЮЧЕНИЕ (должны быть все)
                     const meetsInclude = include.every(tag => taskTags.includes(tag));
 
-                    // 2. Проверяем, нет ли ни одного тега из списка exclude
+                    // 2. Проверка на ИСКЛЮЧЕНИЕ (не должно быть ни одного)
                     const meetsExclude = !exclude.some(tag => taskTags.includes(tag));
 
-                    tagsMatch = meetsInclude && meetsExclude;
+                    // 3. Проверка на ИЛИ (должен быть хотя бы один)
+                    // Эта проверка срабатывает, только если список 'any' не пустой
+                    const meetsAny = any.length === 0 ? true : any.some(tag => taskTags.includes(tag));
+
+                    tagsMatch = meetsInclude && meetsExclude && meetsAny;
                 }
-                // Если filter.tags - это простой массив (для обратной совместимости)
+                // Для обратной совместимости, если tags - это простой массив
                 else if (Array.isArray(filter.tags)) {
                     tagsMatch = filter.tags.every(tag => taskTags.includes(tag));
                 }
@@ -258,5 +263,6 @@ function pickTasks() {
         render();
     }
 });
+
 
 
