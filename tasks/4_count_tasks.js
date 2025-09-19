@@ -2,8 +2,8 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_26",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "умножение_на_однозначное", "скобки", "type1"],
+    number: "4count21",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "умножение_на_однозначное", "скобки", "1"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const c = getRandomInt(10, 99);
@@ -51,8 +51,8 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_25",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "type2"],
+    number: "4count20",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "2"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const paren_res = getRandomInt(4, 9);
@@ -102,8 +102,8 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_24",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "type4"],
+    number: "4count19",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "4"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const paren1_result = getRandomInt(2, 9);
@@ -137,8 +137,8 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_23", 
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "type3"],
+    number: "4count18", 
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "3"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const c = getRandomInt(4, 9);
@@ -181,8 +181,8 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_22",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "type2"],
+    number: "4count17",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "2"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const parenResult = getRandomInt(2, 9);
@@ -242,8 +242,8 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_21",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "type2"],
+    number: "4count16",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "2"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const parenResult = getRandomInt(2, 9);
@@ -304,8 +304,8 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_20",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "type1"],
+    number: "4count15",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "1"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const e = getRandomInt(10, 50);
@@ -338,8 +338,8 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_19",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "type1"],
+    number: "4count14",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "1"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         let c, d, e, divResult, parenResult;
@@ -378,8 +378,8 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_18",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "type1"],
+    number: "4count13",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "1"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const sign1 = Math.random() > 0.5 ? '+' : '-';
@@ -422,8 +422,8 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_17",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "type1"],
+    number: "4count12",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "1"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         let c, d, e, divResult, parenResult;
@@ -467,8 +467,8 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_16",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "type1"],
+    number: "4count11",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "1"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const e = getRandomInt(2, 9);
@@ -521,8 +521,8 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_15", 
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "type1"],
+    number: "4count10", 
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "1"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const sign1 = Math.random() > 0.5 ? '+' : '-';
@@ -578,8 +578,8 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_14", 
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "type1"],
+    number: "4count9", 
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "1"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const e = getRandomInt(2, 9);
@@ -634,8 +634,8 @@ const _4countTasks = [
 
 {
     type: " ",
-    number: "4_count_13", 
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "type1"],
+    number: "4count8", 
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "скобки", "1"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const e = getRandomInt(2, 9);
@@ -684,8 +684,8 @@ const _4countTasks = [
 },
 
 {
-    number: "4_count_12",
-    tags: ["4_класс", "счёт", "сложение_многозначных", "вычитание_многозначных", "перенос_разряда", "sparse_nums", "натуральные_числа"],
+    number: "4count7",
+    tags: ["4_класс", "счёт", "сложение_многозначных", "вычитание_многозначных", "перенос_разряда", "sparse_nums", "натуральные_числа", "3"],
     generate: () => {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
@@ -766,8 +766,8 @@ const _4countTasks = [
 },
 
 {
-    number: "4_count_11",
-    tags: ["4_класс", "счёт", "вычитание_многозначных", "перенос_разряда", "sparse_nums", "натуральные_числа"],
+    number: "4count6",
+    tags: ["4_класс", "счёт", "вычитание_многозначных", "перенос_разряда", "sparse_nums", "натуральные_числа", "2"],
     generate: () => {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const u_digits = []; const v_digits = []; const r_digits = []; let borrow = 0;
@@ -788,8 +788,8 @@ const _4countTasks = [
 },
 
 {
-    number: "4_count_10", 
-    tags: ["4_класс", "сложение_многозначных", "круглые_числа", "счёт", "натуральные_числа", "sparse_nums"],
+    number: "4count5", 
+    tags: ["4_класс", "сложение_многозначных", "круглые_числа", "счёт", "натуральные_числа", "sparse_nums". "2"],
     generate: () => {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
@@ -810,135 +810,102 @@ const _4countTasks = [
 },
 
 {
-    number: "4_count_9", 
-    tags: ["4_класс", "sparse_nums", "счёт", "натуральные_числа", "умножение_на_однозначное"],
-    generate: () => {
+    number: "4count4",
+    tags: ["4_класс", "счёт", "натуральные_числа", "sparse_nums", "умножение_на_однозначное", "деление_на_однозначное", "1"],
+
+    generate: () => {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
-        const variant = getRandomInt(1, 4);
-        let factor1, factor2;
-        switch (variant) {
-            case 1: {
-                const n = getRandomElement([3, 4, 6, 7, 8, 9]); const k = getRandomElement([5, 6]); let a;
-                do { a = getRandomInt(11, 90); } while (a % n === 0 || a % 10 === 0);
-                const m = Math.floor((a * Math.pow(10, k)) / n) + 1;
-                factor1 = n; factor2 = m; break;
-            }
-            case 2: {
-                const n = getRandomElement([3, 4, 6, 7, 8, 9]); const k = getRandomElement([3, 4]); const a = getRandomInt(100, 999);
-                const term = a * Math.pow(10, k); const b = (n - (term % n)) % n; const p = term + b; const m = p / n;
-                factor1 = m; factor2 = n; break;
-            }
-            case 3: {
-                const n = getRandomElement([3, 6, 7, 9]); const k = getRandomElement([4, 5]); const a = getRandomInt(11, 99);
-                const term = a * Math.pow(10, k); const b = (n - (term % n)) % n; const p = term + b; const m = p / n;
-                factor1 = m; factor2 = n; break;
-            }
-            case 4: {
-                const m2 = 8; let m1;
-                do {
-                    const c_min = Math.ceil(1000 / 1250); const c_max = Math.floor(99999 / 1250);
-                    const c = getRandomInt(c_min, c_max) * 2 - 1;
-                    m1 = 1250 * c;
-                } while (m1 % 100 === 0);
-                factor1 = m1; factor2 = m2; break;
-            }
-        }
-        if (getRandomInt(0, 1) === 1) { [factor1, factor2] = [factor2, factor1]; }
-        return {
-            variables: { factor1, factor2 },
-            problemText: `Вычислите:<br><div class="problem-expression">${factor1} · ${factor2}</div>`
-        };
-    },
-    calculateAnswer: (vars) => { return vars.factor1 * vars.factor2; }
+
+        // Случайно выбираем, какое действие генерировать: умножение или деление
+        const operation = getRandomElement(['multiplication', 'division']);
+        let variables, problemText;
+
+        if (operation === 'division') {
+            // --- Логика из combined_generator.js (4_count_7 и 4_count_8) ---
+            const variant = getRandomInt(1, 2);
+            let n, m;
+
+            if (variant === 1) { // Логика 4_count_7
+                m = getRandomElement([3, 6, 7, 9]);
+                const k = getRandomElement([5, 6]);
+                let a;
+                do { a = getRandomInt(10, 99); } while (a % m === 0 || (m === 6 && a % 3 === 0));
+                const term = a * Math.pow(10, k);
+                const b_base = (m - (term % m)) % m;
+                let b = b_base;
+                while (b < 10) { b += m; }
+                n = a * Math.pow(10, k) + b;
+            } else { // Логика 4_count_8
+                m = getRandomElement([3, 4, 6, 7, 8, 9]);
+                const k = getRandomElement([4, 5]);
+                let a;
+                do { a = getRandomInt(11, 99); } while (a % m === 0 || a % 10 === 0);
+                const term = a * Math.pow(10, k);
+                let b_base = (m - (term % m)) % m;
+                if (b_base === 0) { b_base = m; }
+                const candidates_b = [];
+                for (let b_candidate = b_base; b_candidate < 10; b_candidate += m) { candidates_b.push(b_candidate); }
+                const b = getRandomElement(candidates_b);
+                n = a * Math.pow(10, k) + b;
+            }
+            variables = { n, m, operation };
+            problemText = `${n} : ${m}`;
+
+        } else { // operation === 'multiplication'
+            // --- Логика из 4_count_9 ---
+            const variant = getRandomInt(1, 4);
+            let factor1, factor2;
+            switch (variant) {
+                case 1: {
+                    const n = getRandomElement([3, 4, 6, 7, 8, 9]); const k = getRandomElement([5, 6]); let a;
+                    do { a = getRandomInt(11, 90); } while (a % n === 0 || a % 10 === 0);
+                    const m = Math.floor((a * Math.pow(10, k)) / n) + 1;
+                    factor1 = n; factor2 = m; break;
+                }
+                case 2: {
+                    const n = getRandomElement([3, 4, 6, 7, 8, 9]); const k = getRandomElement([3, 4]); const a = getRandomInt(100, 999);
+                    const term = a * Math.pow(10, k); const b = (n - (term % n)) % n; const p = term + b; const m = p / n;
+                    factor1 = m; factor2 = n; break;
+                }
+                case 3: {
+                    const n = getRandomElement([3, 6, 7, 9]); const k = getRandomElement([4, 5]); const a = getRandomInt(11, 99);
+                    const term = a * Math.pow(10, k); const b = (n - (term % n)) % n; const p = term + b; const m = p / n;
+                    factor1 = m; factor2 = n; break;
+                }
+                case 4: {
+                    const m2 = 8; let m1;
+                    do {
+                        const c_min = Math.ceil(1000 / 1250); const c_max = Math.floor(99999 / 1250);
+                        const c = getRandomInt(c_min, c_max) * 2 - 1;
+                        m1 = 1250 * c;
+                    } while (m1 % 100 === 0);
+                    factor1 = m1; factor2 = m2; break;
+                }
+            }
+            if (getRandomInt(0, 1) === 1) { [factor1, factor2] = [factor2, factor1]; }
+            variables = { factor1, factor2, operation };
+            problemText = `${factor1} · ${factor2}`;
+        }
+
+        return {
+            variables: variables,
+            problemText: `Вычислите:<br><div class="problem-expression">${problemText}</div>`
+        };
+    },
+
+    calculateAnswer: (vars) => {
+        if (vars.operation === 'division') {
+            return vars.n / vars.m;
+        } else { // 'multiplication'
+            return vars.factor1 * vars.factor2;
+        }
+    }
 },
 
 {
-    number: "4_count_8",
-    tags: ["4_класс", "деление_на_однозначное", "sparse_nums", "счёт", "натуральные_числа"],
-    generate: () => {
-        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-        const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
-        const m = getRandomElement([3, 4, 6, 7, 8, 9]);
-        const k = getRandomElement([4, 5]);
-        let a;
-        do { a = getRandomInt(11, 99); } while (a % m === 0 || a % 10 === 0);
-        const candidates_b = [];
-        const term = a * Math.pow(10, k);
-        let b_base = (m - (term % m)) % m;
-        if (b_base === 0) { b_base = m; }
-        for (let b_candidate = b_base; b_candidate < 10; b_candidate += m) { candidates_b.push(b_candidate); }
-        const b = getRandomElement(candidates_b);
-        const n = a * Math.pow(10, k) + b;
-        return {
-            variables: { n, m },
-            problemText: `Вычислите:<br><div class="problem-expression">${n} : ${m}</div>`
-        };
-    },
-    calculateAnswer: (vars) => { return vars.n / vars.m; }
-},
-
-{
-    number: "4_count_7",
-    tags: ["4_класс", "деление_на_однозначное", "sparse_nums", "счёт", "натуральные_числа"],
-    generate: () => {
-        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-        const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
-        const m = getRandomElement([3, 6, 7, 9]);
-        const k = getRandomElement([5, 6]);
-        let a;
-        do { a = getRandomInt(10, 99); } while (a % m === 0 || (m === 6 && a % 3 === 0));
-        const term = a * Math.pow(10, k);
-        const b_base = (m - (term % m)) % m;
-        let b = b_base;
-        while (b < 10) { b += m; }
-        const n = a * Math.pow(10, k) + b;
-        return {
-            variables: { n, m },
-            problemText: `Вычислите:<br><div class="problem-expression">${n} : ${m}</div>`
-        };
-    },
-    calculateAnswer: (vars) => { return vars.n / vars.m; }
-},
-
-{
-    number: "4_count_6",
-    tags: ["4_класс", "счёт", "натуральные_числа", "вычитание_многозначных", "деление_на_однозначное"],
-    generate: () => {
-        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-        const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
-        const hasBorrow = (minuend, subtrahend) => {
-            const mStr = String(minuend);
-            const sStr = String(subtrahend).padStart(mStr.length, '0');
-            let borrow = 0;
-            for (let i = mStr.length - 1; i >= 0; i--) {
-                let mDigit = parseInt(mStr[i]) - borrow;
-                let sDigit = parseInt(sStr[i]);
-                if (mDigit < sDigit) { return true; }
-                borrow = mDigit < sDigit ? 1 : 0;
-            }
-            return false;
-        };
-        let a, b, c, q; let attempts = 0;
-        do {
-            b = getRandomElement([5, 6, 7, 8, 9]);
-            const min_q = Math.ceil(100000 / b); const max_q = Math.floor(999999 / b);
-            q = getRandomInt(min_q, max_q); a = q * b;
-            c = getRandomInt(Math.floor(q / 2), q - 1);
-            attempts++;
-            if (attempts > 50) { attempts = 0; continue; }
-        } while (!hasBorrow(q, c));
-        return {
-            variables: { a, b, c },
-            problemText: `Вычислите:<br><div class="problem-expression">${a} : ${b} - ${c}</div>`
-        };
-    },
-    calculateAnswer: (vars) => { return (vars.a / vars.b) - vars.c; }
-},
-
-{
-    number: "4_count_5",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "без_скобок"],
+    number: "4count3",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "без_скобок", "3"],
     generate: () => {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
@@ -1006,229 +973,253 @@ const _4countTasks = [
 },
 
 {
-    number: "4_count_4",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "без_скобок"],
-    generate: () => {
+    number: "4count2",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "без_скобок", "2"],
+
+    generate: () => {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
-        const generateConstrainedNumber = (min, max, nonMultipleOf = 1) => {
-            let num;
-            if (min > max) return min;
-            do { num = getRandomInt(min, max); } while (num % nonMultipleOf === 0);
-            return num;
-        };
-        let a, b, c, d, opSign;
-        const c_options = { 6: [3, 6], 8: [4, 8], 9: [3, 9] };
-        let lower_bound_q, upper_bound_q;
-        do {
-            b = getRandomElement([6, 8, 9]);
-            c = getRandomElement(c_options[b]);
-            d = generateConstrainedNumber(1000, 9999, 10);
-            opSign = getRandomElement([-1, 1]);
-            const product_bc = b * c;
-            upper_bound_q = Math.floor(99999 / product_bc);
-            let lower_bound_op = 1;
-            if (opSign === -1) { lower_bound_op = d + 1; }
-            const lower_bound_digits = Math.ceil(10000 / product_bc);
-            lower_bound_q = Math.max(lower_bound_digits, lower_bound_op);
-        } while (lower_bound_q >= upper_bound_q);
-        let q;
-        do {
-            q = getRandomInt(lower_bound_q, upper_bound_q);
-            a = q * b * c;
-        } while (a % 100 === 0);
-        const opString = opSign === 1 ? '+' : '-';
-        return {
-            variables: { a, b, c, d, opSign },
-            problemText: `Вычислите:<br><div class="problem-expression">${a} : ${b} : ${c} ${opString} ${d}</div>`
-        };
-    },
-    calculateAnswer: (vars) => {
-        const intermediateResult = (vars.a / vars.b) / vars.c;
-        if (vars.opSign === 1) { return intermediateResult + vars.d; }
-        else { return intermediateResult - vars.d; }
-    }
+        const generateConstrainedNumber = (min, max, nonMultipleOf = 1) => {
+            let num;
+            if (min > max) return null;
+            do {
+                num = getRandomInt(min, max);
+            } while (num % nonMultipleOf === 0);
+            return num;
+        };
+
+        // Объявляем все возможные переменные
+        let a, b, c, d, opSign, problemTextStr, format;
+
+        // Случайно выбираем, какой вариант генерировать
+        const variant = getRandomInt(1, 3);
+
+        if (variant === 1) {
+            // --- Логика из 4_count_6 ---
+            const hasBorrow = (minuend, subtrahend) => {
+                const mStr = String(minuend);
+                const sStr = String(subtrahend).padStart(mStr.length, '0');
+                let borrow = 0;
+                for (let i = mStr.length - 1; i >= 0; i--) {
+                    let mDigit = parseInt(mStr[i]) - borrow;
+                    let sDigit = parseInt(sStr[i]);
+                    if (mDigit < sDigit) { return true; }
+                    borrow = mDigit < sDigit ? 1 : 0;
+                }
+                return false;
+            };
+            let q, attempts = 0;
+            do {
+                b = getRandomElement([5, 6, 7, 8, 9]);
+                const min_q = Math.ceil(100000 / b);
+                const max_q = Math.floor(999999 / b);
+                q = getRandomInt(min_q, max_q);
+                a = q * b;
+                c = getRandomInt(Math.floor(q / 2), q - 1);
+                attempts++;
+                if (attempts > 50) { attempts = 0; continue; }
+            } while (!hasBorrow(q, c));
+            problemTextStr = `${a} : ${b} - ${c}`;
+
+        } else if (variant === 2) {
+            // --- Логика из 4_count_4 ---
+            const c_options = { 6: [3, 6], 8: [4, 8], 9: [3, 9] };
+            let lower_bound_q, upper_bound_q;
+            do {
+                b = getRandomElement([6, 8, 9]);
+                c = getRandomElement(c_options[b]);
+                d = generateConstrainedNumber(1000, 9999, 10);
+                opSign = getRandomElement([-1, 1]);
+                const product_bc = b * c;
+                upper_bound_q = Math.floor(99999 / product_bc);
+                let lower_bound_op = 1;
+                if (opSign === -1) { lower_bound_op = d + 1; }
+                const lower_bound_digits = Math.ceil(10000 / product_bc);
+                lower_bound_q = Math.max(lower_bound_digits, lower_bound_op);
+            } while (lower_bound_q >= upper_bound_q);
+            let q;
+            do {
+                q = getRandomInt(lower_bound_q, upper_bound_q);
+                a = q * b * c;
+            } while (a % 100 === 0);
+            const opString = opSign === 1 ? '+' : '-';
+            problemTextStr = `${a} : ${b} : ${c} ${opString} ${d}`;
+
+        } else {
+            // --- Логика из 4count2 ---
+            const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+            format = getRandomInt(1, 2);
+            if (format === 1) {
+                let one_digit, multi_digit;
+                const digits = [3, 4, 5, 6, 7, 8, 9];
+                do {
+                    one_digit = getRandomElement(digits);
+                    const c_options = digits.filter(x => x !== one_digit);
+                    c = getRandomElement(c_options);
+                } while (one_digit % c === 0);
+                const requiredDivisor = c / gcd(one_digit, c);
+                do {
+                    const minQuotient = Math.ceil(1000 / requiredDivisor);
+                    const maxQuotient = Math.floor(99999 / requiredDivisor);
+                    const q = getRandomInt(minQuotient, maxQuotient);
+                    multi_digit = q * requiredDivisor;
+                } while (multi_digit % 10 === 0);
+                if (getRandomInt(0, 1) === 0) { a = one_digit; b = multi_digit; } else { a = multi_digit; b = one_digit; }
+                const intermediateResult = (a * b) / c;
+                opSign = getRandomElement([-1, 1]);
+                d = (opSign === 1) ? generateConstrainedNumber(1000, 99999, 100) : generateConstrainedNumber(1000, intermediateResult - 1, 100);
+                if (d === null) { opSign = 1; d = generateConstrainedNumber(1000, 99999, 100); }
+                const opString = opSign === 1 ? '+' : '-';
+                problemTextStr = `${a} · ${b} : ${c} ${opString} ${d}`;
+            } else {
+                const digits = [3, 4, 5, 6, 7, 8, 9];
+                do {
+                    b = getRandomElement(digits);
+                    const c_options = digits.filter(x => x !== b);
+                    c = getRandomElement(c_options);
+                } while (b % c === 0);
+                do {
+                    const q = getRandomInt(1001, 33333);
+                    a = q * b;
+                } while (a % 10 === 0 || a < 1000 || a > 99999);
+                const intermediateResult = (a / b) * c;
+                opSign = getRandomElement([-1, 1]);
+                d = (opSign === 1) ? generateConstrainedNumber(1000, 99999, 100) : generateConstrainedNumber(1000, intermediateResult - 1, 100);
+                if (d === null) { opSign = 1; d = generateConstrainedNumber(1000, 99999, 100); }
+                const opString = opSign === 1 ? '+' : '-';
+                problemTextStr = `${a} : ${b} · ${c} ${opString} ${d}`;
+            }
+        }
+
+        return {
+            variables: { a, b, c, d, opSign, format, variant },
+            problemText: `Вычислите:<br><div class="problem-expression">${problemTextStr}</div>`
+        };
+    },
+
+    calculateAnswer: (vars) => {
+        if (vars.variant === 1) {
+            // --- Расчёт для 4_count_6 ---
+            return (vars.a / vars.b) - vars.c;
+        } else if (vars.variant === 2) {
+            // --- Расчёт для 4_count_4 ---
+            const intermediateResult = (vars.a / vars.b) / vars.c;
+            return (vars.opSign === 1) ? intermediateResult + vars.d : intermediateResult - vars.d;
+        } else {
+            // --- Расчёт для 4count2 ---
+            let result = (vars.format === 1) ? (vars.a * vars.b) / vars.c : (vars.a / vars.b) * vars.c;
+            return (vars.opSign === 1) ? result + vars.d : result - vars.d;
+        }
+    }
 },
 
 {
-    number: "4_count_3",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "без_скобок"],
-    generate: () => {
-        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-        const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
-        const generateConstrainedNumber = (min, max, nonMultipleOf = 1) => {
-            let num; if (min > max) return min;
-            do { num = getRandomInt(min, max); } while (num % nonMultipleOf === 0);
-            return num;
-        };
-        let a, b, c, d;
-        let lower_bound_q, upper_bound_q;
-        do {
-            c = generateConstrainedNumber(10000, 90000, 100);
-            d = generateConstrainedNumber(1000, 9000, 100);
-            const sum_cd = c + d;
-            b = getRandomElement([4, 5, 6, 7, 8, 9]);
-            upper_bound_q = Math.floor(99999 / b);
-            lower_bound_q = Math.max(Math.ceil(10000 / b), sum_cd + 1);
-        } while (lower_bound_q >= upper_bound_q);
-        let q_a;
-        do {
-            q_a = getRandomInt(lower_bound_q, upper_bound_q);
-            a = q_a * b;
-        } while (a % 100 === 0);
-        const term_div = { id: 'div', str: `${a} : ${b}` };
-        const term_c = { id: 'c', str: `${c}` };
-        const term_d = { id: 'd', str: `${d}` };
-        const remainingTerms = [term_c, term_d];
-        if (getRandomInt(0, 1) === 1) { [remainingTerms[0], remainingTerms[1]] = [remainingTerms[1], remainingTerms[0]]; }
-        const finalOrder = [term_div, ...remainingTerms];
-        const orderIds = finalOrder.map(t => t.id);
-        const opPairs = [['+', '-'], ['-', '+'], ['-', '-']];
-        const operators = getRandomElement(opPairs);
-        let problemTextStr = `${finalOrder[0].str} ${operators[0]} ${finalOrder[1].str} ${operators[1]} ${finalOrder[2].str}`;
-        return {
-            variables: { a, b, c, d, orderIds, operators },
-            problemText: `Вычислите:<br><div class="problem-expression">${problemTextStr}</div>`
-        };
-    },
-    calculateAnswer: (vars) => {
-        const values = { div: vars.a / vars.b, c: vars.c, d: vars.d };
-        const term1_val = values[vars.orderIds[0]];
-        const term2_val = values[vars.orderIds[1]];
-        const term3_val = values[vars.orderIds[2]];
-        const [op1, op2] = vars.operators;
-        let result = term1_val;
-        if (op1 === '+') result += term2_val; else result -= term2_val;
-        if (op2 === '+') result += term3_val; else result -= term3_val;
-        return result;
-    }
-},
+    number: "4count1",
+    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "умножение_на_однозначное", "без_скобок", "1"],
 
-{
-    number: "4_count_2",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "без_скобок"],
-    generate: () => {
+    generate: () => {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
-        const generateConstrainedNumber = (min, max, nonMultipleOf = 1) => {
-            let num; if (min > max) return null;
-            do { num = getRandomInt(min, max); } while (num % nonMultipleOf === 0);
-            return num;
-        };
-        const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
-        let a, b, c, d, opSign, problemTextStr;
-        const format = getRandomInt(1, 2);
-        if (format === 1) {
-            let one_digit, multi_digit; const digits = [3, 4, 5, 6, 7, 8, 9];
-            do {
-                one_digit = getRandomElement(digits);
-                const c_options = digits.filter(x => x !== one_digit);
-                c = getRandomElement(c_options);
-            } while (one_digit % c === 0);
-            const requiredDivisor = c / gcd(one_digit, c);
-            do {
-                const minQuotient = Math.ceil(1000 / requiredDivisor);
-                const maxQuotient = Math.floor(99999 / requiredDivisor);
-                const q = getRandomInt(minQuotient, maxQuotient);
-                multi_digit = q * requiredDivisor;
-            } while (multi_digit % 10 === 0);
-            if (getRandomInt(0, 1) === 0) { a = one_digit; b = multi_digit; } else { a = multi_digit; b = one_digit; }
-            const intermediateResult = (a * b) / c;
-            opSign = getRandomElement([-1, 1]);
-            if (opSign === 1) {
-                d = generateConstrainedNumber(1000, 99999, 100);
-            } else {
-                const max_d = intermediateResult - 1;
-                d = generateConstrainedNumber(1000, max_d, 100);
-                if (d === null) { opSign = 1; d = generateConstrainedNumber(1000, 99999, 100); }
-            }
-            const opString = opSign === 1 ? '+' : '-';
-            problemTextStr = `${a} · ${b} : ${c} ${opString} ${d}`;
-        } else {
-            const digits = [3, 4, 5, 6, 7, 8, 9];
-            do {
-                b = getRandomElement(digits);
-                const c_options = digits.filter(x => x !== b);
-                c = getRandomElement(c_options);
-            } while (b % c === 0);
-            do {
-                const q = getRandomInt(1001, 33333);
-                a = q * b;
-            } while (a % 10 === 0 || a < 1000 || a > 99999);
-            const intermediateResult = (a / b) * c;
-            opSign = getRandomElement([-1, 1]);
-            if (opSign === 1) {
-                d = generateConstrainedNumber(1000, 99999, 100);
-            } else {
-                const max_d = intermediateResult - 1;
-                d = generateConstrainedNumber(1000, max_d, 100);
-                if (d === null) { opSign = 1; d = generateConstrainedNumber(1000, 99999, 100); }
-            }
-            const opString = opSign === 1 ? '+' : '-';
-            problemTextStr = `${a} : ${b} · ${c} ${opString} ${d}`;
-        }
-        return {
-            variables: { a, b, c, d, opSign, format },
-            problemText: `Вычислите:<br><div class="problem-expression">${problemTextStr}</div>`
-        };
-    },
-    calculateAnswer: (vars) => {
-        let result;
-        if (vars.format === 1) { result = (vars.a * vars.b) / vars.c; } else { result = (vars.a / vars.b) * vars.c; }
-        if (vars.opSign === 1) { return result + vars.d; } else { return result - vars.d; }
-    }
-},
+        const generateConstrainedNumber = (min, max, nonMultipleOf = 1) => {
+            let num;
+            if (min > max) return min;
+            do {
+                num = getRandomInt(min, max);
+            } while (num % nonMultipleOf === 0);
+            return num;
+        };
 
-{
-    number: "4_count_1",
-    tags: ["4_класс", "счёт", "натуральные_числа", "сложение_многозначных", "вычитание_многозначных", "деление_на_однозначное", "без_скобок"],
-    generate: () => {
-        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-        const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
-        const generateConstrainedNumber = (min, max, nonMultipleOf = 1) => {
-            let num; do { num = getRandomInt(min, max); } while (num % nonMultipleOf === 0);
-            return num;
-        };
-        const c = generateConstrainedNumber(1000, 15000, 100);
-        const b = getRandomElement([3, 4, 5, 6, 7, 8, 9]);
-        let a, q_a;
-        do {
-            q_a = getRandomInt(c + 1, c + 20000);
-            a = q_a * b;
-        } while (a % 100 === 0 || a < 1000 || a > 99999);
-        const p1_val = q_a;
-        const d_options = [3, 4, 5, 6, 7, 8, 9].filter(x => x !== b);
-        const d = getRandomElement(d_options);
-        const min_e = Math.ceil((c + 1) / d);
-        const e = generateConstrainedNumber(Math.max(1000, min_e), 9999, 10);
-        const p2_val = d * e;
-        const term1 = { id: 'div', val: p1_val, str: `${a} : ${b}` };
-        const term2 = { id: 'mul', val: p2_val, str: `${d} · ${e}` };
-        const term3 = { id: 'c', val: c, str: `${c}` };
-        const positiveTerms = [term1, term2];
-        const negativeTerm = term3;
-        const firstTerm = positiveTerms.splice(getRandomInt(0, 1), 1)[0];
-        const remainingTerms = [positiveTerms[0], negativeTerm];
-        if (getRandomInt(0, 1) === 1) { [remainingTerms[0], remainingTerms[1]] = [remainingTerms[1], remainingTerms[0]]; }
-        const finalOrder = [firstTerm, ...remainingTerms];
-        const orderIds = finalOrder.map(t => t.id);
-        let problemTextStr = finalOrder[0].str;
-        let op1, op2;
-        if (finalOrder[1].id === 'c') { op1 = '-'; op2 = '+'; } else { op1 = '+'; op2 = '-'; }
-        problemTextStr += ` ${op1} ${finalOrder[1].str} ${op2} ${finalOrder[2].str}`;
-        return {
-            variables: { a, b, c, d, e, orderIds, op1, op2 },
-            problemText: `Вычислите:<br><div class="problem-expression">${problemTextStr}</div>`
-        };
-    },
-    calculateAnswer: (vars) => {
-        const values = { div: vars.a / vars.b, mul: vars.d * vars.e, c: vars.c };
-        let result = values[vars.orderIds[0]];
-        const [op1, op2] = [vars.op1, vars.op2];
-        if (op1 === '+') result += values[vars.orderIds[1]]; else result -= values[vars.orderIds[1]];
-        if (op2 === '+') result += values[vars.orderIds[2]]; else result -= values[vars.orderIds[2]];
-        return result;
-    }
+        // Объявляем все возможные переменные
+        let a, b, c, d, e, orderIds, operators, op1, op2, problemTextStr;
+        
+        // Случайно выбираем, какой вариант генерировать: 1 (старый 4count1) или 2 (старый 4count3)
+        const variant = getRandomInt(1, 2);
+
+        if (variant === 1) {
+            // --- Логика из 4count1 ---
+            c = generateConstrainedNumber(1000, 15000, 100);
+            b = getRandomElement([3, 4, 5, 6, 7, 8, 9]);
+            let q_a;
+            do {
+                q_a = getRandomInt(c + 1, c + 20000);
+                a = q_a * b;
+            } while (a % 100 === 0 || a < 1000 || a > 99999);
+            const d_options = [3, 4, 5, 6, 7, 8, 9].filter(x => x !== b);
+            d = getRandomElement(d_options);
+            const min_e = Math.ceil((c + 1) / d);
+            e = generateConstrainedNumber(Math.max(1000, min_e), 9999, 10);
+            
+            const term1 = { id: 'div', str: `${a} : ${b}` };
+            const term2 = { id: 'mul', str: `${d} · ${e}` };
+            const term3 = { id: 'c', str: `${c}` };
+            
+            const positiveTerms = [term1, term2];
+            const firstTerm = positiveTerms.splice(getRandomInt(0, 1), 1)[0];
+            const remainingTerms = [positiveTerms[0], term3];
+            if (getRandomInt(0, 1) === 1) { [remainingTerms[0], remainingTerms[1]] = [remainingTerms[1], remainingTerms[0]]; }
+            
+            const finalOrder = [firstTerm, ...remainingTerms];
+            orderIds = finalOrder.map(t => t.id);
+            if (finalOrder[1].id === 'c') { op1 = '-'; op2 = '+'; } else { op1 = '+'; op2 = '-'; }
+            problemTextStr = `${finalOrder[0].str} ${op1} ${finalOrder[1].str} ${op2} ${finalOrder[2].str}`;
+
+        } else {
+            // --- Логика из 4count3 ---
+            let lower_bound_q, upper_bound_q;
+            do {
+                c = generateConstrainedNumber(10000, 90000, 100);
+                d = generateConstrainedNumber(1000, 9000, 100);
+                const sum_cd = c + d;
+                b = getRandomElement([4, 5, 6, 7, 8, 9]);
+                upper_bound_q = Math.floor(99999 / b);
+                lower_bound_q = Math.max(Math.ceil(10000 / b), sum_cd + 1);
+            } while (lower_bound_q >= upper_bound_q);
+            let q_a;
+            do {
+                q_a = getRandomInt(lower_bound_q, upper_bound_q);
+                a = q_a * b;
+            } while (a % 100 === 0);
+
+            const term_div = { id: 'div', str: `${a} : ${b}` };
+            const term_c = { id: 'c', str: `${c}` };
+            const term_d = { id: 'd', str: `${d}` };
+            const remainingTerms = [term_c, term_d];
+            if (getRandomInt(0, 1) === 1) { [remainingTerms[0], remainingTerms[1]] = [remainingTerms[1], remainingTerms[0]]; }
+            const finalOrder = [term_div, ...remainingTerms];
+            orderIds = finalOrder.map(t => t.id);
+            const opPairs = [['+', '-'], ['-', '+'], ['-', '-']];
+            operators = getRandomElement(opPairs);
+            problemTextStr = `${finalOrder[0].str} ${operators[0]} ${finalOrder[1].str} ${operators[1]} ${finalOrder[2].str}`;
+        }
+
+        return {
+            variables: { a, b, c, d, e, orderIds, operators, op1, op2, variant },
+            problemText: `Вычислите:<br><div class="problem-expression">${problemTextStr}</div>`
+        };
+    },
+
+    calculateAnswer: (vars) => {
+        if (vars.variant === 1) {
+            // --- Расчёт для 4count1 ---
+            const values = { div: vars.a / vars.b, mul: vars.d * vars.e, c: vars.c };
+            let result = values[vars.orderIds[0]];
+            const [op1, op2] = [vars.op1, vars.op2];
+            if (op1 === '+') result += values[vars.orderIds[1]]; else result -= values[vars.orderIds[1]];
+            if (op2 === '+') result += values[vars.orderIds[2]]; else result -= values[vars.orderIds[2]];
+            return result;
+        } else {
+            // --- Расчёт для 4count3 ---
+            const values = { div: vars.a / vars.b, c: vars.c, d: vars.d };
+            const term1_val = values[vars.orderIds[0]];
+            const term2_val = values[vars.orderIds[1]];
+            const term3_val = values[vars.orderIds[2]];
+            const [op1, op2] = vars.operators;
+            let result = term1_val;
+            if (op1 === '+') result += term2_val; else result -= term2_val;
+            if (op2 === '+') result += term3_val; else result -= term3_val;
+            return result;
+        }
+    }
 },
 
 ];
