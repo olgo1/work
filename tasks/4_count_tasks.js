@@ -789,7 +789,7 @@ const _4countTasks = [
 
 {
     number: "4count5", 
-    tags: ["4_класс", "сложение_многозначных", "круглые_числа", "счёт", "натуральные_числа", "sparse_nums". "2"],
+    tags: ["4_класс", "сложение_многозначных", "круглые_числа", "счёт", "натуральные_числа", "sparse_nums", "2"],
     generate: () => {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
