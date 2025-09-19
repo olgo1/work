@@ -766,25 +766,40 @@ const _4countTasks = [
 },
 
 {
-    number: "4count6",
-    tags: ["4_класс", "счёт", "вычитание_многозначных", "перенос_разряда", "sparse_nums", "натуральные_числа", "2"],
-    generate: () => {
+    number: "4count6",
+    tags: ["4_класс", "счёт", "вычитание_многозначных", "перенос_разряда", "sparse_nums", "натуральные_числа", "2"],
+    generate: () => {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-        const u_digits = []; const v_digits = []; const r_digits = []; let borrow = 0;
-        r_digits[0] = getRandomInt(1, 9); u_digits[0] = getRandomInt(0, r_digits[0] - 1); v_digits[0] = 10 + u_digits[0] - r_digits[0]; borrow = 1;
-        r_digits[1] = 0; u_digits[1] = getRandomInt(borrow + 1, 9); v_digits[1] = u_digits[1] - r_digits[1] - borrow; borrow = 0;
-        r_digits[2] = getRandomInt(1, 9); u_digits[2] = getRandomInt(borrow, r_digits[2] - 1); v_digits[2] = 10 + u_digits[2] - r_digits[2] - borrow; borrow = 1;
-        r_digits[3] = 0; u_digits[3] = getRandomInt(borrow + 1, 9); v_digits[3] = u_digits[3] - r_digits[3] - borrow; borrow = 0;
-        r_digits[4] = getRandomInt(1, 9); u_digits[4] = getRandomInt(borrow, r_digits[4] - 1); v_digits[4] = 10 + u_digits[4] - r_digits[4] - borrow; borrow = 1;
-        r_digits[5] = getRandomInt(1, 8); v_digits[5] = getRandomInt(1, 8 - r_digits[5]); u_digits[5] = v_digits[5] + r_digits[5] + borrow;
-        const u = parseInt(u_digits.reverse().join(''));
-        const v = parseInt(v_digits.reverse().join(''));
-        return {
-            variables: { u, v },
-            problemText: `Вычислите:<br><div class="problem-expression">${u} - ${v}</div>`
-        };
-    },
-    calculateAnswer: (vars) => { return vars.u - vars.v; }
+
+        // 1. Определяем структуру "почти круглого" числа (уменьшаемого)
+        const k_zeros = getRandomInt(4, 5);    // Количество нулей в середине
+        const head_digit = getRandomInt(2, 9); // Первая цифра
+        const tail_digit = getRandomInt(1, 9); // Последняя цифра
+
+        // 2. Создаём уменьшаемое по формуле.
+        // Например: 3 * 10^(4+1) + 7 = 300007
+        const u = head_digit * Math.pow(10, k_zeros + 1) + tail_digit;
+
+        // 3. Создаём вычитаемое.
+        // Количество его цифр должно быть таким, чтобы "залезть" в нули.
+        // Для 4 нулей, это будет 4-значное число.
+        const min_v = Math.pow(10, k_zeros - 1); // e.g., for 4 zeros -> 1000
+        const max_v = Math.pow(10, k_zeros) - 1;   // e.g., for 4 zeros -> 9999
+        
+        let v = getRandomInt(min_v, max_v);
+        
+        // Небольшая проверка, чтобы вычитаемое не было слишком простым (например, 1000)
+        // и заставляло больше думать.
+        if (v % 100 === 0) {
+            v += getRandomInt(1, 99);
+        }
+
+        return {
+            variables: { u, v },
+            problemText: `Вычислите:<br><div class="problem-expression">${u} - ${v}</div>`
+        };
+    },
+    calculateAnswer: (vars) => { return vars.u - vars.v; }
 },
 
 {
