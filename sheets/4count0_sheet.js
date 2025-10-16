@@ -1,4 +1,10 @@
-// НОВЫЙ ФОРМАТ
+// --- ОБЩИЕ НАСТРОЙКИ ТРЕНАЖЁРА ---
+const trainerSettings = {
+    title: "Счёт",
+    subtitle: "разнные примеры",
+    totalTime: 900 // 15 минут
+};
+
 const problemSelectors = [
     {
         count: 1,
