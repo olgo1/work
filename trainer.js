@@ -133,61 +133,78 @@ document.addEventListener('DOMContentLoaded', () => {
  /**
  * Обновлённая функция выбора задач с поддержкой include, exclude и ANY для тегов.
  */
+// Вставьте этот код в ваш старый trainer.js, полностью заменив старую функцию pickTasks
+
 function pickTasks() {
+    // ===== Вспомогательные функции для нового фильтра =====
+    function matchesTagsExpr(expr, taskTags = []) {
+        if (!expr) return true;
+        const tokens = expr.match(/not|[&|\\()]|"[^"]+"/g);
+        if (!tokens) return true;
+        let i = 0;
+        function parseExpression() {
+            let node = parseTerm();
+            while (i < tokens.length && tokens[i] === '|') {
+                i++;
+                const right = parseTerm();
+                node = node || right;
+            }
+            return node;
+        }
+        function parseTerm() {
+            let node = parseFactor();
+            while (i < tokens.length && (tokens[i] === '&' || tokens[i] === '\\')) {
+                const op = tokens[i++];
+                const right = parseFactor();
+                if (op === '&') node = node && right;
+                else if (op === '\\') node = node && !right;
+            }
+            return node;
+        }
+        function parseFactor() {
+            if (i >= tokens.length) return true;
+            const tok = tokens[i++];
+            if (tok === 'not') return !parseFactor();
+            if (tok === '(') {
+                const val = parseExpression();
+                if (tokens[i] === ')') i++;
+                return val;
+            }
+            if (/^".+"$/.test(tok)) {
+                const tag = tok.slice(1, -1);
+                return taskTags.includes(tag);
+            }
+            return true;
+        }
+        return parseExpression();
+    }
+    
+    // ===== Основная логика выбора =====
     const selectedTasks = [];
-    let availableTasks = [...allTasks]; // Создаём копию для работы
+    let availableTasks = [...window.taskRegistry]; 
 
     for (const selector of problemSelectors) {
         const { count, filter } = selector;
 
         const candidates = availableTasks.filter(task => {
             if (!task) return false;
+            
+            // Фильтр по тегам теперь использует новую функцию
+            const tagsMatch = filter.tags ? matchesTagsExpr(filter.tags, task.tags || []) : true;
+            
+            // Фильтры по типу и номеру, если они есть (остаются для совместимости)
+            const typeMatch = filter.type ? (Array.isArray(filter.type) ? filter.type.includes(task.type) : task.type === filter.type) : true;
+            const numberMatch = filter.number ? (Array.isArray(filter.number) ? filter.number.includes(task.number) : task.number === filter.number) : true;
 
-            // --- Фильтрация по номеру и типу (без изменений) ---
-            const typeMatch = filter.type ?
-                (Array.isArray(filter.type) ? filter.type.includes(task.type) : task.type === filter.type) :
-                true;
-
-            const numberMatch = filter.number ?
-                (Array.isArray(filter.number) ? filter.number.includes(task.number) : task.number === filter.number) :
-                true;
-
-            // --- ОБНОВЛЁННАЯ ЛОГИКА ФИЛЬТРАЦИИ ПО ТЕГАМ ---
-            let tagsMatch = true;
-            if (filter.tags) {
-                const taskTags = task.tags || [];
-
-                if (typeof filter.tags === 'object' && !Array.isArray(filter.tags)) {
-                    const include = filter.tags.include || [];
-                    const exclude = filter.tags.exclude || [];
-                    const any = filter.tags.any || []; // <-- Новое свойство
-
-                    // 1. Проверка на ВКЛЮЧЕНИЕ (должны быть все)
-                    const meetsInclude = include.every(tag => taskTags.includes(tag));
-
-                    // 2. Проверка на ИСКЛЮЧЕНИЕ (не должно быть ни одного)
-                    const meetsExclude = !exclude.some(tag => taskTags.includes(tag));
-
-                    // 3. Проверка на ИЛИ (должен быть хотя бы один)
-                    // Эта проверка срабатывает, только если список 'any' не пустой
-                    const meetsAny = any.length === 0 ? true : any.some(tag => taskTags.includes(tag));
-
-                    tagsMatch = meetsInclude && meetsExclude && meetsAny;
-                }
-                // Для обратной совместимости, если tags - это простой массив
-                else if (Array.isArray(filter.tags)) {
-                    tagsMatch = filter.tags.every(tag => taskTags.includes(tag));
-                }
-            }
-
-            return typeMatch && numberMatch && tagsMatch;
+            return tagsMatch && typeMatch && numberMatch;
         });
 
-        // --- Выбор случайных задач (без изменений) ---
+        // Выбор случайных задач из кандидатов
         const shuffledCandidates = candidates.sort(() => 0.5 - Math.random());
         const picked = shuffledCandidates.slice(0, count);
         selectedTasks.push(...picked);
 
+        // Удаляем выбранные задачи, чтобы они не попались снова
         const pickedSet = new Set(picked);
         availableTasks = availableTasks.filter(task => !pickedSet.has(task));
     }

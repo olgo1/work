@@ -14,7 +14,7 @@ const newTasks = [
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
             const time2 = `${String(n2).padStart(2, '0')}:${String(k2).padStart(2, '0')}`;
             const latePhrase = `${t} ${declineWord(t, ['минуту', 'минуты', 'минут'])}`;
-            const problemText = `Автобус выехал с автовокзала в ${time1} и должен был прибыть в пункт назначения в ${time2} следующего дня. Однако он попал в пробку и прибыл на ${latePhrase} позже. Сколько времени автобус был в пути? <br><i>Дайте ответ в формате чч:мм.</i>`;
+            const problemText = `Автобус выехал с автовокзала в ${time1} и должен был прибыть в пункт назначения в ${time2} следующего дня. Однако он попал в пробку и прибыл на ${latePhrase} позже. Сколько времени автобус был в пути? <br><br><em>Дайте ответ в формате чч:мм.</em>`;
             return { variables: { n1, k1, n2, k2, t }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -26,6 +26,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "25",
@@ -39,7 +40,7 @@ const newTasks = [
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
             const time2 = `${String(n2).padStart(2, '0')}:${String(k2).padStart(2, '0')}`;
             const earlyPhrase = `${t} ${declineWord(t, ['минуту', 'минуты', 'минут'])}`;
-            const problemText = `Автобус выехал с автовокзала в ${time1} и должен был прибыть в пункт назначения в ${time2} следующего дня. Однако он не сделал остановку и прибыл на ${earlyPhrase} раньше. Сколько времени автобус был в пути? <br><i>Дайте ответ в минутах.</i>`;
+            const problemText = `Автобус выехал с автовокзала в ${time1} и должен был прибыть в пункт назначения в ${time2} следующего дня. Однако он не сделал остановку и прибыл на ${earlyPhrase} раньше. Сколько времени автобус был в пути? <br><br><em>Дайте ответ в минутах.</em>`;
             return { variables: { n1, k1, n2, k2, t }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -48,6 +49,7 @@ const newTasks = [
             return scheduledArrivalTotalMinutes - vars.t - departureTotalMinutes;
         }
     },
+
     {
         type: " ",
         number: "24",
@@ -65,11 +67,12 @@ const newTasks = [
             const t2 = getRandomInt(4, 14);
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
             const time2 = `${String(n2).padStart(2, '0')}:${String(k2).padStart(2, '0')}`;
-            const problemText = `${name1} вышла гулять в ${time1}, а ${name2} на ${t1} ${declineWord(t1, ['минуту', 'минуты', 'минут'])} позже. ${name2} вернулся домой в ${time2}, и он гулял на ${t2} ${declineWord(t2, ['минуту', 'минуты', 'минут'])} меньше ${toGenitive(name1)}. Сколько минут гуляла ${name1}?`;
+            const problemText = `${name1} вышла гулять в ${time1}, а ${name2} на ${t1} ${declineWord(t1, ['минуту', 'минуты', 'минут'])} позже. ${name2} вернулся домой в ${time2}, и он гулял на ${t2} ${declineWord(t2, ['минуту', 'минуты', 'минут'])} меньше ${toGenitive(name1)}. Сколько минут гуляла ${name1}? <br><br><em> Запишите только число.<\em>`;
             return { variables: { n1, k1, n2, k2, t1, t2 }, problemText };
         },
         calculateAnswer: (vars) => (vars.n2 * 60 + vars.k2) - (vars.n1 * 60 + vars.k1 + vars.t1) + vars.t2
     },
+
     {
         type: " ",
         number: "23",
@@ -87,7 +90,7 @@ const newTasks = [
             const t2 = getRandomInt(4, 14);
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
             const time2 = `${String(n2).padStart(2, '0')}:${String(k2).padStart(2, '0')}`;
-            const problemText = `${name1} вышел гулять в ${time1}, а ${name2} на ${t1} ${declineWord(t1, ['минуту', 'минуты', 'минут'])} позже. ${name2} вернулась домой в ${time2}, и она гуляла на ${t2} ${declineWord(t2, ['минуту', 'минуты', 'минут'])} меньше ${toGenitive(name1)}. Во сколько вернулся домой ${name1}? <br><i>Дайте ответ в формате чч:мм, например, 01:12.</i>`;
+            const problemText = `${name1} вышел гулять в ${time1}, а ${name2} на ${t1} ${declineWord(t1, ['минуту', 'минуты', 'минут'])} позже. ${name2} вернулась домой в ${time2}, и она гуляла на ${t2} ${declineWord(t2, ['минуту', 'минуты', 'минут'])} меньше ${toGenitive(name1)}. Во сколько вернулся домой ${name1}? <br><br><em>Дайте ответ в формате чч:мм, например, 01:12.</em>`;
             return { variables: { n1, k1, n2, k2, t1, t2 }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -98,6 +101,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "22",
@@ -113,7 +117,7 @@ const newTasks = [
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
             const time2 = `${String(n2).padStart(2, '0')}:${String(k2).padStart(2, '0')}`;
             const time3 = `${String(n3).padStart(2, '0')}:${String(k3).padStart(2, '0')}`;
-            const problemText = `Поезд Сапсан отправляется из Санкт-Петербурга в ${time1} и прибывает в Москву в ${time2}. Обычный поезд отправляется в ${time3}, а едет до Москвы на ${t1} мин дольше Сапсана. Во сколько этот поезд прибывает в Москву? <br><i>Дайте ответ в формате чч:мм, например, 01:12.</i>`;
+            const problemText = `Поезд Сапсан отправляется из Санкт-Петербурга в ${time1} и прибывает в Москву в ${time2}. Обычный поезд отправляется в ${time3}, а едет до Москвы на ${t1} мин дольше Сапсана. Во сколько этот поезд прибывает в Москву? <br><br><em>Дайте ответ в формате чч:мм, например, 01:12.</em>`;
             return { variables: { n1, k1, n2, k2, n3, k3, t1 }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -125,6 +129,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "21",
@@ -140,7 +145,7 @@ const newTasks = [
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
             const time2 = `${String(n2).padStart(2, '0')}:${String(k2).padStart(2, '0')}`;
             const time3 = `${String(n3).padStart(2, '0')}:${String(k3).padStart(2, '0')}`;
-            const problemText = `Поезд отправляется из Москвы в Санкт-Петербург в ${time1}, а прибывает в ${time2}. На обратную дорогу поезд тратит на ${t1} минут меньше. Во сколько поезд прибудет в Москву, если он выедет из Санкт-Петербурга в ${time3}? <br><i>Дайте ответ в формате чч:мм, например, 01:12.</i>`;
+            const problemText = `Поезд отправляется из Москвы в Санкт-Петербург в ${time1}, а прибывает в ${time2}. На обратную дорогу поезд тратит на ${t1} минут меньше. Во сколько поезд прибудет в Москву, если он выедет из Санкт-Петербурга в ${time3}? <br><br><em>Дайте ответ в формате чч:мм, например, 01:12.</em>`;
             return { variables: { n1, k1, n2, k2, n3, k3, t1 }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -152,6 +157,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "20",
@@ -163,7 +169,7 @@ const newTasks = [
             let k2 = getRandomInt(10, 50); k2 -= (k2 % 2);
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
             const time2 = `${String(n2).padStart(2, '0')}:${String(k2).padStart(2, '0')}`;
-            const problemText = `Лекция началась в ${time1} и закончилась в ${time2}. Посередине лекции лектор зевнул. Сколько времени было на часах? <br><i>Дайте ответ в формате чч:мм, например, 11:03.</i>`;
+            const problemText = `Лекция началась в ${time1} и закончилась в ${time2}. Посередине лекции лектор зевнул. Сколько времени было на часах? <br><br><em> Дайте ответ в формате чч:мм, например, 11:03.</em>`;
             return { variables: { n1, k1, n2, k2 }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -175,6 +181,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
 
         type: " ",
@@ -188,7 +195,7 @@ const newTasks = [
             if ((k1 + k2) % 10 === 0) k2 += 2;
             let t1 = getRandomInt(70, 120); t1 -= (t1 % 10);
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
-            const problemText = `Лекция началась в ${time1} и длилась ${n2} ${declineWord(n2, ['час', 'часа', 'часов'])} ${k2} ${declineWord(k2, ['минуту', 'минуты', 'минут'])}. За ${t1} минут до конца лекции лектор зевнул. Сколько времени было на часах? <br><i>Дайте ответ в формате чч:мм, например, 11:03.</i>`;
+            const problemText = `Лекция началась в ${time1} и длилась ${n2} ${declineWord(n2, ['час', 'часа', 'часов'])} ${k2} ${declineWord(k2, ['минуту', 'минуты', 'минут'])}. За ${t1} минут до конца лекции лектор зевнул. Сколько времени было на часах? <br><br><em> Дайте ответ в формате чч:мм, например, 11:03.</em>`;
             return { variables: { n1, k1, n2, k2, t1 }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -198,6 +205,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "18",
@@ -219,7 +227,7 @@ const newTasks = [
             const k1 = name2EndTime % 60;
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
 
-            const problemText = `В школе каждый урок длится ${t1} минут, а каждая перемена - ${t2} минут. Занятия начинаются в 08:45. ${name1} ушла сразу после ${m1} урока, а ${name2} - сразу после ${m2}, в ${time1}. Сколько было времени, когда ушла ${name1}? <br><i>Дайте ответ в виде чч:мм, например, 08:23.</i>`;
+            const problemText = `В школе каждый урок длится ${t1} минут, а каждая перемена - ${t2} минут. Занятия начинаются в 08:45. ${name1} ушла сразу после ${m1} урока, а ${name2} - сразу после ${m2}, в ${time1}. Сколько было времени, когда ушла ${name1}? <br><br><em> Дайте ответ в виде чч:мм, например, 08:23.</em>`;
             return { variables: { n1, k1, m1, m2, t1, t2 }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -230,6 +238,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "17",
@@ -247,7 +256,7 @@ const newTasks = [
             const k1 = m2EndTime % 60;
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
 
-            const problemText = `В школе каждый урок длится ${t1} минут, а каждая перемена - ${t2} минут. Занятия начинаются в 08:45. ${m2}-й урок закончился в ${time1}. Во сколько закончился ${m1}-й урок? <br><i>Дайте ответ в виде чч:мм, например, 08:23.</i>`;
+            const problemText = `В школе каждый урок длится ${t1} минут, а каждая перемена - ${t2} минут. Занятия начинаются в 08:45. ${m2}-й урок закончился в ${time1}. Во сколько закончился ${m1}-й урок? <br><br><em>Дайте ответ в виде чч:мм, например, 08:23.</em>`;
             return { variables: { n1, k1, m1, m2, t1, t2 }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -258,6 +267,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "16",
@@ -269,7 +279,7 @@ const newTasks = [
             const n1 = getRandomInt(1, 23);
             let k1; do { k1 = getRandomInt(11, 59); } while (k1 % 10 === 0);
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
-            const problemText = `Вылет самолёта задержали на ${a} ${declineWord(a, ['час', 'часа', 'часов'])} ${b} минут. Он немного изменил маршрут, поэтому летел на ${t} минут больше расчётного времени и приземлился в ${time1}. Во сколько должен был приземлиться этот самолёт по плану? <br><i>Дайте ответ в виде чч:мм, например, 08:23.</i>`;
+            const problemText = `Вылет самолёта задержали на ${a} ${declineWord(a, ['час', 'часа', 'часов'])} ${b} минут. Он немного изменил маршрут, поэтому летел на ${t} минут больше расчётного времени и приземлился в ${time1}. Во сколько должен был приземлиться этот самолёт по плану? <br><br><em>Дайте ответ в виде чч:мм, например, 08:23.</em>`;
             return { variables: { n1, k1, a, b, t }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -279,6 +289,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
 
         type: " ",
@@ -296,7 +307,7 @@ const newTasks = [
             const k1 = actualArrival % 60;
             
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
-            const problemText = `Вылет самолёта задержали на ${a} ${declineWord(a, ['час', 'часа', 'часов'])} ${b} минут. Он немного изменил маршрут, поэтому летел на ${t} минут меньше расчётного времени и приземлился в ${time1}. Во сколько этот самолёт должен был вылететь по плану? <br><i>Дайте ответ в виде чч:мм, например, 08:23.</i>`;
+            const problemText = `Вылет самолёта задержали на ${a} ${declineWord(a, ['час', 'часа', 'часов'])} ${b} минут. Он немного изменил маршрут, поэтому летел на ${t} минут меньше расчётного времени и приземлился в ${time1}. Во сколько этот самолёт должен был вылететь по плану? <br><br><em>Дайте ответ в виде чч:мм, например, 08:23.</em>`;
             return { variables: { n1, k1, a, b, t, scheduledDeparture }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -308,6 +319,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "14",
@@ -324,11 +336,12 @@ const newTasks = [
             let t = getRandomInt(60 + k2 - k1 + 6, 89); t -= (t % 5);
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
             const time2 = `${String(n2).padStart(2, '0')}:${String(k2).padStart(2, '0')}`;
-            const problemText = `${name1} и ${name2} договорились встретиться. ${name1} пришла в ${time1}, но ${toGenitive(name2)} ещё не было. В ${time2} ${name2} пришла, и ${name1} возмущённо сказала: “Ты опоздала на ${t} минут!” “А ты на сколько?” - спросила ${name2}. Что должна (честно) ответить ${name1}? <br><i>Ответ дайте в минутах.</i>`;
+            const problemText = `${name1} и ${name2} договорились встретиться. ${name1} пришла в ${time1}, но ${toGenitive(name2)} ещё не было. В ${time2} ${name2} пришла, и ${name1} возмущённо сказала: “Ты опоздала на ${t} минут!” “А ты на сколько?” - спросила ${name2}. Что должна (честно) ответить ${name1}? <br><br><em>Ответ дайте в минутах.</em>`;
             return { variables: { n1, k1, n2, k2, t }, problemText };
         },
         calculateAnswer: (vars) => (vars.n1 * 60 + vars.k1) - (vars.n2 * 60 + vars.k2 - vars.t)
     },
+
     {
         type: " ",
         number: "13",
@@ -350,6 +363,7 @@ const newTasks = [
         },
         calculateAnswer: (vars) => (vars.n2 * 60 + vars.k2) - vars.t - (vars.n1 * 60 + vars.k1)
     },
+
     {
         type: " ",
         number: "12",
@@ -362,7 +376,7 @@ const newTasks = [
             const name1List = ["Михаил Юрьевич", "Сергей Петрович", "Дмитрий Олегович", "Юрий Владимирович"];
             const name1 = getRandomElement(name1List);
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
-            const problemText = `${name1} хотел приехать на вокзал за ${t1} минут до отправления поезда. Однако он потратил на дорогу на ${t2} минут больше, чем рассчитывал, и приехал только в ${time1}. Во сколько отправляется поезд? <br><i>Дайте ответ в виде чч:мм, например, 08:23.</i>`;
+            const problemText = `${name1} хотел приехать на вокзал за ${t1} минут до отправления поезда. Однако он потратил на дорогу на ${t2} минут больше, чем рассчитывал, и приехал только в ${time1}. Во сколько отправляется поезд? <br><br><em>Дайте ответ в виде чч:мм, например, 08:23.</em>`;
             return { variables: { n1, k1, t1, t2 }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -372,6 +386,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "11",
@@ -385,7 +400,7 @@ const newTasks = [
             const name1List = ["Михаил Юрьевич", "Сергей Петрович", "Дмитрий Олегович", "Юрий Владимирович"];
             const name1 = getRandomElement(name1List);
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
-            const problemText = `${name1} планировал приехать на вокзал в ${time1}, за ${t4} минут до отправления поезда. Он вышел из дома позже и опоздал на поезд на ${t3} минут. Во сколько ${name1} вышел из дома, если до вокзала он добирался ${t5} минут? <br><i>Дайте ответ в виде чч:мм, например, 08:23.</i>`;
+            const problemText = `${name1} планировал приехать на вокзал в ${time1}, за ${t4} минут до отправления поезда. Он вышел из дома позже и опоздал на поезд на ${t3} минут. Во сколько ${name1} вышел из дома, если до вокзала он добирался ${t5} минут? <br><br><em>Дайте ответ в виде чч:мм, например, 08:23.</em>`;
             return { variables: { n1, k1, t3, t4, t5 }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -395,6 +410,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "10",
@@ -410,7 +426,7 @@ const newTasks = [
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
             const time2 = `${String(n2).padStart(2, '0')}:${String(k2).padStart(2, '0')}`;
             const time3 = `${String(n3).padStart(2, '0')}:${String(k3).padStart(2, '0')}`;
-            const problemText = `Первый поезд выезжает со станции А в ${time1} и прибывает в Б в ${time2}. Второй поезд выезжает из А в ${time3}, а едет на ${t} минут дольше, чем первый. Во сколько второй поезд прибывает в Б? <br><i>Дайте ответ в виде чч:мм, например, 08:23.</i>`;
+            const problemText = `Первый поезд выезжает со станции А в ${time1} и прибывает в Б в ${time2}. Второй поезд выезжает из А в ${time3}, а едет на ${t} минут дольше, чем первый. Во сколько второй поезд прибывает в Б? <br><br><em>Дайте ответ в виде чч:мм, например, 08:23.</em>`;
             return { variables: { n1, k1, n2, k2, n3, k3, t }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -422,6 +438,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "9",
@@ -437,7 +454,7 @@ const newTasks = [
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
             const time2 = `${String(n2).padStart(2, '0')}:${String(k2).padStart(2, '0')}`;
             const time3 = `${String(n3).padStart(2, '0')}:${String(k3).padStart(2, '0')}`;
-            const problemText = `Первый поезд выезжает со станции А в ${time1} и прибывает в Б в ${time2}. Второй поезд выезжает из А в ${time3}, а едет на ${t} минут меньше, чем первый. Во сколько второй поезд прибывает в Б? <br><i>Дайте ответ в виде чч:мм, например, 08:23.</i>`;
+            const problemText = `Первый поезд выезжает со станции А в ${time1} и прибывает в Б в ${time2}. Второй поезд выезжает из А в ${time3}, а едет на ${t} минут меньше, чем первый. Во сколько второй поезд прибывает в Б? <br><br><em>Дайте ответ в виде чч:мм, например, 08:23.</em>`;
             return { variables: { n1, k1, n2, k2, n3, k3, t }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -448,6 +465,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "8",
@@ -470,7 +488,7 @@ const newTasks = [
             const t = getRandomElement(possibleT);
 
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
-            const problemText = `Электрички со станции ${name1} отправляются в Москву с интервалом ${a} ${declineWord(a, ['час', 'часа', 'часов'])} ${b} минут. ${name2} приехал на станцию в ${time1} и оказалось, что последняя электричка ушла ${t} минут назад. Во сколько уходит следующая электричка? <br><i>Дайте ответ в виде чч:мм, например, 08:23.</i>`;
+            const problemText = `Электрички со станции ${name1} отправляются в Москву с интервалом ${a} ${declineWord(a, ['час', 'часа', 'часов'])} ${b} минут. ${name2} приехал на станцию в ${time1} и оказалось, что последняя электричка ушла ${t} минут назад. Во сколько уходит следующая электричка? <br><br><em>Дайте ответ в виде чч:мм, например, 08:23.</em>`;
             return { variables: { n1, k1, a, b, t }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -480,6 +498,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "7",
@@ -502,7 +521,7 @@ const newTasks = [
             const t = getRandomElement(possibleT);
 
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
-            const problemText = `Электрички со станции ${name1} отправляются в Москву с интервалом ${a} ${declineWord(a, ['час', 'часа', 'часов'])} ${b} минут. ${name2} приехал на станцию в ${time1} и оказалось, что следующая электричка будет через ${t} минут. Во сколько ушла предыдущая электричка? <br><i>Дайте ответ в виде чч:мм, например, 08:23.</i>`;
+            const problemText = `Электрички со станции ${name1} отправляются в Москву с интервалом ${a} ${declineWord(a, ['час', 'часа', 'часов'])} ${b} минут. ${name2} приехал на станцию в ${time1} и оказалось, что следующая электричка будет через ${t} минут. Во сколько ушла предыдущая электричка? <br><br><em>Дайте ответ в виде чч:мм, например, 08:23.</em>`;
             return { variables: { n1, k1, a, b, t }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -512,6 +531,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "6",
@@ -523,7 +543,7 @@ const newTasks = [
             const n2 = getRandomInt(Math.floor(t1 / 60) + 1, Math.floor(t1 / 60) + 2);
             const k2 = getRandomInt(1, 9);
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
-            const problemText = `Автомобиль едет из города А в город Б ${t1} минут, а автобус - ${n2} ${declineWord(n2, ['час', 'часа', 'часов'])} ${k2} ${declineWord(k2, ['минуту', 'минуты', 'минут'])}. Автобус выехал из А в ${time1}. Во сколько должен выехать автомобиль, чтобы прибыть в Б одновременно с автобусом? <br><i>Дайте ответ в виде чч:мм, например, 08:23.</i>`;
+            const problemText = `Автомобиль едет из города А в город Б ${t1} минут, а автобус - ${n2} ${declineWord(n2, ['час', 'часа', 'часов'])} ${k2} ${declineWord(k2, ['минуту', 'минуты', 'минут'])}. Автобус выехал из А в ${time1}. Во сколько должен выехать автомобиль, чтобы прибыть в Б одновременно с автобусом? <br><br><em>Дайте ответ в виде чч:мм, например, 08:23.</em>`;
             return { variables: { n1, k1, t1, n2, k2 }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -535,6 +555,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "5",
@@ -546,7 +567,7 @@ const newTasks = [
             const n2 = getRandomInt(Math.floor(t1 / 60) + 1, Math.floor(t1 / 60) + 2);
             const k2 = getRandomInt(1, 9);
             const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
-            const problemText = `Автомобиль едет из города А в город Б ${t1} минут, а автобус - ${n2} ${declineWord(n2, ['час', 'часа', 'часов'])} ${k2} ${declineWord(k2, ['минуту', 'минуты', 'минут'])}. Автомобиль выехал из А в ${time1}. Во сколько должен выехать автобус, чтобы прибыть в Б одновременно с автомобилем? <br><i>Дайте ответ в виде чч:мм, например, 08:23.</i>`;
+            const problemText = `Автомобиль едет из города А в город Б ${t1} минут, а автобус - ${n2} ${declineWord(n2, ['час', 'часа', 'часов'])} ${k2} ${declineWord(k2, ['минуту', 'минуты', 'минут'])}. Автомобиль выехал из А в ${time1}. Во сколько должен выехать автобус, чтобы прибыть в Б одновременно с автомобилем? <br><br><em>Дайте ответ в виде чч:мм, например, 08:23.</em>`;
             return { variables: { n1, k1, t1, n2, k2 }, problemText };
         },
         calculateAnswer: (vars) => {
@@ -557,6 +578,7 @@ const newTasks = [
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
         }
     },
+
     {
         type: " ",
         number: "4",
@@ -575,6 +597,7 @@ const newTasks = [
         },
         calculateAnswer: (vars) => vars.a * 60 + vars.b - vars.t1 - vars.t2
     },
+
     {
         
         type: " ",
@@ -594,6 +617,7 @@ const newTasks = [
         },
         calculateAnswer: (vars) => vars.a * 60 + vars.b - vars.t1 + vars.t2
     },
+
     {
         type: " ",
         number: "2",
@@ -615,6 +639,7 @@ const newTasks = [
         },
         calculateAnswer: (vars) => (vars.a * 60 + vars.b) - vars.t1 - vars.t2 + vars.t3
     },
+    
     {
         type: " ",
         number: "1",
