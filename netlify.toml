@@ -1,6 +1,14 @@
-# Это правило "маскирует" ссылку на GitHub
-
+# Правило 1: Для вашей "красивой" ссылки
+# Загружает сам HTML-файл
 [[redirects]]
   from = "/s/76hoEqJ8OS"
   to = "https://olgo1.github.io/work/index.html?sheet=4count0_sheet"
-  status = 200  # <--- ЭТО САМОЕ ГЛАВНОЕ!
+  status = 200
+
+# Правило 2: ДЛЯ ВСЕХ ОСТАЛЬНЫХ ФАЙЛОВ (JS, CSS, картинки)
+# Это "поймает" запросы вроде /s/sheets/4count0_sheet.js
+# и перенаправит их на github.com/work/sheets/4count0_sheet.js
+[[redirects]]
+  from = "/s/*"
+  to = "https://olgo1.github.io/work/:splat"
+  status = 200
