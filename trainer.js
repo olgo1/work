@@ -1,19 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- Dynamic loading of sheet and task modules ---
-    const params = new URLSearchParams(window.location.search);
-    const sheetName = params.get('sheet');
+    // --- Dynamic loading of sheet and task modules ---
+const params = new URLSearchParams(window.location.search);
+const accessId = params.get('id'); // <--- ТЕПЕРЬ ИЩЕМ 'id'
 
-    if (!sheetName) {
-        document.body.innerHTML = `
-            <div style="text-align: center; padding: 40px; font-family: sans-serif;">
-                <h1>Тренажёр готов к работе</h1>
-                <p>Пожалуйста, укажите лист с заданиями в адресной строке.</p>
-                <p>Например: <strong>index.html?sheet=имя_файла_листа</strong></p>
-            </div>
-        `;
-        return;
-    }
+// Проверяем, что справочник window.sheetMap загрузился 
+// и что в нем есть тот ID, который нам передали в URL
+if (!accessId || !window.sheetMap || !window.sheetMap[accessId]) {
+
+    // Если ID нет или он неверный, показываем ошибку
+    document.body.innerHTML = `
+        <div style="text-align: center; padding: 40px; font-family: sans-serif;">
+            <h1>Тренажёр не найден</h1>
+            <p>Ссылка, по которой вы перешли, недействительна или устарела.</p>
+        </div>
+    `;
+    return;
+}
+
+// Все в порядке! ID верный. Получаем настоящее имя файла из справочника
+const sheetName = window.sheetMap[accessId];
 
     // A global registry to collect tasks from different files
     window.taskRegistry = [];

@@ -1,14 +1,17 @@
-# Правило 1: Для вашей "красивой" ссылки
-# Загружает сам HTML-файл
-[[redirects]]
-  from = "/s/76hoEqJ8OS"
-  to = "https://olgo1.github.io/work/index.html?sheet=4count0_sheet"
-  status = 200
+# netlify.toml
 
-# Правило 2: ДЛЯ ВСЕХ ОСТАЛЬНЫХ ФАЙЛОВ (JS, CSS, картинки)
-# Это "поймает" запросы вроде /s/sheets/4count0_sheet.js
-# и перенаправит их на github.com/work/sheets/4count0_sheet.js
+# Правило 1: "Маскирует" главную страницу index.html
+# Оно сработает, когда кто-то откроет /s/ или /s/?id=...
+[[redirects]]
+  from = "/s/"
+  to = "https://olgo1.github.io/work/index.html"
+  status = 200 # <-- "Маскировка" (Proxy)
+  force = true 
+
+# Правило 2: "Маскирует" ВСЕ остальные файлы (JS, CSS, картинки)
+# Оно поймает /s/utils.js, /s/sheet_map.js, /s/sheets/4count0_sheet.js и т.д.
 [[redirects]]
   from = "/s/*"
   to = "https://olgo1.github.io/work/:splat"
-  status = 200
+  status = 200 # <-- "Маскировка" (Proxy)
+  force = true
