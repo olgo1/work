@@ -1,0 +1,6 @@
+# Это правило "маскирует" ссылку на GitHub
+
+[[redirects]]
+  from = "/s/76hoEqJ8OS"
+  to = "https://olgo1.github.io/work/index.html?sheet=4count0_sheet"
+  status = 200  # <--- ЭТО САМОЕ ГЛАВНОЕ!
