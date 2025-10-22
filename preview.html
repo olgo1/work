@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Task Generator Preview (Plain JS)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f6f7fb;
+            color: #111;
+        }
+
+        header {
+            padding: 1rem 1.25rem;
+            background: #111827;
+            color: #fff;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        main {
+            padding: 1rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 900px) {
+            .row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .08);
+            overflow: hidden;
+        }
+
+        .card .hd {
+            padding: .75rem 1rem;
+            background: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .card .bd {
+            padding: 1rem;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 260px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            padding: .75rem;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            box-sizing: border-box;
+        }
+
+        .controls {
+            display: flex;
+            gap: .5rem;
+            flex-wrap: wrap;
+            margin-top: .75rem;
+        }
+
+        button {
+            padding: .6rem .9rem;
+            border-radius: 10px;
+            border: 1px solid #111827;
+            background: #111827;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        button.secondary {
+            background: #fff;
+            color: #111827;
+        }
+
+        .grid {
+            display: grid;
+            gap: .75rem;
+        }
+
+        .example {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: .75rem 1rem;
+        }
+
+        .example h3 {
+            margin: .25rem 0 .5rem;
+            font-size: .95rem;
+        }
+
+        .muted {
+            color: #6b7280;
+            font-size: .9rem;
+        }
+
+        .err {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+            padding: .75rem;
+            border-radius: 10px;
+            white-space: pre-wrap;
+        }
+
+        .meta {
+            font-size: .85rem;
+            color: #475569;
+        }
+
+        code.inline {
+            background: #f1f5f9;
+            padding: .1rem .3rem;
+            border-radius: 6px;
+        }
+    </style>
+
+    <!-- Load your helpers here. They must define getRandomInt and declineWord on the global scope. -->
+    <script src="utils.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Task Generator Preview (paste your JS object &rarr; see 3 examples)</h1>
+    </header>
+    <main>
+        <div class="row">
+            <section class="card">
+                <div class="hd">1) Paste your JS object</div>
+                <div class="bd">
+                    <p class="meta">It should evaluate to an object with <code class="inline">generate()</code> and
+                        <code class="inline">calculateAnswer(vars)</code>. Helpers
+                        <code class="inline">getRandomInt</code> and <code class="inline">declineWord</code> are now
+                        loaded from <code class="inline">utils.js</code>.
+                    </p>
+                    <textarea id="codeInput">{
+    type: "Время в пути (позже)",
+    number: 1.1,
+    generate: () => {
+        const n1 = getRandomInt(17, 20);
+        let k1 = getRandomInt(21, 59);
+        if (k1 % 10 === 0) k1 += 3;
+        const n2 = getRandomInt(0, 2);
+        let k2 = getRandomInt(1, k1 - 1);
+        if (k2 % 10 === 0) k2 -= 5;
+        if (k2 < 0) k2 = 1;
+        const t = getRandomInt(71, 119);
+        const time1 = `${String(n1).padStart(2, '0')}:${String(k1).padStart(2, '0')}`;
+        const time2 = `${String(n2).padStart(2, '0')}:${String(k2).padStart(2, '0')}`;
+        const latePhrase = `${t} ${declineWord(t, ['минуту', 'минуты', 'минут'])}`;
+        const problemText = `Автобус выехал с автовокзала в ${time1} и должен был прибыть в пункт назначения в ${time2}. Однако он попал в пробку и прибыл на ${latePhrase} позже. Сколько времени автобус был в пути? <br><i>Дайте ответ в формате чч:мм, например, 07:20. Если не можете найти двоеточие - просто скопируйте и вставьте.</i>`;
+        return { variables: { n1, k1, n2, k2, t }, problemText };
+    },
+    calculateAnswer: (vars) => {
+        const departureTotalMinutes = vars.n1 * 60 + vars.k1;
+        const scheduledArrivalTotalMinutes = (vars.n2 < vars.n1 ? vars.n2 + 24 : vars.n2) * 60 + vars.k2;
+        const totalMinutesInWay = scheduledArrivalTotalMinutes + vars.t - departureTotalMinutes;
+        const n0 = Math.floor(totalMinutesInWay / 60);
+        const k0 = totalMinutesInWay % 60;
+        return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
+    }
+}</textarea>
+                    <div class="controls">
+                        <button id="runBtn">Generate 3 examples</button>
+                        <button id="regenBtn" class="secondary"
+                            title="Uses the already-evaluated object to generate 3 new examples">Re-run (same
+                            code)</button>
+                    </div>
+                    <p class="muted">Note: running arbitrary code is potentially unsafe—use with trusted snippets only.
+                    </p>
+                    <div id="error" style="display:none;margin-top:.75rem;"></div>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="hd">2) Output</div>
+                <div class="bd">
+                    <div id="metaInfo" class="meta" style="margin-bottom:.5rem;"></div>
+                    <div id="out" class="grid"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // --- Simple evaluator that returns the pasted object as-is.
+        // Assumes helpers (getRandomInt, declineWord) are already on the global scope via utils.js.
+        function evaluateObject(code) {
+            const factory = new Function(`return (${code});`);
+            return factory();
+        }
+
+        // --- Render utils ---
+        const out = document.getElementById('out');
+        const metaInfo = document.getElementById('metaInfo');
+        const errBox = document.getElementById('error');
+        let cachedObj = null;
+
+        function clearOutput() {
+            out.innerHTML = '';
+            metaInfo.textContent = '';
+            errBox.style.display = 'none';
+            errBox.innerHTML = '';
+        }
+
+        function showError(e) {
+            errBox.style.display = 'block';
+            errBox.className = 'err';
+            errBox.textContent = (e && e.stack) ? e.stack : String(e);
+        }
+
+        function assertHelpers() {
+            const missing = [];
+            if (typeof getRandomInt !== 'function') missing.push('getRandomInt');
+            if (typeof declineWord !== 'function') missing.push('declineWord');
+            if (missing.length) {
+                throw new Error(`Missing helper(s) from utils.js: ${missing.join(', ')}.\nEnsure utils.js loads before this script and exposes them globally.`);
+            }
+        }
+
+        function renderExamples(obj, count = 3) {
+            clearOutput();
+            const type = obj?.type ?? '(no type)';
+            const number = obj?.number ?? '(no number)';
+            metaInfo.textContent = `Type: ${type}   •   Number: ${number}   •   Showing ${count} example(s)`;
+
+            for (let i = 0; i < count; i++) {
+                const ex = document.createElement('div');
+                ex.className = 'example';
+
+                let gen;
+                try {
+                    if (typeof obj.generate !== 'function') throw new Error('Object has no generate()');
+                    gen = obj.generate();
+                } catch (e) {
+                    showError(e);
+                    return;
+                }
+
+                let answerText = '';
+                try {
+                    if (typeof obj.calculateAnswer !== 'function') throw new Error('Object has no calculateAnswer(vars)');
+                    answerText = obj.calculateAnswer(gen.variables);
+                } catch (e) {
+                    showError(e);
+                    return;
+                }
+
+                const problem = document.createElement('div');
+                problem.innerHTML = gen.problemText ?? '(no problemText returned)';
+
+                const header = document.createElement('h3');
+                header.textContent = `Example ${i + 1}`;
+
+                const vars = document.createElement('div');
+                vars.className = 'muted';
+                vars.textContent = `variables = ${JSON.stringify(gen.variables)}`;
+
+                const ans = document.createElement('p');
+                ans.innerHTML = `<strong>Answer:</strong> <code class="inline">${answerText}</code>`;
+
+                ex.appendChild(header);
+                ex.appendChild(problem);
+                ex.appendChild(ans);
+                ex.appendChild(vars);
+
+                out.appendChild(ex);
+            }
+        }
+
+        // --- Wire up buttons ---
+        document.getElementById('runBtn').addEventListener('click', () => {
+            clearOutput();
+            try {
+                assertHelpers();
+                const code = document.getElementById('codeInput').value.trim();
+                if (!code) throw new Error('Please paste your JS object first.');
+                const obj = evaluateObject(code);
+                cachedObj = obj;
+                renderExamples(obj, 3);
+            } catch (e) {
+                showError(e);
+            }
+        });
+
+        document.getElementById('regenBtn').addEventListener('click', () => {
+            clearOutput();
+            try {
+                assertHelpers();
+                if (!cachedObj) throw new Error('Nothing to re-run. Click "Generate 3 examples" first.');
+                renderExamples(cachedObj, 3);
+            } catch (e) {
+                showError(e);
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -93,71 +93,123 @@ document.addEventListener('DOMContentLoaded', () => {
             return `${m}:${s}`;
         }
 
+        // --- ИЗМЕНЁННЫЙ БЛОК ТАЙМЕРА ---
         function startTimer() {
-            if (state.timerId) clearInterval(state.timerId);
+            if (state.timerId) clearInterval(state.timerId); // Очищаем старый таймер
             state.isFinished = false;
-            let timeLeft = trainerSettings.totalTime || 600;
-            elements.timer.textContent = formatTime(timeLeft);
+
+            const totalTimeMs = (trainerSettings.totalTime || 600) * 1000;
+            const startTime = Date.now();
+
+            elements.timer.textContent = formatTime(totalTimeMs / 1000);
+
             state.timerId = setInterval(() => {
                 if (state.isFinished) {
                     clearInterval(state.timerId);
                     return;
                 }
-                timeLeft--;
-                elements.timer.textContent = formatTime(timeLeft);
-                if (timeLeft <= 0) {
+                
+                const elapsedTime = Date.now() - startTime;
+                const remainingTimeMs = totalTimeMs - elapsedTime;
+
+                if (remainingTimeMs <= 0) {
                     clearInterval(state.timerId);
+                    elements.timer.textContent = '00:00';
                     checkAnswers();
+                    return;
                 }
-            }, 1000);
+
+                // Округляем до ближайшей секунды вверх для отображения
+                const remainingSeconds = Math.ceil(remainingTimeMs / 1000);
+                elements.timer.textContent = formatTime(remainingSeconds);
+                
+            }, 250); // Интервал обновления для плавности
         }
 
         /**
          * New task selection logic based on selectors.
          */
-        function pickTasks() {
-            const selectedTasks = [];
-            let availableTasks = [...allTasks]; // Create a mutable copy
+        /**
+ /**
+ * Обновлённая функция выбора задач с поддержкой include, exclude и ANY для тегов.
+ */
+// Вставьте этот код в ваш старый trainer.js, полностью заменив старую функцию pickTasks
 
-            for (const selector of problemSelectors) {
-                const { count, filter } = selector;
-
-                // Find all tasks that match the current filter
-                const candidates = availableTasks.filter(task => {
-                    if (!task) return false;
-
-                    // Filter by type (can be a string or an array of strings)
-                    const typeMatch = filter.type ?
-                        (Array.isArray(filter.type) ? filter.type.includes(task.type) : task.type === filter.type) :
-                        true;
-
-                    // Filter by number (can be a number or an array of numbers)
-                    const numberMatch = filter.number ?
-                        (Array.isArray(filter.number) ? filter.number.includes(task.number) : task.number === filter.number) :
-                        true;
-
-                    // Filter by tags (assumes AND logic: task must have ALL specified tags)
-                    const tagsMatch = filter.tags ?
-                        (Array.isArray(filter.tags) ? filter.tags.every(tag => task.tags && task.tags.includes(tag)) : false) :
-                        true;
-
-                    return typeMatch && numberMatch && tagsMatch;
-                });
-
-                // Shuffle candidates to get random tasks
-                const shuffledCandidates = candidates.sort(() => 0.5 - Math.random());
-
-                // Select the required number of tasks
-                const picked = shuffledCandidates.slice(0, count);
-                selectedTasks.push(...picked);
-
-                // Create a set of picked tasks for efficient lookup
-                const pickedSet = new Set(picked);
-                // Filter out the picked tasks from the available pool for the next selector
-                availableTasks = availableTasks.filter(task => !pickedSet.has(task));
+function pickTasks() {
+    // ===== Вспомогательные функции для нового фильтра =====
+    function matchesTagsExpr(expr, taskTags = []) {
+        if (!expr) return true;
+        const tokens = expr.match(/not|[&|\\()]|"[^"]+"/g);
+        if (!tokens) return true;
+        let i = 0;
+        function parseExpression() {
+            let node = parseTerm();
+            while (i < tokens.length && tokens[i] === '|') {
+                i++;
+                const right = parseTerm();
+                node = node || right;
             }
-            return selectedTasks;
+            return node;
         }
+        function parseTerm() {
+            let node = parseFactor();
+            while (i < tokens.length && (tokens[i] === '&' || tokens[i] === '\\')) {
+                const op = tokens[i++];
+                const right = parseFactor();
+                if (op === '&') node = node && right;
+                else if (op === '\\') node = node && !right;
+            }
+            return node;
+        }
+        function parseFactor() {
+            if (i >= tokens.length) return true;
+            const tok = tokens[i++];
+            if (tok === 'not') return !parseFactor();
+            if (tok === '(') {
+                const val = parseExpression();
+                if (tokens[i] === ')') i++;
+                return val;
+            }
+            if (/^".+"$/.test(tok)) {
+                const tag = tok.slice(1, -1);
+                return taskTags.includes(tag);
+            }
+            return true;
+        }
+        return parseExpression();
+    }
+    
+    // ===== Основная логика выбора =====
+    const selectedTasks = [];
+    let availableTasks = [...window.taskRegistry]; 
+
+    for (const selector of problemSelectors) {
+        const { count, filter } = selector;
+
+        const candidates = availableTasks.filter(task => {
+            if (!task) return false;
+            
+            // Фильтр по тегам теперь использует новую функцию
+            const tagsMatch = filter.tags ? matchesTagsExpr(filter.tags, task.tags || []) : true;
+            
+            // Фильтры по типу и номеру, если они есть (остаются для совместимости)
+            const typeMatch = filter.type ? (Array.isArray(filter.type) ? filter.type.includes(task.type) : task.type === filter.type) : true;
+            const numberMatch = filter.number ? (Array.isArray(filter.number) ? filter.number.includes(task.number) : task.number === filter.number) : true;
+
+            return tagsMatch && typeMatch && numberMatch;
+        });
+
+        // Выбор случайных задач из кандидатов
+        const shuffledCandidates = candidates.sort(() => 0.5 - Math.random());
+        const picked = shuffledCandidates.slice(0, count);
+        selectedTasks.push(...picked);
+
+        // Удаляем выбранные задачи, чтобы они не попались снова
+        const pickedSet = new Set(picked);
+        availableTasks = availableTasks.filter(task => !pickedSet.has(task));
+    }
+    return selectedTasks;
+}
 
 
         function createTaskCard(task) {
@@ -197,7 +249,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (state.isFinished) return;
             state.isFinished = true;
             elements.checkBtn.disabled = true;
-            elements.rerollBtn.disabled = true;
             let correctCount = 0;
             for (const task of state.tasks) {
                 const userAnswer = task.input.value.trim();
@@ -229,3 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
         render();
     }
 });
+
+
+
