@@ -1,7 +1,7 @@
 // --- ОБЩИЕ НАСТРОЙКИ ТРЕНАЖЁРА ---
 const trainerSettings = {
     title: "Счёт",
-    subtitle: "разнные примеры",
+    subtitle: "разные примеры",
     totalTime: 900 // 15 минут
 };
 
