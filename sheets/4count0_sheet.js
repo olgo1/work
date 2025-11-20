@@ -1,7 +1,7 @@
 // --- ОБЩИЕ НАСТРОЙКИ ТРЕНАЖЁРА ---
 const trainerSettings = {
-    title: "Счёт",
-    subtitle: "разные примеры",
+    title: "Счёт. Примеры со скобками и без",
+    subtitle: "mathnomagic.ru",
     totalTime: 900 // 15 минут
 };
 
