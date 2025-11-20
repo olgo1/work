@@ -1,9 +1,9 @@
 // sheets/4count0_sheet.js
 
 const trainerSettings = {
-    title: "Счёт (Мини-тест)",
-    subtitle: "3 задачи разных типов",
-    totalTime: 300 // 5 минут хватит с головой
+    title: "Счёт. Деление и умножение на однозначное",
+    subtitle: "mathnomagic.ru",
+    totalTime: 900 
 };
 
 // --- 1. Определяем фильтры ---
