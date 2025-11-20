@@ -5,7 +5,7 @@ const _4unitsTasks = [
 {
     type: " ",
     name: "4units35",
-    tags: ["4_класс", "текстовая_задача", "единицы_длины", "деление_именованных_величин", "периметр_квадрата", "площадь_квадрата"],
+    tags: ["4_класс", "текстовая_задача", "единицы_длины", "перевод_единиц", "периметр_квадрата", "площадь_квадрата"],
     generate: function() {
         // --- Вспомогательные функции и данные ---
         const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -62,7 +62,7 @@ const _4unitsTasks = [
 {
     type: " ",
     name: "4units34",
-    tags: ["4_класс", "текстовая_задача", "единицы_массы", "деление_именованных_величин"],
+    tags: ["4_класс", "текстовая_задача", "единицы_массы", "перевод_единиц"],
     generate: function() {
         // --- Вспомогательные функции и данные ---
         const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -109,7 +109,7 @@ const _4unitsTasks = [
 {
     type: " ",
     name: "4units33",
-    tags: ["4_класс", "текстовая_задача", "единицы_массы", "деление_именованных_величин"],
+    tags: ["4_класс", "текстовая_задача", "единицы_массы", "перевод_единиц"],
     generate: function() {
         // --- Вспомогательные функции и данные ---
         const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -155,7 +155,7 @@ const _4unitsTasks = [
 {
     type: " ",
     name: "4units32",
-    tags: ["4_класс", "текстовая_задача", "единицы_массы", "деление_именованных_величин"],
+    tags: ["4_класс", "текстовая_задача", "единицы_массы", "перевод_единиц"],
     generate: function() {
         // --- Вспомогательные функции и данные ---
         const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -205,7 +205,7 @@ const _4unitsTasks = [
 {
     type: " ",
     name: "4units31",
-    tags: ["4_класс", "текстовая_задача", "единицы_массы", "деление_именованных_величин"],
+    tags: ["4_класс", "текстовая_задача", "единицы_массы", "перевод_единиц"],
     generate: function() {
         // --- Вспомогательные функции и данные ---
         const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
