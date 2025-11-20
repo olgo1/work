@@ -1,4 +1,3 @@
-
 // --- TASK BANK ---
 const newTasks = [
     {
@@ -55,7 +54,8 @@ const newTasks = [
         number: "24",
         tags: ["время_на_часах", "4_класс", "текстовая_задача", "12"],
         generate: () => {
-            const N1 = ["Маша", "Лена", "Наташа", "Оля", "Яна"];
+            // Исправлено: Убраны имена с твердой основой (Лена, Яна), добавлены совместимые с окончанием -и
+            const N1 = ["Маша", "Юля", "Наташа", "Оля", "Таня"];
             const N2 = ["Денис", "Демид", "Андрей", "Витя", "Саша"];
             const name1 = getRandomElement(N1);
             const name2 = getRandomElement(N2);
@@ -79,7 +79,8 @@ const newTasks = [
         tags: ["время_на_часах", "4_класс", "текстовая_задача", "12"],
         generate: () => {
             const N1 = ["Ратмир", "Егор", "Миша", "Ильдар", "Денис"];
-            const N2 = ["Настя", "Аня", "Катя", "Алина", "Сабина"];
+            // Исправлено: Убраны Алина, Сабина (требуют -ы), добавлены Соня, Варя (требуют -и)
+            const N2 = ["Настя", "Аня", "Катя", "Соня", "Варя"];
             const name1 = getRandomElement(N1);
             const name2 = getRandomElement(N2);
             const n1 = getRandomInt(14, 17);
@@ -211,7 +212,8 @@ const newTasks = [
         number: "18",
         tags: ["время_на_часах", "4_класс", "текстовая_задача", "9"],
         generate: () => {
-            const name1List = ["Даша", "Василиса", "Рита", "Света"];
+            // Исправлено: Убраны Василиса, Рита, Света (требуют -ы)
+            const name1List = ["Даша", "Вика", "Маша", "Оля"];
             const name2List = ["Гоша", "Гриша", "Дима", "Миша"];
             const name1 = getRandomElement(name1List);
             const name2 = getRandomElement(name2List);
@@ -219,7 +221,7 @@ const newTasks = [
             let t2 = getRandomInt(12, 18); t2 -= (t2 % 2);
             const m1 = getRandomElement([2, 3, 4, 5, 6]);
             let m2 = getRandomElement([m1 + 2, m1 - 2]);
-            if (m2 < m1) m2 = m1 + 2; // simplified logic based on analysis
+            if (m2 < m1) m2 = m1 + 2; 
             
             const schoolStartTime = 8 * 60 + 45; // 08:45
             const name2EndTime = schoolStartTime + (t1 * m2) + (t2 * (m2 - 1));
@@ -299,7 +301,7 @@ const newTasks = [
             const a = getRandomElement([1, 2, 3]);
             const b = getRandomElement([10, 20, 30, 40, 50]);
             let t; do { t = getRandomInt(1, 29); } while (t % 10 === 0);
-            const scheduledDuration = getRandomInt(120, 300); // Add a missing variable
+            const scheduledDuration = getRandomInt(120, 300); 
             const scheduledDeparture = (getRandomInt(8, 20) * 60) + getRandomInt(0, 59);
             const actualArrival = scheduledDeparture + (a * 60 + b) + (scheduledDuration - t);
             
@@ -311,9 +313,6 @@ const newTasks = [
             return { variables: { n1, k1, a, b, t, scheduledDeparture }, problemText };
         },
         calculateAnswer: (vars) => {
-            // NOTE: The user's formula calculated scheduled ARRIVAL. 
-            // The logic is corrected to answer the question (scheduled DEPARTURE).
-            // This required generating the answer first and working backwards in the generate step.
             const n0 = Math.floor(vars.scheduledDeparture / 60);
             const k0 = vars.scheduledDeparture % 60;
             return `${String(n0).padStart(2, '0')}:${String(k0).padStart(2, '0')}`;
@@ -325,7 +324,8 @@ const newTasks = [
         number: "14",
         tags: ["время_на_часах", "4_класс", "текстовая_задача", "7"],
         generate: () => {
-            const nameList = ["Марина", "Злата", "Элина", "Аня", "Оксана", "Мия"];
+            // Исправлено: Убраны Марина, Злата, Элина, Оксана
+            const nameList = ["Юля", "Лиля", "Соня", "Аня", "Вика", "Мия"];
             const name1 = getRandomElement(nameList);
             let name2;
             do { name2 = getRandomElement(nameList); } while (name1 === name2);
@@ -347,7 +347,8 @@ const newTasks = [
         number: "13",
         tags: ["время_на_часах", "4_класс", "текстовая_задача", "7"],
         generate: () => {
-            const nameList = ["Марина", "Злата", "Элина", "Аня", "Оксана", "Мия"];
+            // Исправлено (аналогично задаче 14)
+            const nameList = ["Юля", "Лиля", "Соня", "Аня", "Вика", "Мия"];
             const name1 = getRandomElement(nameList);
             let name2;
             do { name2 = getRandomElement(nameList); } while (name1 === name2);
@@ -430,7 +431,6 @@ const newTasks = [
             return { variables: { n1, k1, n2, k2, n3, k3, t }, problemText };
         },
         calculateAnswer: (vars) => {
-            // NOTE: The user's formula was a copy-paste error. Corrected based on the problem logic.
             const firstTrainDuration = (vars.n2 * 60 + vars.k2) - (vars.n1 * 60 + vars.k1);
             const secondTrainArrival = (vars.n3 * 60 + vars.k3) + firstTrainDuration + vars.t;
             const n0 = Math.floor(secondTrainArrival / 60);
@@ -547,7 +547,6 @@ const newTasks = [
             return { variables: { n1, k1, t1, n2, k2 }, problemText };
         },
         calculateAnswer: (vars) => {
-            // NOTE: The user's formula had swapped signs. Corrected to match logic.
             const busArrivalTime = (vars.n1 * 60 + vars.k1) + (vars.n2 * 60 + vars.k2);
             const carDepartureTime = busArrivalTime - vars.t1;
             const n0 = Math.floor(carDepartureTime / 60);
@@ -584,7 +583,8 @@ const newTasks = [
         number: "4",
         tags: ["время_на_часах", "4_класс", "текстовая_задача", "2"],
         generate: () => {
-            const name1List = ["Лена", "Даша", "Дарина", "Тася", "Лера", "Аманда"];
+            // Исправлено: Убраны Лена, Дарина, Лера, Аманда
+            const name1List = ["Соня", "Даша", "Варя", "Тася", "Катя", "Ася"];
             const name2List = ["Серёжа", "Глеб", "Денис", "Антон", "Родион"];
             const name1 = getRandomElement(name1List);
             const name2 = getRandomElement(name2List);
@@ -604,7 +604,8 @@ const newTasks = [
         number: "3",
         tags: ["время_на_часах", "4_класс", "текстовая_задача", "2"],
         generate: () => {
-            const name1List = ["Лена", "Даша", "Дарина", "Тася", "Лера", "Аманда"];
+            // Исправлено
+            const name1List = ["Соня", "Даша", "Варя", "Тася", "Катя", "Ася"];
             const name2List = ["Серёжа", "Глеб", "Денис", "Антон", "Родион"];
             const name1 = getRandomElement(name1List);
             const name2 = getRandomElement(name2List);
@@ -623,7 +624,8 @@ const newTasks = [
         number: "2",
         tags: ["время_на_часах", "4_класс", "текстовая_задача", "1"],
         generate: () => {
-            const name2List = ["Лена", "Даша", "Дарина", "Тася", "Лера", "Аманда"];
+            // Исправлено
+            const name2List = ["Соня", "Даша", "Варя", "Тася", "Катя", "Ася"];
             const name1List = ["Серёжа", "Глеб", "Денис", "Антон", "Родион"];
             const name1 = getRandomElement(name1List);
             const name2 = getRandomElement(name2List);
@@ -645,7 +647,8 @@ const newTasks = [
         number: "1",
         tags: ["время_на_часах", "4_класс", "текстовая_задача", "1"],
         generate: () => {
-            const name2List = ["Лена", "Даша", "Дарина", "Тася", "Лера", "Аманда"];
+            // Исправлено
+            const name2List = ["Соня", "Даша", "Варя", "Тася", "Катя", "Ася"];
             const name1List = ["Серёжа", "Глеб", "Денис", "Антон", "Родион"];
             const name1 = getRandomElement(name1List);
             const name2 = getRandomElement(name2List);
@@ -653,14 +656,12 @@ const newTasks = [
             const t1 = getRandomInt(4, 6);
             const t2 = getRandomElement([65, 70, 75, 80, 85]);
             let t3; do { t3 = getRandomInt(3, t1 + t2 - 6); } while (t3 % 5 === 0);
-            const problemText = `Тест длится 2 часа ${b} минут. ${name2} опоздала на него на ${t1} минут, а закончила за ${t2} минут до конца. ${name1} писал тест на ${t3} минут дольше ${toGenitive(name2)}. За сколько минут ${name1} выполнил тест?`;
+            const problemText = `Тест длится 2 часа ${b} минут. ${name2} опоздала на него на ${t1} минут, а закончил за ${t2} минут до конца. ${name1} писал тест на ${t3} минут дольше ${toGenitive(name2)}. За сколько минут ${name1} выполнил тест?`;
             return { variables: { b, t1, t2, t3 }, problemText };
         },
         calculateAnswer: (vars) => 120 + vars.b - vars.t1 - vars.t2 + vars.t3
     }
 ];
-
-
 
 // Add these tasks to the global registry
 window.taskRegistry.push(...newTasks);
