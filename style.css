@@ -61,20 +61,16 @@ h1 {
     box-shadow: 0 2px 4px rgba(0,0,0,0.03);
 }
 
-/* Заголовок/Текст задачи - ОСНОВНЫЕ ИЗМЕНЕНИЯ ЗДЕСЬ */
+/* Заголовок/Текст задачи - ИСПРАВЛЕННАЯ ВЕРСИЯ */
 .problem-title {
-    /* 1. Фиксируем размер шрифта, чтобы он не скакал */
+    /* 1. Единый размер шрифта */
     font-size: 20px;
     font-weight: normal;
     line-height: 1.5;
     
-    /* 2. Задаем минимальную высоту блока. 
-       Это выровняет поля ввода, даже если текста мало. */
-    min-height: 90px; 
-    
-    /* 3. Центрируем текст по вертикали (красиво для коротких примеров) */
-    display: flex;
-    align-items: center; 
+    /* 2. Минимальная высота, чтобы поля ввода были на одном уровне.
+       display: flex; мы УБРАЛИ, чтобы не ломать переносы строк (<br>). */
+    min-height: 80px; 
     
     margin-bottom: 15px;
     color: #222;
@@ -86,7 +82,7 @@ h1 {
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 6px;
-    font-size: 18px; /* Крупный удобный шрифт для ввода */
+    font-size: 18px;
     font-family: var(--font-family);
     box-sizing: border-box;
     transition: border-color 0.2s;
@@ -170,8 +166,6 @@ button:active {
     display: none;
 }
 
-/* Оставляем на случай, если используется внутри HTML задач, 
-   но переопределяем размер, чтобы он не конфликтовал */
 .problem-expression {
     font-size: inherit; 
     font-weight: inherit;
