@@ -1,7 +1,7 @@
 // sheets/4count0_sheet.js
 
 const trainerSettings = {
-    title: "Счёт. Деление и умножение на однозначное",
+    title: "Деление и умножение на однозначные числа. Сложение и вычитание многозначных. Примеры",
     subtitle: "mathnomagic.ru",
     totalTime: 900 
 };
