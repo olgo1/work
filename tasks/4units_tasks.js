@@ -5,7 +5,7 @@ const _4unitsTasks = [
 {
     type: " ",
     name: "4units35",
-    tags: ["4_класс", "текстовая_задача", "единицы_длины", "деление_именованных_величин", "периметр_квадрата", "площадь_квадрата"],
+    tags: ["4_класс", "текстовая_задача", "единицы_длины", "перевод_единиц", "периметр_квадрата", "площадь_квадрата"],
     generate: function() {
         // --- Вспомогательные функции и данные ---
         const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -47,7 +47,7 @@ const _4unitsTasks = [
 
         return {
             variables: { answer: answer, unit: areaUnit },
-            problemText: problemText + `<br><br><em>Ответ запишите вместе с единицами измерения (например, 25 дм2).</em>`
+            problemText: problemText + `<br><br><em>Запишите число и единицу измерения (например, 81 дм2). Единица измерения должна быть одна, самая крупная из возможных, а число натуральное. </em>`
         };
     },
     
@@ -62,7 +62,7 @@ const _4unitsTasks = [
 {
     type: " ",
     name: "4units34",
-    tags: ["4_класс", "текстовая_задача", "единицы_массы", "деление_именованных_величин"],
+    tags: ["4_класс", "текстовая_задача", "единицы_массы", "перевод_единиц"],
     generate: function() {
         // --- Вспомогательные функции и данные ---
         const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -98,7 +98,7 @@ const _4unitsTasks = [
 
         return {
             variables: { answer: answer },
-            problemText: problemText + "<br><br><em>В ответе запишите число и единицы измерения.</em>"
+            problemText: problemText + "<br><br><em>Запишите число и единицу измерения (например, 150 г). Единица измерения должна быть одна, самая крупная из возможных, а число натуральное. </em>"
         };
     },
     calculateAnswer: function(vars) {
@@ -109,7 +109,7 @@ const _4unitsTasks = [
 {
     type: " ",
     name: "4units33",
-    tags: ["4_класс", "текстовая_задача", "единицы_массы", "деление_именованных_величин"],
+    tags: ["4_класс", "текстовая_задача", "единицы_массы", "перевод_единиц"],
     generate: function() {
         // --- Вспомогательные функции и данные ---
         const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -143,7 +143,7 @@ const _4unitsTasks = [
 
         return {
             variables: { answer: answer },
-            problemText: problemText + "<br><br><em>В ответе запишите число и единицы измерения.</em>"
+            problemText: problemText + "<br><br><em>Запишите число и единицу измерения (например, 750 г). Единица измерения должна быть одна, самая крупная из возможных, а число натуральное.</em>"
         };
     },
     calculateAnswer: function(vars) {
@@ -155,7 +155,7 @@ const _4unitsTasks = [
 {
     type: " ",
     name: "4units32",
-    tags: ["4_класс", "текстовая_задача", "единицы_массы", "деление_именованных_величин"],
+    tags: ["4_класс", "текстовая_задача", "единицы_массы", "перевод_единиц"],
     generate: function() {
         // --- Вспомогательные функции и данные ---
         const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -194,7 +194,7 @@ const _4unitsTasks = [
 
         return {
             variables: { answer: answer },
-            problemText: problemText + "<br><br><em>В ответе запишите число и единицы измерения.</em>"
+            problemText: problemText + "<br><br><em>Запишите число и единицу измерения (например, 2 кг). Единица измерения должна быть одна, самая крупная из возможных, а число натуральное.</em>"
         };
     },
     calculateAnswer: function(vars) {
@@ -205,7 +205,7 @@ const _4unitsTasks = [
 {
     type: " ",
     name: "4units31",
-    tags: ["4_класс", "текстовая_задача", "единицы_массы", "деление_именованных_величин"],
+    tags: ["4_класс", "текстовая_задача", "единицы_массы", "перевод_единиц"],
     generate: function() {
         // --- Вспомогательные функции и данные ---
         const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -242,7 +242,7 @@ const _4unitsTasks = [
 
         return {
             variables: { answer: answer },
-            problemText: problemText + "<br><br><em>В ответе запишите число и единицы измерения.</em>"
+            problemText: problemText + "<br><br><em>Запишите число и единицу измерения (например, 150 г). Единица измерения должна быть одна, самая крупная из возможных, а число натуральное.</em>"
         };
     },
     calculateAnswer: function(vars) {
@@ -259,26 +259,34 @@ const _4unitsTasks = [
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-        // 1. Создаём переменные так, чтобы они сразу были правильными. Идём от ответа.
+        // 1. Создаём переменные так, чтобы они сразу были правильными.
         const n3 = getRandomInt(1401, 1800); // Вес автомобиля без груза
         const half_cargo_weight_kg = getRandomInt(100, 400); // Вес половины груза
 
-        // 2. Вычисляем остальные значения на их основе
-        const cargo_weight_kg = half_cargo_weight_kg * 2; // Весь груз (гарантированно чётный!)
-        const total_weight_kg = n3 + cargo_weight_kg; // Общий вес
+        // 2. Вычисляем остальные значения
+        const cargo_weight_kg = half_cargo_weight_kg * 2;
+        const total_weight_kg = n3 + cargo_weight_kg;
 
-        // 3. Превращаем общий вес в центнеры и килограммы для текста задачи
+        // 3. Превращаем общий вес в центнеры и килограммы
         const n1 = Math.floor(total_weight_kg / 100);
         const n2 = total_weight_kg % 100;
+        
+        // --- ИСПРАВЛЕНО: Формируем строку веса без 0 кг ---
+        let weight_text;
+        if (n2 === 0) {
+            weight_text = `${n1} ц`;
+        } else {
+            weight_text = `${n1} ц ${n2} кг`;
+        }
         
         // 4. Финальный ответ
         const answer = n3 + half_cargo_weight_kg;
 
-        const problemText = `Автомобиль с грузом весит ${n1} ц ${n2} кг, а без груза — ${n3} кг. Сколько будет весить автомобиль с половиной этого груза?`;
+        const problemText = `Автомобиль с грузом весит ${weight_text}, а без груза — ${n3} кг. Сколько будет весить автомобиль с половиной этого груза?`;
 
         return {
             variables: { answer: answer },
-            problemText: problemText + "<br><br><em>Ответ дайте в килограммах. Укажите только число.</em>"
+            problemText: problemText + "<br><br><em>Ответ дайте в килограммах. Запишите только число.</em>"
         };
     },
     
@@ -445,7 +453,7 @@ const _4unitsTasks = [
 
         return {
             variables: { answer: answer },
-            problemText: problemText + "<br><br><em>Ответ дайте в граммах. Укажите только число.</em>"
+            problemText: problemText + "<br><br><em>Ответ дайте в граммах. Запишите только число.</em>"
         };
     },
 
@@ -500,7 +508,7 @@ const _4unitsTasks = [
 
         return {
             variables: { answer: answer },
-            problemText: problemText + "<br><br><em>Ответ дайте в граммах. Укажите только число.</em>"
+            problemText: problemText + "<br><br><em>Ответ дайте в граммах. Запишите только число.</em>"
         };
     },
 
@@ -559,7 +567,7 @@ const _4unitsTasks = [
 
         return {
             variables: { answer: answer },
-            problemText: problemText + "<br><br><em>В поле ответа запишите только число.</em>"
+            problemText: problemText + "<br><br><em>Запишите только число.</em>"
         };
     },
     calculateAnswer: function(vars) {
@@ -759,7 +767,7 @@ const _4unitsTasks = [
 
         return {
             variables: { answer: answer },
-            problemText: problemText + `<br><br><em>В поле ответа запишите только число.</em>`
+            problemText: problemText + `<br><br><em>Запишите только число.</em>`
         };
     },
 
@@ -975,7 +983,7 @@ const _4unitsTasks = [
 
         return {
             variables: { answer: final_price },
-            problemText: problemText + "<br><br><em>В поле ответа запишите только число.</em>"
+            problemText: problemText + "<br><br><em>Запишите только число.</em>"
         };
     },
 
@@ -1336,7 +1344,7 @@ const _4unitsTasks = [
 
         return {
             variables: { answer: answer },
-            problemText: problemText + "<br><br><em>Ответ дайте в сантиметрах. Укажите только число.</em>"
+            problemText: problemText + "<br><br><em>Ответ дайте в сантиметрах. Запишите только число.</em>"
         };
     },
 
@@ -1382,48 +1390,51 @@ const _4unitsTasks = [
         const tree = trees[getRandomInt(0, trees.length - 1)];
         const pronoun = tree.gender === 'm' ? 'его' : 'её';
 
-        // --- ИСПРАВЛЕННЫЙ БЛОК РАСЧЁТА ВЫСОТЫ ---
+        // --- РАСЧЁТ ВЫСОТЫ ---
         let total_height_cm = 0;
         const height_stage1 = tree.stage1_years * tree.stage1_growth;
 
         if (target_age <= tree.stage1_years) {
-            // Если возраст в пределах первого этапа
             total_height_cm = target_age * tree.stage1_growth;
         } else if (target_age <= tree.stage2_years) {
-            // Если возраст в пределах второго этапа
             const years_in_stage2 = target_age - tree.stage1_years;
             const height_stage2 = years_in_stage2 * tree.stage2_growth;
             total_height_cm = height_stage1 + height_stage2;
         } else {
-            // Если возраст в третьем этапе
             const height_stage2 = (tree.stage2_years - tree.stage1_years) * tree.stage2_growth;
             const years_in_stage3 = target_age - tree.stage2_years;
             const height_stage3 = years_in_stage3 * tree.stage3_growth;
             total_height_cm = height_stage1 + height_stage2 + height_stage3;
         }
-        // --- КОНЕЦ ИСПРАВЛЕННОГО БЛОКА ---
         
+        // --- ИСПРАВЛЕНО: Формирование текста высоты без нулей ---
         let height_text;
         const m = Math.floor(total_height_cm / 100);
         const cm = total_height_cm % 100;
-        const isDmPossible = (cm % 10 === 0);
-        const useDmFormat = (isDmPossible && Math.random() < 0.5);
 
-        if (useDmFormat) {
-            const dm = cm / 10;
-            height_text = `${m} м ${dm} дм`;
+        if (cm === 0) {
+            // Если сантиметров 0, пишем только метры
+            height_text = `${m} м`;
         } else {
-            height_text = `${m} м ${cm} см`;
+            // Иначе проверяем, можно ли записать в дм
+            const isDmPossible = (cm % 10 === 0);
+            const useDmFormat = (isDmPossible && Math.random() < 0.5);
+
+            if (useDmFormat) {
+                const dm = cm / 10;
+                height_text = `${m} м ${dm} дм`;
+            } else {
+                height_text = `${m} м ${cm} см`;
+            }
         }
         
         const problemText = `${tree.name} в первые ${tree.stage1_years} лет своей жизни растёт на ${tree.stage1_growth} см в год; в период от ${tree.stage1_years} до ${tree.stage2_years} лет — на ${tree.stage2_growth} см в год; после ${tree.stage2_years} лет ${pronoun} рост практически останавливается и составляет ${tree.stage3_growth} см в год.
 <br>Сколько лет ${tree.name_genitive}, если ${pronoun} высота ${height_text}?`;
 
         return {
-    variables: { answer: target_age },
-    // --- ИСПРАВЛЕНИЕ ЗДЕСЬ ---
-    problemText: problemText + "<br><br><em>(В ответе укажите только число, например: 18)</em>"
-};
+            variables: { answer: target_age },
+            problemText: problemText + "<br><br><em>Запишите только число</em>"
+        };
     },
 
     calculateAnswer: function(vars) {
@@ -1499,7 +1510,7 @@ const _4unitsTasks = [
 
         return {
             variables: { answer: answer },
-            problemText: problemText + "<br><br><em>(В ответе укажите только число.</em>"
+            problemText: problemText + "<br><br><em>Запишите только число.</em>"
         };
     },
 
@@ -1674,7 +1685,7 @@ const _4unitsTasks = [
 
         return {
             variables: { answer: answer },
-            problemText: problemText + "<br><br><em>(В ответе укажите только число.</em>"
+            problemText: problemText + "<br><br><em>Запишите только число.</em>"
         };
     },
     calculateAnswer: function(vars) {
@@ -1705,27 +1716,23 @@ const _4unitsTasks = [
 		const summand_mm = n1 * 1000 + n2 * 10 + n3 * 10;
 
 		// 3. Определяем допустимый диапазон для n4.
-		// n4 должно быть меньше summand_mm и кратно 1000.
-		// Нижняя граница = 11000.
-		// Верхняя граница - это наибольшее число, кратное 1000, которое меньше summand_mm.
 		const n4_max = Math.floor((summand_mm - 1) / 1000) * 1000;
-
-		// Учитываем собственное ограничение n4 (до 99000)
 		const final_n4_max = Math.min(99000, n4_max);
 
-		// Генерируем n4 в вычисленном диапазоне.
+		// Генерируем n4
 		const n4_multiplier = getRandomInt(11, final_n4_max / 1000);
 		const n4 = n4_multiplier * 1000;
 
 		// 4. Вычисляем итоговый ответ.
 		const answerInMm = summand_mm - n4;
 
-		// 5. Формируем текст задачи с требуемой инструкцией.
+		// 5. Формируем текст задачи.
 		const problemText = `Вычислите:<br><br>${n1} м ${n2} см + ${n3} см - ${n4} мм`;
 		
 		return {
 			variables: { answer: answerInMm },
-			problemText: problemText + "<br><br><em>Ответ запишите, выделив единицы измерения (км, м, см, мм). Если какая-то из них равна нулю, не записывайте её.</em>"
+			// Обновил подсказку, добавив дм в список примеров
+			problemText: problemText + "<br><br><em>Ответ запишите, выделив все единицы измерения (км, м, дм, см, мм). Если какая-то из них равна нулю, не записывайте её (например, 4 м 5 см - здесь 0 дм указывать не нужно)</em>"
 		};
 	},
 
@@ -1733,17 +1740,25 @@ const _4unitsTasks = [
 		// Принимаем, что vars.answer - это целое число в миллиметрах.
 		const totalMm = vars.answer;
 		
-		// 1. Раскладываем ответ, пропуская дециметры.
-		const kilometers = Math.floor(totalMm / 1000000); // 1 км = 1 000 000 мм
+		// 1. Километры (1 км = 1 000 000 мм)
+		const kilometers = Math.floor(totalMm / 1000000);
 		const mmAfterKm = totalMm % 1000000;
 		
-		const meters = Math.floor(mmAfterKm / 1000);      // 1 м = 1000 мм
+		// 2. Метры (1 м = 1000 мм)
+		const meters = Math.floor(mmAfterKm / 1000);
 		const mmAfterM = mmAfterKm % 1000;
 		
-		const centimeters = Math.floor(mmAfterM / 10);    // 1 см = 10 мм
-		const millimeters = mmAfterM % 10;                // Оставшиеся миллиметры
+		// 3. Дециметры (1 дм = 100 мм) — ДОБАВЛЕНО
+		const decimeters = Math.floor(mmAfterM / 100);
+		const mmAfterDm = mmAfterM % 100;
 
-		// 2. Собираем строку ответа.
+		// 4. Сантиметры (1 см = 10 мм)
+		const centimeters = Math.floor(mmAfterDm / 10);
+		
+		// 5. Миллиметры (остаток)
+		const millimeters = mmAfterDm % 10;
+
+		// Собираем строку ответа
 		const answerParts = [];
 
 		if (kilometers > 0) {
@@ -1752,6 +1767,9 @@ const _4unitsTasks = [
 		if (meters > 0) {
 			answerParts.push(`${meters} м`);
 		}
+		if (decimeters > 0) {
+			answerParts.push(`${decimeters} дм`);
+		}
 		if (centimeters > 0) {
 			answerParts.push(`${centimeters} см`);
 		}
@@ -1759,7 +1777,6 @@ const _4unitsTasks = [
 			answerParts.push(`${millimeters} мм`);
 		}
 		
-		// 3. Если ответ равен 0, возвращаем "0 мм".
 		if (answerParts.length === 0) {
 			 return "0 мм";
 		}
@@ -1807,7 +1824,8 @@ const _4unitsTasks = [
 		
 		return {
 			variables: { answer: answerInMm },
-			problemText: problemText + "<br><br><em>Ответ запишите, выделив единицы измерения (км, м, см, мм). Если какая-то из них равна нулю, не записывайте её.</em>"
+            // Исправил подсказку: добавил дм
+			problemText: problemText + "<br><br><em>Ответ запишите, выделив все единицы измерения (км, м, дм, см, мм). Если какая-то из них равна нулю, не записывайте её (например, 4 м 5 см - здесь 0 дм указывать не нужно)</em>"
 		};
 	},
 
@@ -1815,17 +1833,25 @@ const _4unitsTasks = [
 		// Принимаем, что vars.answer - это целое число в миллиметрах.
 		const totalMm = vars.answer;
 		
-		// 1. Раскладываем ответ, пропуская дециметры.
-		const kilometers = Math.floor(totalMm / 1000000); // 1 км = 1 000 000 мм
+		// 1. Километры (1 км = 1 000 000 мм)
+		const kilometers = Math.floor(totalMm / 1000000); 
 		const mmAfterKm = totalMm % 1000000;
 		
-		const meters = Math.floor(mmAfterKm / 1000);      // 1 м = 1000 мм
+		// 2. Метры (1 м = 1000 мм)
+		const meters = Math.floor(mmAfterKm / 1000);      
 		const mmAfterM = mmAfterKm % 1000;
-		
-		const centimeters = Math.floor(mmAfterM / 10);    // 1 см = 10 мм
-		const millimeters = mmAfterM % 10;                // Оставшиеся миллиметры
 
-		// 2. Собираем строку ответа.
+        // 3. Дециметры (1 дм = 100 мм) — ДОБАВЛЕНО
+        const decimeters = Math.floor(mmAfterM / 100);
+        const mmAfterDm = mmAfterM % 100;
+		
+        // 4. Сантиметры (1 см = 10 мм)
+		const centimeters = Math.floor(mmAfterDm / 10);    
+		
+        // 5. Миллиметры
+        const millimeters = mmAfterDm % 10;               
+
+		// Собираем строку ответа.
 		const answerParts = [];
 
 		if (kilometers > 0) {
@@ -1834,6 +1860,10 @@ const _4unitsTasks = [
 		if (meters > 0) {
 			answerParts.push(`${meters} м`);
 		}
+        // Добавляем дм в ответ
+        if (decimeters > 0) {
+			answerParts.push(`${decimeters} дм`);
+		}
 		if (centimeters > 0) {
 			answerParts.push(`${centimeters} см`);
 		}
@@ -1841,7 +1871,7 @@ const _4unitsTasks = [
 			answerParts.push(`${millimeters} мм`);
 		}
 		
-		// 3. Если ответ равен 0, возвращаем "0 мм".
+		// Если ответ равен 0, возвращаем "0 мм".
 		if (answerParts.length === 0) {
 			 return "0 мм";
 		}
@@ -1889,7 +1919,8 @@ const _4unitsTasks = [
 		
 		return {
 			variables: { answer: answerInMm },
-			problemText: problemText + "<br><br><em>Ответ запишите, выделив единицы измерения (км, м, см, мм). Если какая-то из них равна нулю, не записывайте её.</em>"
+            // Добавил 'дм' в подсказку
+			problemText: problemText + "<br><br><em>Ответ запишите, выделив все единицы измерения (км, м, дм, см, мм). Если какая-то из них равна нулю, не записывайте её (например, 4 м 5 см - здесь 0 дм указывать не нужно)</em>"
 		};
 	},
 
@@ -1897,17 +1928,25 @@ const _4unitsTasks = [
 		// Принимаем, что vars.answer - это целое число в миллиметрах.
 		const totalMm = vars.answer;
 		
-		// 1. Раскладываем ответ, пропуская дециметры.
-		const kilometers = Math.floor(totalMm / 1000000); // 1 км = 1 000 000 мм
+		// 1. Километры (1 км = 1 000 000 мм)
+		const kilometers = Math.floor(totalMm / 1000000); 
 		const mmAfterKm = totalMm % 1000000;
 		
-		const meters = Math.floor(mmAfterKm / 1000);      // 1 м = 1000 мм
+		// 2. Метры (1 м = 1000 мм)
+		const meters = Math.floor(mmAfterKm / 1000);
 		const mmAfterM = mmAfterKm % 1000;
-		
-		const centimeters = Math.floor(mmAfterM / 10);    // 1 см = 10 мм
-		const millimeters = mmAfterM % 10;                // Оставшиеся миллиметры
 
-		// 2. Собираем строку ответа.
+        // 3. Дециметры (1 дм = 100 мм) — ДОБАВЛЕНО
+        const decimeters = Math.floor(mmAfterM / 100);
+        const mmAfterDm = mmAfterM % 100;
+		
+		// 4. Сантиметры (1 см = 10 мм)
+		const centimeters = Math.floor(mmAfterDm / 10);
+		
+        // 5. Миллиметры
+        const millimeters = mmAfterDm % 10; 
+
+		// Собираем строку ответа.
 		const answerParts = [];
 
 		if (kilometers > 0) {
@@ -1916,6 +1955,9 @@ const _4unitsTasks = [
 		if (meters > 0) {
 			answerParts.push(`${meters} м`);
 		}
+        if (decimeters > 0) {
+			answerParts.push(`${decimeters} дм`);
+		}
 		if (centimeters > 0) {
 			answerParts.push(`${centimeters} см`);
 		}
@@ -1923,7 +1965,7 @@ const _4unitsTasks = [
 			answerParts.push(`${millimeters} мм`);
 		}
 		
-		// 3. Если ответ равен 0, возвращаем "0 мм".
+		// Если ответ равен 0, возвращаем "0 мм".
 		if (answerParts.length === 0) {
 			 return "0 мм";
 		}
@@ -1959,6 +2001,7 @@ const _4unitsTasks = [
 
 		const n4 = getRandomIntNotMultipleOf10(51, 98);
 		
+		// Все переводим в дециметры для расчета
 		const val1_dm = (n1 * 1000 + n2) * 10;
 		const val2_dm = n3;
 		const val3_dm = n4 * 10;
@@ -1969,29 +2012,28 @@ const _4unitsTasks = [
 		
 		return {
 			variables: { answer: answerInDm },
-			problemText: problemText + "<br><br><em>Ответ запишите, выделив единицы измерения (км, м, см, мм). Если какая-то из них равна нулю, не записывайте её.</em>"
+            // Добавил 'дм' в список
+			problemText: problemText + "<br><br><em>Ответ запишите, выделив все единицы измерения (км, м, дм, см, мм). Если какая-то из них равна нулю, не записывайте её (например, 4 м 5 см - здесь 0 дм указывать не нужно)</em>"
 		};
 	},
 
-	// -------- ОБНОВЛЕННАЯ ФУНКЦИЯ ПРОВЕРКИ ОТВЕТА (БЕЗ ДМ) --------
 	calculateAnswer: function(vars) {
-		// Принимаем, что vars.answer - это целое число в дециметрах.
+		// Принимаем, что vars.answer - это целое число в ДЕЦИМЕТРАХ.
 		const totalDm = vars.answer;
 		
-		// 1. Раскладываем ответ, пропуская дециметры.
-		const kilometers = Math.floor(totalDm / 10000); // 1 км = 10 000 дм
+		// 1. Километры (1 км = 10 000 дм)
+		const kilometers = Math.floor(totalDm / 10000); 
 		const dmAfterKm = totalDm % 10000;
 		
-		const meters = Math.floor(dmAfterKm / 10);      // 1 м = 10 дм
-		const remainingDm = dmAfterKm % 10;             // Это дециметры, которые нужно скрыть.
-
-		// Конвертируем оставшиеся дециметры в сантиметры.
-		const centimeters = remainingDm * 10;           // 1 дм = 10 см
+		// 2. Метры (1 м = 10 дм)
+		const meters = Math.floor(dmAfterKm / 10);     
 		
-		// Так как исходное число - целое количество дециметров, мм будут равны нулю.
-		const millimeters = 0;
+        // 3. Дециметры (остаток)
+        const decimeters = dmAfterKm % 10;             
 
-		// 2. Собираем строку ответа.
+        // Сантиметры и миллиметры равны 0, так как мы считали в целых дециметрах
+
+		// Собираем строку ответа.
 		const answerParts = [];
 
 		if (kilometers > 0) {
@@ -2000,17 +2042,14 @@ const _4unitsTasks = [
 		if (meters > 0) {
 			answerParts.push(`${meters} м`);
 		}
-		// Строка для дециметров (дм) удалена.
-		if (centimeters > 0) {
-			answerParts.push(`${centimeters} см`);
-		}
-		if (millimeters > 0) {
-			answerParts.push(`${millimeters} мм`);
+        // Возвращаем нормальный вывод дм
+        if (decimeters > 0) {
+			answerParts.push(`${decimeters} дм`);
 		}
 		
-		// 3. Если ответ равен 0, возвращаем "0 м".
+		// Если ответ равен 0, возвращаем "0 дм".
 		if (answerParts.length === 0) {
-			 return "0 м";
+			 return "0 дм";
 		}
 
 		return answerParts.join(' ');
@@ -2121,7 +2160,7 @@ const _4unitsTasks = [
         const problemText = `Вычислите:<br><br>${n1} ц + ${n2} т ${n3} кг - (${n4} ц + ${n5} кг)`;
         return {
             variables: { answer: answerInKg },
-            problemText: problemText + "<br><br><em>Ответ запишите, выделив единицы измерения (т, ц, кг, г). Если какая-то из них равна нулю, не записывайте её.</em>"
+            problemText: problemText + "<br><br><em>Ответ запишите, выделив все единицы измерения (т, ц, кг, г). Если какая-то из них равна нулю, не записывайте её (например, 2 т 5 кг - здесь 0 ц указывать не нужно)</em>"
         };
     },
 
@@ -2178,7 +2217,7 @@ const _4unitsTasks = [
 
 		return {
 			variables: { answer: finalAnswer },
-			problemText: problemText + "<br><br><em>Ответ запишите, выделив единицы измерения (т, ц, кг, г). Если какая-то из них равна нулю, не записывайте её.</em>"
+			problemText: problemText + "<br><br><em>Ответ запишите, выделив все единицы измерения (т, ц, кг, г). Если какая-то из них равна нулю, не записывайте её (например, 2 т 5 кг - здесь 0 ц указывать не нужно)</em>"
 		};
 	},
 
@@ -2221,7 +2260,7 @@ const _4unitsTasks = [
         const answerInKg = intermediateResult + (n4 * 1000 + n5);
         return {
             variables: { answer: answerInKg },
-            problemText: problemText + "<br><br><em>Ответ запишите, выделив единицы измерения (т, ц, кг, г). Если какая-то из них равна нулю, не записывайте её.</em>"
+            problemText: problemText + "<br><br><em>Ответ запишите, выделив все единицы измерения (т, ц, кг, г). Если какая-то из них равна нулю, не записывайте её (например, 2 т 5 кг - здесь 0 ц указывать не нужно)</em>"
         };
     },
 
@@ -2269,7 +2308,7 @@ const _4unitsTasks = [
         const total_kg = (n1 * 100 + n2) + (n3 * 1000 + n4 * 100 + n5) - n6;
         return {
             variables: { answer: total_kg },
-            problemText: problemText + "<br><br><em>Ответ запишите, выделив единицы измерения (т, ц, кг, г). Если какая-то из них равна нулю, не записывайте её.</em>"
+            problemText: problemText + "<br><br><em>Ответ запишите, выделив все единицы измерения (т, ц, кг, г). Если какая-то из них равна нулю, не записывайте её (например, 2 т 5 кг - здесь 0 ц указывать не нужно)</em>"
         };
     },
 
@@ -2322,7 +2361,7 @@ const _4unitsTasks = [
         const answerInKg = total_kg1 - total_kg2 + n5;
         return {
             variables: { answer: answerInKg },
-            problemText: problemText + "<br><br><em>Ответ запишите, выделив единицы измерения (т, ц, кг, г). Если какая-то из них равна нулю, не записывайте её.</em>"
+            problemText: problemText + "<br><br><em>Ответ запишите, выделив все единицы измерения (т, ц, кг, г). Если какая-то из них равна нулю, не записывайте её (например, 2 т 5 кг - здесь 0 ц указывать не нужно)</em>"
         };
     },
 
