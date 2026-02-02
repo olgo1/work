@@ -45,7 +45,7 @@ const _4countTasks = [
         const chosenExpression = validExpressions[getRandomInt(0, validExpressions.length - 1)];
         return {
             variables: { a, b, c, d, e, f, answer: chosenExpression.answer },
-            problemText: `Вычислите:<br><div class="problem-expression">${chosenExpression.text}</div>`
+            problemText: `Вычислите: <br><div class="problem-expression">${chosenExpression.text}</div>`
         };
     },
     calculateAnswer: function(vars) { return vars.answer; }
@@ -85,13 +85,13 @@ const _4countTasks = [
         if (Math.random() > 0.5) {
             sign = '+';
             const final_text = Math.random() > 0.5 ? `${term1_text} + ${term2_text}` : `${term2_text} + ${term1_text}`;
-            problemText = `Вычислите:<br><div class="problem-expression">${final_text}</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">${final_text}</div>`;
         } else {
             sign = '-';
             if (term1_result >= term2_result) {
-                problemText = `Вычислите:<br><div class="problem-expression">${term1_text} - ${term2_text}</div>`;
+                problemText = `Вычислите: <br><div class="problem-expression">${term1_text} - ${term2_text}</div>`;
             } else {
-                problemText = `Вычислите:<br><div class="problem-expression">${term2_text} - ${term1_text}</div>`;
+                problemText = `Вычислите: <br><div class="problem-expression">${term2_text} - ${term1_text}</div>`;
             }
         }
         return { variables: { a, b, c, d, e, f, term1_result, term2_result, sign }, problemText };
@@ -128,9 +128,9 @@ const _4countTasks = [
         const term2_text = `${e} · ${f}`;
         let problemText;
         if (term1_result > term2_result) {
-            problemText = `Вычислите:<br><div class="problem-expression">${term1_text} - ${term2_text}</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">${term1_text} - ${term2_text}</div>`;
         } else {
-            problemText = `Вычислите:<br><div class="problem-expression">${term2_text} - ${term1_text}</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">${term2_text} - ${term1_text}</div>`;
         }
         return { variables: { a, b, c, d, e, f, term1_result, term2_result }, problemText };
     },
@@ -172,9 +172,9 @@ const _4countTasks = [
         const term2_text = `${e} : ${f}`;
         let problemText;
         if (term1_result > term2_result) {
-            problemText = `Вычислите:<br><div class="problem-expression">${term1_text} - ${term2_text}</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">${term1_text} - ${term2_text}</div>`;
         } else {
-            problemText = `Вычислите:<br><div class="problem-expression">${term2_text} - ${term1_text}</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">${term2_text} - ${term1_text}</div>`;
         }
         return { variables: { a, b, c, d, e, f, term1_result, term2_result}, problemText };
     },
@@ -226,9 +226,9 @@ const _4countTasks = [
         const a = divResult_a * parenResult;
         let problemText;
         if (isADivFirst) {
-            problemText = `Вычислите:<br><div class="problem-expression">${a} : (${c} · ${d} - ${b}) ${sign} ${e} · ${f}</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">${a} : (${c} · ${d} - ${b}) ${sign} ${e} · ${f}</div>`;
         } else {
-            problemText = `Вычислите:<br><div class="problem-expression">${e} · ${f} ${sign} ${a} : (${c} · ${d} - ${b})</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">${e} · ${f} ${sign} ${a} : (${c} · ${d} - ${b})</div>`;
         }
         return { variables: { a, b, c, d, e, f, sign, isADivFirst }, problemText };
     },
@@ -288,9 +288,9 @@ const _4countTasks = [
         const a = divResult_a * parenResult;
         let problemText;
         if (isADivFirst) {
-            problemText = `Вычислите:<br><div class="problem-expression">${a} : (${b} - ${c} · ${d}) ${sign} ${e} · ${f}</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">${a} : (${b} - ${c} · ${d}) ${sign} ${e} · ${f}</div>`;
         } else {
-            problemText = `Вычислите:<br><div class="problem-expression">${e} · ${f} ${sign} ${a} : (${b} - ${c} · ${d})</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">${e} · ${f} ${sign} ${a} : (${b} - ${c} · ${d})</div>`;
         }
         return { variables: { a, b, c, d, e, f, sign, isADivFirst }, problemText };
     },
@@ -326,7 +326,7 @@ const _4countTasks = [
         const intermediateResult = (sign1 === '+') ? a + middleTerm : a - middleTerm;
         if (sign2 === '+') { f = getRandomInt(100, 999); } 
         else { if (intermediateResult <= 100) return this.generate(); f = getRandomInt(100, intermediateResult - 1); }
-        const problemText = `Вычислите:<br><div class="problem-expression">${a} ${sign1} ${b} · (${c} - ${d}) : ${e} ${sign2} ${f}</div>`;
+        const problemText = `Вычислите: <br><div class="problem-expression">${a} ${sign1} ${b} · (${c} - ${d}) : ${e} ${sign2} ${f}</div>`;
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
     calculateAnswer: function(vars) {
@@ -366,7 +366,7 @@ const _4countTasks = [
         const intermediateResult = (sign1 === '+') ? a + middleTerm : a - middleTerm;
         if (sign2 === '+') { f = getRandomInt(100, 999); } 
         else { if (intermediateResult <= 100) return this.generate(); f = getRandomInt(100, intermediateResult - 1); }
-        const problemText = `Вычислите:<br><div class="problem-expression">${a} ${sign1} ${b} · (${e} - ${c} : ${d}) ${sign2} ${f}</div>`;
+        const problemText = `Вычислите: <br><div class="problem-expression">${a} ${sign1} ${b} · (${e} - ${c} : ${d}) ${sign2} ${f}</div>`;
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
     calculateAnswer: function(vars) {
@@ -410,7 +410,7 @@ const _4countTasks = [
                 break;
             }
         }
-        const problemText = `Вычислите:<br><div class="problem-expression">${a} ${sign1} ${f} ${sign2} ${b} · (${c} : ${d} - ${e})</div>`;
+        const problemText = `Вычислите: <br><div class="problem-expression">${a} ${sign1} ${f} ${sign2} ${b} · (${c} : ${d} - ${e})</div>`;
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
     calculateAnswer: function(vars) {
@@ -452,9 +452,9 @@ const _4countTasks = [
         let problemText;
         const parenText = `(${c} : ${d} - ${e})`;
         if (Math.random() > 0.5) {
-            problemText = `Вычислите:<br><div class="problem-expression">${a} ${sign1} ${b} · ${parenText} ${sign2} ${f}</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">${a} ${sign1} ${b} · ${parenText} ${sign2} ${f}</div>`;
         } else {
-            problemText = `Вычислите:<br><div class="problem-expression">${a} ${sign1} ${parenText} · ${b} ${sign2} ${f}</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">${a} ${sign1} ${parenText} · ${b} ${sign2} ${f}</div>`;
         }
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
@@ -510,7 +510,7 @@ const _4countTasks = [
         } else {
             f = getRandomInt(50, intermediateResult - 1);
         }
-        const problemText = `Вычислите:<br><div class="problem-expression">${a} ${sign1} (${d} + ${b} · ${c}) : ${e} ${sign2} ${f}</div>`;
+        const problemText = `Вычислите: <br><div class="problem-expression">${a} ${sign1} (${d} + ${b} · ${c}) : ${e} ${sign2} ${f}</div>`;
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
     calculateAnswer: function(vars) {
@@ -564,9 +564,9 @@ const _4countTasks = [
         const d = dividend - (b * c);
         let problemText;
         if (Math.random() > 0.5) {
-            problemText = `Вычислите:<br><div class="problem-expression">${a} ${sign1} ${f} ${sign2} (${d} + ${b} · ${c}) : ${e}</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">${a} ${sign1} ${f} ${sign2} (${d} + ${b} · ${c}) : ${e}</div>`;
         } else {
-            problemText = `Вычислите:<br><div class="problem-expression">${a} ${sign1} ${f} ${sign2} (${b} · ${c} + ${d}) : ${e}</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">${a} ${sign1} ${f} ${sign2} (${b} · ${c} + ${d}) : ${e}</div>`;
         }
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
@@ -620,9 +620,9 @@ const _4countTasks = [
         }
         let problemText;
         if (Math.random() > 0.5) {
-            problemText = `Вычислите:<br><div class="problem-expression">(${b} · ${c} + ${d}) : ${e} ${sign1} ${f} ${sign2} ${a}</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">(${b} · ${c} + ${d}) : ${e} ${sign1} ${f} ${sign2} ${a}</div>`;
         } else {
-            problemText = `Вычислите:<br><div class="problem-expression">(${d} + ${b} · ${c}) : ${e} ${sign1} ${f} ${sign2} ${a}</div>`;
+            problemText = `Вычислите: <br><div class="problem-expression">(${d} + ${b} · ${c}) : ${e} ${sign1} ${f} ${sign2} ${a}</div>`;
         }
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
@@ -674,7 +674,7 @@ const _4countTasks = [
         } else {
             f = getRandomInt(50, intermediateResult - 1);
         }
-        const problemText = `Вычислите:<br><div class="problem-expression">${a} ${sign1} (${b} · ${c} + ${d}) : ${e} ${sign2} ${f}</div>`;
+        const problemText = `Вычислите: <br><div class="problem-expression">${a} ${sign1} (${b} · ${c} + ${d}) : ${e} ${sign2} ${f}</div>`;
         return { variables: { a, b, c, d, e, f, sign1, sign2 }, problemText };
     },
     calculateAnswer: function(vars) {
@@ -759,7 +759,7 @@ const _4countTasks = [
         }
         return {
             variables: { a, b, c, variant },
-            problemText: `Вычислите:<br><div class="problem-expression">${problemTextStr}</div>`
+            problemText: `Вычислите: <br><div class="problem-expression">${problemTextStr}</div>`
         };
     },
     calculateAnswer: (vars) => {
@@ -800,7 +800,7 @@ const _4countTasks = [
 
         return {
             variables: { u, v },
-            problemText: `Вычислите:<br><div class="problem-expression">${u} - ${v}</div>`
+            problemText: `Вычислите: <br><div class="problem-expression">${u} - ${v}</div>`
         };
     },
     calculateAnswer: (vars) => { return vars.u - vars.v; }
@@ -822,7 +822,7 @@ const _4countTasks = [
         const s2 = s2_head * powerOf10 + s2_tail;
         return {
             variables: { s1, s2 },
-            problemText: `Вычислите:<br><div class="problem-expression">${s1} + ${s2}</div>`
+            problemText: `Вычислите: <br><div class="problem-expression">${s1} + ${s2}</div>`
         };
     },
     calculateAnswer: (vars) => { return vars.s1 + vars.s2; }
@@ -909,7 +909,7 @@ const _4countTasks = [
 
         return {
             variables: variables,
-            problemText: `Вычислите:<br><div class="problem-expression">${problemText}</div>`
+            problemText: `Вычислите: <br><div class="problem-expression">${problemText}</div>`
         };
     },
 
@@ -979,7 +979,7 @@ const _4countTasks = [
         }
         return {
             variables: { a, b, c, d, e, orderIds, operators },
-            problemText: `Вычислите:<br><div class="problem-expression">${problemTextStr}</div>`
+            problemText: `Вычислите: <br><div class="problem-expression">${problemTextStr}</div>`
         };
     },
     calculateAnswer: (vars) => {
@@ -1114,7 +1114,7 @@ const _4countTasks = [
 
         return {
             variables: { a, b, c, d, opSign, format, variant },
-            problemText: `Вычислите:<br><div class="problem-expression">${problemTextStr}</div>`
+            problemText: `Вычислите: <br><div class="problem-expression">${problemTextStr}</div>`
         };
     },
 
@@ -1215,7 +1215,7 @@ const _4countTasks = [
 
         return {
             variables: { a, b, c, d, e, orderIds, operators, op1, op2, variant },
-            problemText: `Вычислите:<br><div class="problem-expression">${problemTextStr}</div>`
+            problemText: `Вычислите: <br><div class="problem-expression">${problemTextStr}</div>`
         };
     },
 

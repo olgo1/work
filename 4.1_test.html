@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Итоговая работа</title><style>
+            body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
+            h1 { text-align: center; margin-bottom: 5px; }
+            .subtitle { text-align: center; color: #666; margin-bottom: 20px; }
+            .timer { text-align: center; font-size: 32px; font-weight: bold; color: #007bff; margin-bottom: 30px; }
+            .card { background: white; border-radius: 10px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s; }
+            .problem-text { font-size: 18px; margin-bottom: 15px; line-height: 1.5; }
+            .input-group { display: flex; gap: 10px; align-items: center; }
+            input { flex: 1; padding: 12px; font-size: 18px; border: 2px solid #ddd; border-radius: 6px; outline: none; transition: border 0.3s; }
+            input:focus { border-color: #007bff; }
+            
+            /* Стили для проверки */
+            input.correct { border-color: #28a745; background-color: #e8f5e9; }
+            input.wrong { border-color: #dc3545; background-color: #fbe9eb; }
+            .msg { margin-top: 10px; font-size: 14px; display: none; }
+            .msg.error { color: #dc3545; display: block; }
+            .msg.success { color: #28a745; display: block; }
+
+            .main-btn { display: block; width: 100%; padding: 15px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 20px; cursor: pointer; margin-top: 30px; }
+            .main-btn:hover { background: #0056b3; }
+            .main-btn:disabled { background: #ccc; cursor: default; }
+            
+            .result-box { display: none; text-align: center; margin-top: 20px; padding: 20px; background: #fff; border-radius: 8px; font-size: 22px; font-weight: bold; }
+        </style></head><body>
+        <h1>Счёт, уравнения, величины</h1><div class="subtitle">Итоговая работа</div>
+        <div class="timer" id="timer">15:00</div>
+        <div id="tasks">
+            <div class="card">
+                <div class="problem-text">Вычислите: <br><div class="problem-expression">4 · 97775 : 5 + 45705</div></div>
+                <div class="input-wrapper">
+                    <input type="text" placeholder="Ваш ответ" data-answer="123925" autocomplete="off">
+                    <div class="msg"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="problem-text">Решите уравнение:<br>909 : (x + 52) + 965 = 974<br><br><em>Запишите только число.</em></div>
+                <div class="input-wrapper">
+                    <input type="text" placeholder="Ваш ответ" data-answer="49" autocomplete="off">
+                    <div class="msg"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="problem-text">Вычислите:<br><br>6 т 89 кг - 4 ц 96 кг + 199 кг<br><br><em>Ответ запишите, выделив все единицы измерения (т, ц, кг, г). Если какая-то из них равна нулю, не записывайте её (например, 2 т 5 кг - здесь 0 ц указывать не нужно)</em></div>
+                <div class="input-wrapper">
+                    <input type="text" placeholder="Ваш ответ" data-answer="5 т 7 ц 92 кг" autocomplete="off">
+                    <div class="msg"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="problem-text">— Даже 150 таких питонов, как я, не хватит, чтобы протянуть мост между берегами реки Кришна, Маугли.
+<br>— А 200 хватит?
+<br>— Хватит, это даже на 13 метров больше.
+<br><br>
+Какой ширины река Кришна, если длина питона 4 м 20 см?<br><br><em>Ответ дайте в метрах. Запишите только число.</em></div>
+                <div class="input-wrapper">
+                    <input type="text" placeholder="Ваш ответ" data-answer="827 м" autocomplete="off">
+                    <div class="msg"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="problem-text">Автомобиль едет из города А в город Б 270 минут, а автобус - 6 часов 6 минут. Автобус выехал из А в 11:17. Во сколько должен выехать автомобиль, чтобы прибыть в Б одновременно с автобусом? <br><br><em>Дайте ответ в виде чч:мм, например, 08:23.</em></div>
+                <div class="input-wrapper">
+                    <input type="text" placeholder="Ваш ответ" data-answer="12:53" autocomplete="off">
+                    <div class="msg"></div>
+                </div>
+            </div></div>
+        <button id="checkBtn" class="main-btn" onclick="checkAll()">Завершить и проверить</button>
+        <div id="result-box" class="result-box"></div>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Таймер
+                let time = 15 * 60;
+                const timerEl = document.getElementById('timer');
+                const timerId = setInterval(() => {
+                    if (time <= 0) return;
+                    time--;
+                    const m = Math.floor(time / 60).toString().padStart(2, '0');
+                    const s = (time % 60).toString().padStart(2, '0');
+                    timerEl.textContent = m + ':' + s;
+                }, 1000);
+
+                // Логика проверки
+                window.checkAll = function() {
+                    clearInterval(timerId); // Остановить таймер
+                    const inputs = document.querySelectorAll('input[data-answer]');
+                    let correctCount = 0;
+
+                    inputs.forEach(input => {
+                        const userVal = input.value.trim().replace(/\s+/g, '').toLowerCase().replace(',', '.');
+                        const correctVal = input.dataset.answer.trim().replace(/\s+/g, '').toLowerCase().replace(',', '.');
+                        const msgDiv = input.nextElementSibling;
+
+                        // Сравнение (простое: если строки совпадают)
+                        if (userVal === correctVal) {
+                            input.classList.add('correct');
+                            input.classList.remove('wrong');
+                            msgDiv.className = 'msg success';
+                            msgDiv.textContent = 'Верно!';
+                            correctCount++;
+                        } else {
+                            input.classList.add('wrong');
+                            input.classList.remove('correct');
+                            msgDiv.className = 'msg error';
+                            msgDiv.innerHTML = 'Ошибка. Правильный ответ: ' + input.dataset.answer;
+                        }
+                        input.readOnly = true; // Блокируем поле
+                    });
+
+                    // Итог
+                    const resBox = document.getElementById('result-box');
+                    resBox.style.display = 'block';
+                    resBox.innerHTML = 'Результат: ' + correctCount + ' из ' + inputs.length;
+                    
+                    // Кнопка
+                    document.getElementById('checkBtn').style.display = 'none';
+                };
+            });
+        </script></body></html>
