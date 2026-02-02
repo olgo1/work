@@ -1,8 +1,1575 @@
-// 5count9
+// 5count26 - найти число, кратное данному числу в заданном промежутке
+// 5count25 - найти частное от деления a на b (оба записаны в виде произведения степеней простых чисел)
+// 5count24 - найти неизвестный простой множитель в разложении a, если известно, что a кратно b (b записано в десятичной системе счисления)
+// 5count23 - какое из чисел a, b, c кратно числу d? (a, b, c записаны в виде произведения, число d - в десятичном виде)
+// 5count22 - найти, сколько чисел из данного диапазона кратны данному числу
+// ПРОБЛЕМА 5count21 - среди ряда чисел выбрать то, которое не кратно данному 
+// (нет) 5count20 - Найти НОД трёх чисел, записанных в десятичной системе счисления
+// (нет) 5count19 - найти НОД двух чисел, записанных в десятичной системе счисления
+// (нет) 5count18 - найти НОД трёх чисел, записанных в виде произведения простых множителей
+// 5count17 -  найти НОД двух чисел, записанных в виде произведения простых множителей
+// 5count16 - найти общие делители трёх чисел, записанных в виде разложение на простые, со степенями
+// 5count15 - найти общие делители двух чисел, записанных в дес. системе счисления
+// 5count14 - найти общие делители чисел, записанных в виде произведения простых множителей (возможно, со степенями)
+//[проверено] 5count13 - найти все делители числа, разложенного на простые множители (разложение записано по степеням)
+// [проверено]  5count12 - найти все делители числа, разложенного на простые множители (разложение записано в виде произведения)
+// [проверено] 5count11 - найти все делители числа
+// [проверено] 5count10 - разложить число на простые множители
 
-const _5countTasks = [
+{
+    type: " ",
+    number: "5count26",
+    tags: ["5_класс", "кратные"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-// Десятичные дроби. Все арифметические действия (5-6) и скобки.
+        // Цикл для поиска валидной комбинации
+        let attempts = 0;
+        while (attempts < 1000) {
+            attempts++;
+
+            // 1. Генерируем n (делитель)
+            // Условия: 
+            // 20 <= n <= 50, не кратно 10.
+            // Также n должно быть >= 23, иначе 9 * n = 198 < 200 (не выполним условие a >= 200 при k < 10)
+            let n = getRandomInt(23, 50);
+            if (n % 10 === 0) continue;
+
+            // 2. Выбираем множитель k (частное)
+            // Условия:
+            // target = k * n
+            // target >= 205 (чтобы а >= 200)
+            // k < 10 (по запросу)
+            
+            const minK = Math.ceil(205 / n);
+            const maxK = 9; // Строго меньше 10
+            
+            if (minK > maxK) continue; // Невозможно подобрать k для этого n
+
+            const k = getRandomInt(minK, maxK);
+            const target = k * n;
+
+            // 3. Формируем границы [a, b]
+            // a = target - leftShift
+            // Ограничения на leftShift:
+            // 1) Чтобы a >= 200: leftShift <= target - 200
+            // 2) Чтобы a > target - n (предыдущее кратное не входит): leftShift < n
+            // 3) Чтобы a < 10*n (предыдущее условие пользователя):
+            //    a = kn - shift. Поскольку k <= 9, то a < 9n, что автоматически меньше 10n.
+            
+            const maxLeftShift = Math.min(n - 1, target - 200);
+            if (maxLeftShift < 1) continue;
+
+            const leftShift = getRandomInt(1, maxLeftShift);
+            const a = target - leftShift;
+
+            // Определяем b
+            // b = target + rightShift
+            // Ограничения на rightShift:
+            // 1) Чтобы интервал был узким (единственное решение): (target + right) - (target - left) < n  =>  right < n - left
+            // 2) Чтобы b <= 500: right <= 500 - target
+            
+            const maxRightShift = Math.min(n - leftShift - 1, 500 - target);
+            if (maxRightShift < 0) continue;
+            
+            const rightShift = getRandomInt(0, maxRightShift);
+            const b = target + rightShift;
+
+            return {
+                variables: { 
+                    n, 
+                    a, 
+                    b,
+                    target,
+                    k // Частное (для отладки, если нужно)
+                },
+                problemText: `Найдите число, которое кратно ${n} и находится в промежутке от ${a} до ${b} (включая эти числа).`
+            };
+        }
+        
+        return this.generate();
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.target;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        if (/[^0-9]/.test(cleanInput)) return false;
+        
+        const val = parseInt(cleanInput, 10);
+        
+        return (val >= vars.a && val <= vars.b && val % vars.n === 0);
+    }
+},
+
+{
+    type: " ",
+    number: "5count25",
+    tags: ["5_класс", "степени", "разложение_на_множители"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        
+        // Хелпер для перемешивания массива
+        const shuffleArray = (array) => {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        };
+
+        // Хелпер: факторизация числа
+        const getPrimeFactors = (num) => {
+            const factors = {};
+            let d = 2;
+            let temp = num;
+            while (d * d <= temp) {
+                while (temp % d === 0) {
+                    factors[d] = (factors[d] || 0) + 1;
+                    temp /= d;
+                }
+                d++;
+            }
+            if (temp > 1) factors[temp] = (factors[temp] || 0) + 1;
+            return factors;
+        };
+
+        // Хелпер: Форматирование в LaTeX
+        const formatLatex = (factorsMap) => {
+            const bases = Object.keys(factorsMap).map(Number).sort((a, b) => a - b);
+            return bases.map(base => {
+                const exp = factorsMap[base];
+                return exp === 1 ? `${base}` : `${base}^{${exp}}`;
+            }).join(" \\cdot ");
+        };
+
+        // Основной цикл генерации
+        let problemData = null;
+        let attempts = 0;
+
+        while (!problemData && attempts < 1000) {
+            attempts++;
+            
+            // 1. Выбираем 3 разных простых основания для числа 'a'
+            // Берем маленькие, чтобы число не улетело в космос
+            const pool = [2, 3, 5, 7, 11]; 
+            const shuffledPool = shuffleArray([...pool]);
+            const bases = shuffledPool.slice(0, 3).sort((a, b) => a - b); // [p1, p2, p3]
+
+            // 2. Выбираем паттерн степеней для 'a'
+            // Либо {1, 2, 2}, либо {1, 1, 3}
+            const pattern = Math.random() > 0.5 ? [1, 2, 2] : [1, 1, 3];
+            const exps = shuffleArray(pattern);
+
+            // Собираем объект факторов для 'a'
+            const factorsA = {};
+            let valA = 1;
+            bases.forEach((base, idx) => {
+                const e = exps[idx];
+                factorsA[base] = e;
+                valA *= Math.pow(base, e);
+            });
+
+            // 3. Ищем подходящее число q (частное)
+            // Условия: 30 <= q <= 70
+            // b = a / q должно быть целым
+            // b должно иметь 2 или 3 множителя
+            
+            // Перебираем возможные q в диапазоне
+            // Для оптимизации: не перебираем все числа, а идем по делителям 'a'
+            // Но проще перебрать диапазон 30..70 и проверить делимость, т.к. диапазон маленький
+            
+            const validQs = [];
+            for (let q = 30; q <= 70; q++) {
+                if (valA % q === 0) {
+                    const valB = valA / q;
+                    const factorsB = getPrimeFactors(valB);
+                    const countDistinctB = Object.keys(factorsB).length;
+                    
+                    // Проверка условий для b:
+                    // 1. Количество различных простых множителей: 2 или 3
+                    if (countDistinctB >= 2 && countDistinctB <= 3) {
+                         validQs.push({ q, factorsB });
+                    }
+                }
+            }
+
+            if (validQs.length > 0) {
+                // Выбираем случайный подходящий вариант
+                const selected = validQs[getRandomInt(0, validQs.length - 1)];
+                
+                problemData = {
+                    q: selected.q,
+                    latexA: formatLatex(factorsA),
+                    latexB: formatLatex(selected.factorsB)
+                };
+            }
+        }
+
+        if (!problemData) return this.generate(); // Рестарт при неудаче
+
+        return {
+            variables: { 
+                q: problemData.q, 
+                latexA: problemData.latexA, 
+                latexB: problemData.latexB 
+            },
+            problemText: `Найдите частное от деления числа $a$ на число $b$:<br>
+            $$a = ${problemData.latexA}$$
+            $$b = ${problemData.latexB}$$<br>
+            Ответ запишите в виде натурального числа.`
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.q;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        if (/[^0-9]/.test(cleanInput)) return false;
+        return parseInt(cleanInput, 10) === vars.q;
+    }
+},
+
+{
+    type: " ",
+    number: "5count24",
+    tags: ["5_класс", "разложение_на_множители", "кратные"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+
+        const shuffleArray = (array) => {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        };
+
+        const getPrimeFactors = (num) => {
+            const factors = [];
+            let d = 2;
+            let temp = num;
+            while (d * d <= temp) {
+                while (temp % d === 0) {
+                    factors.push(d);
+                    temp /= d;
+                }
+                d++;
+            }
+            if (temp > 1) factors.push(temp);
+            return factors;
+        };
+
+        // 1. Генерируем b
+        let b;
+        let bFactors = [];
+        do {
+            b = getRandomInt(6, 59);
+            bFactors = getPrimeFactors(b);
+        } while (bFactors.length < 2);
+
+        // 2. Определяем n (то, чего не будет хватать в a)
+        const hiddenIndex = getRandomInt(0, bFactors.length - 1);
+        const n = bFactors[hiddenIndex];
+
+        // 3. Формируем множители a (без n)
+        let aFactors = [...bFactors];
+        aFactors.splice(hiddenIndex, 1);
+
+        // --- ИСПРАВЛЕНИЕ ТУТ ---
+        // Чтобы a НЕ было кратно b, в aFactors не должно быть лишних n.
+        // Считаем, сколько раз n встречается в bFactors
+        const countNInB = bFactors.filter(x => x === n).length;
+        
+        // Создаем пул для шума, исключая из него n, 
+        // чтобы случайно не сделать a кратным b раньше времени.
+        const primesPool = [2, 3, 5, 7, 11, 13].filter(p => p !== n); 
+        
+        const noiseCount = getRandomInt(1, 2);
+        for (let i = 0; i < noiseCount; i++) {
+            aFactors.push(getRandomEl(primesPool));
+        }
+        // -----------------------
+
+        shuffleArray(aFactors);
+        
+        const factorsString = aFactors.join(" \\cdot "); 
+        const displayA = `${factorsString} \\cdot n`;
+
+        return {
+            variables: { 
+                b, 
+                n 
+            },
+            problemText: `Дано число $a = ${displayA}$, где $n$ --- простое число.<br>
+            <br> Найдите, чему равно $n$, если известно, что $a$ кратно $${b}$.`
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.n;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        if (/[^0-9]/.test(cleanInput)) return false;
+        return parseInt(cleanInput, 10) === vars.n;
+    }
+},
+
+{
+    type: " ",
+    number: "5count23",
+    tags: ["5_класс", "разложение_на_множители"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+
+        const shuffleArray = (array) => {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        };
+
+        const formatFactorsRaw = (factors) => {
+            return [...factors].sort((a, b) => a - b).join(" \\cdot ");
+        };
+
+        const isDivisible = (factors, divisors) => {
+            let tempFactors = [...factors];
+            for (let d of divisors) {
+                const idx = tempFactors.indexOf(d);
+                if (idx === -1) return false;
+                tempFactors.splice(idx, 1);
+            }
+            return true;
+        };
+
+        // 1. Генерируем число "N" (делитель)
+        const p1 = getRandomEl([2, 3, 5, 7, 11, 13]);
+        const p2 = getRandomEl([2, 3, 5, 7]);
+        const divNumber = p1 * p2;
+        const divFactors = [p1, p2];
+
+        // 2. Генерируем варианты
+        const primesPool = [2, 3, 5, 7, 11, 13, 17, 19];
+
+        // Правильный вариант
+        let correctFactors = [...divFactors];
+        const extraCountCorrect = getRandomInt(1, 3);
+        for (let i = 0; i < extraCountCorrect; i++) {
+            correctFactors.push(getRandomEl(primesPool));
+        }
+
+        // Неправильные варианты
+        let wrongOptions = [];
+        while (wrongOptions.length < 2) {
+            const len = getRandomInt(3, 5);
+            let attempt = [];
+            for (let i = 0; i < len; i++) {
+                attempt.push(getRandomEl(primesPool));
+            }
+
+            if (!isDivisible(attempt, divFactors)) {
+                const strKey = attempt.sort().join();
+                const exists = wrongOptions.some(opt => opt.sort().join() === strKey);
+                if (!exists) wrongOptions.push(attempt);
+            }
+        }
+
+        // 3. Сборка
+        const options = [
+            { id: 'correct', factors: correctFactors },
+            { id: 'wrong1', factors: wrongOptions[0] },
+            { id: 'wrong2', factors: wrongOptions[1] }
+        ];
+
+        shuffleArray(options);
+
+        const labels = ['a', 'b', 'c'];
+        let correctLetter = '';
+        
+        // --- ИЗМЕНЕНИЕ ЗДЕСЬ: используем "=" вместо ")" ---
+        const latexLines = options.map((opt, index) => {
+            const letter = labels[index];
+            if (opt.id === 'correct') correctLetter = letter;
+            
+            return `$$${letter} = ${formatFactorsRaw(opt.factors)}$$`;
+        });
+
+        return {
+            variables: { 
+                divNumber, 
+                correctLetter 
+            },
+            problemText: `Ниже записаны три числа в виде произведения простых множителей.
+            Какое из этих чисел кратно числу ${divNumber}?<br>
+            ${latexLines.join("")} <br>
+            (В ответе запишите только букву: $a$, $b$ или $c$.)`
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.correctLetter;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        let clean = userAnswer.toString().toLowerCase().trim();
+        clean = clean.replace("а", "a").replace("в", "b").replace("с", "c");
+        const match = clean.match(/^[abc]/);
+        if (!match) return false;
+        return match[0] === vars.correctLetter;
+    }
+},
+
+{
+    type: " ",
+    number: "5count22",
+    tags: ["5_класс", "кратные"],
+    generate: function() {
+        const getRandomEl = (arr) => arr[Math.floor(Math.random() * arr.length)];
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+        // Хелпер: проверка условия "вторая цифра >= 6"
+        // (имеем в виду цифру единиц: 16, 27, 108 и т.д.)
+        const isValidDivisor = (n) => (n % 10) >= 6;
+
+        // Хелпер: подсчет кратных в диапазоне [min, max]
+        const countRange = (k, min, max) => Math.floor(max / k) - Math.floor((min - 1) / k);
+
+        // ВЫБОР СЦЕНАРИЯ
+        // 1: Числа, меньшие N (аналог "до 100", "до 200" и т.д.)
+        // 2: Трёхзначные числа (100..999)
+        const scenario = Math.random() > 0.5 ? 1 : 2;
+
+        let problemText = "";
+        let answer = 0;
+        let validOptions = [];
+
+        if (scenario === 1) {
+            // --- СЦЕНАРИЙ 1: "Сколько чисел, меньших Limit..." ---
+            // Лимит выбираем красивый: 100, 200, 300, 400, 500, 1000.
+            const limit = getRandomEl([100, 150, 200, 250, 300, 400, 500, 1000]);
+
+            // Перебираем возможные делители k
+            // Чтобы ответ был 5..10, k должно быть примерно limit/10 .. limit/5
+            const minK = Math.floor(limit / 11);
+            const maxK = Math.floor(limit / 5) + 1;
+
+            for (let k = minK; k <= maxK; k++) {
+                if (k <= 1) continue; // Исключаем 1
+                if (!isValidDivisor(k)) continue; // Вторая цифра >= 6
+
+                // Считаем количество чисел < limit (то есть диапазон 1 .. limit-1)
+                const cnt = countRange(k, 1, limit - 1);
+                
+                if (cnt >= 5 && cnt <= 10) {
+                    validOptions.push({ k, ans: cnt });
+                }
+            }
+
+            if (validOptions.length === 0) return this.generate(); // Рестарт, если не нашли
+            const selected = getRandomEl(validOptions);
+            
+            answer = selected.ans;
+            problemText = `Сколько существует натуральных чисел, меньших ${limit}, которые кратны <b>${selected.k}</b>?`;
+
+        } else {
+            // --- СЦЕНАРИЙ 2: "Сколько трёхзначных чисел..." ---
+            // Диапазон строго 100..999
+            
+            // Чтобы ответ был 5..10, делитель k должен быть примерно 900/10=90 .. 900/5=180
+            for (let k = 80; k <= 200; k++) {
+                if (!isValidDivisor(k)) continue; // Вторая цифра >= 6
+
+                const cnt = countRange(k, 100, 999);
+                
+                if (cnt >= 5 && cnt <= 10) {
+                    validOptions.push({ k, ans: cnt });
+                }
+            }
+
+            if (validOptions.length === 0) return this.generate();
+            const selected = getRandomEl(validOptions);
+
+            answer = selected.ans;
+            problemText = `Сколько существует трёхзначных чисел, которые кратны ${selected.k}?`;
+        }
+
+        return {
+            variables: { answer },
+            problemText: problemText
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.answer;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        return parseInt(cleanInput, 10) === vars.answer;
+    }
+},
+
+{
+    type: " ",
+    number: "5count21",
+    tags: ["5_класс", "кратные"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+
+        // 1. Выбираем делитель (Base)
+        const base = getRandomEl([11, 13, 17, 19]);
+
+        // 2. Длина ряда чисел (6-8 штук)
+        const length = getRandomInt(6, 8);
+
+        // 3. Старт последовательности
+        const startMultiplier = 10;
+
+        let numbers = [];
+        let wrongNumber = 0;
+        
+        // 4. Выбираем позицию ошибки
+        const wrongIndex = getRandomInt(3, length - 1);
+
+        for (let i = 0; i < length; i++) {
+            const currentMultiplier = startMultiplier + i;
+            let val = base * currentMultiplier;
+
+            if (i === wrongIndex) {
+                // Ломаем число: +1 или -1
+                const shift = Math.random() > 0.5 ? 1 : -1;
+                val += shift;
+                wrongNumber = val;
+            }
+
+            numbers.push(val);
+        }
+
+        // Формируем строку чисел
+        const listString = numbers.join(", ");
+
+        return {
+            variables: { 
+                base, 
+                wrongNumber,
+                listString // ДОБАВЛЕНО: передаем строку в переменные
+            },
+            // ИСПРАВЛЕНО: добавлена сама последовательность в текст задачи
+            problemText: `В строку выписаны числа: ${listString}.<br>
+            Все они, кроме одного, кратны ${base}. Найдите и запишите число, которое не кратно ${base}.`
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.wrongNumber;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        if (/[^0-9]/.test(cleanInput)) return false;
+        
+        return parseInt(cleanInput, 10) === vars.wrongNumber;
+    }
+},
+
+{
+    type: " ",
+    number: "5count17",
+    tags: ["5_класс", "НОД", "разложение_на_множители"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+
+        const shuffleArray = (array) => {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        };
+
+        const formatFactorsToLatex = (factors) => {
+            const counts = {};
+            factors.forEach(x => { counts[x] = (counts[x] || 0) + 1; });
+            const unique = Object.keys(counts).map(Number).sort((a, b) => a - b);
+            return unique.map(base => {
+                const deg = counts[base];
+                return deg > 1 ? `${base}^{${deg}}` : `${base}`;
+            }).join(" \\cdot ");
+        };
+
+        // Хелпер: произведение массива
+        const getProd = (arr) => arr.reduce((a, b) => a * b, 1);
+
+        // ==========================================
+        // ШАГ 1: Генерация ядра НОД (соблюдая условия)
+        // ==========================================
+        let gcdFactors = [];
+        const scenario = Math.random(); 
+
+        if (scenario < 0.25) {
+            // --- СЦЕНАРИЙ 1: Высокая степень (3 или 4) ---
+            // База: 2 (степени 3,4,5,6) или 3 (степень 3). 
+            // 3^4 = 81 (>70), так что для тройки только куб.
+            const base = Math.random() > 0.3 ? 2 : 3;
+            let exponent = 3; 
+            
+            if (base === 2) {
+                // Для двойки допустимы степени 3 (8), 4 (16), 5 (32), 6 (64).
+                // Но в условии просили "3 или 4". Ок, ограничимся ими.
+                exponent = getRandomEl([3, 4]);
+            }
+            
+            // Заполняем массив
+            gcdFactors = Array(exponent).fill(base);
+
+        } else if (scenario < 0.75) {
+            // --- СЦЕНАРИЙ 2: Квадрат (степень 2) ---
+            // 50% вероятность
+            // Базы: 2, 3, 5, 7 (7^2=49, ок).
+            const base = getRandomEl([2, 3, 5, 7]);
+            gcdFactors = [base, base];
+
+        } else {
+            // --- СЦЕНАРИЙ 3: Линейный (все степени 1) ---
+            // Оставшиеся 25%
+            const startP = getRandomEl([2, 3, 5, 7, 11, 13]);
+            gcdFactors = [startP];
+        }
+
+        // ==========================================
+        // ШАГ 2: Дополнение НОД (до 3-х множителей, <= 70)
+        // ==========================================
+        // Пытаемся добавить еще множители, пока не превысим 70 и не превысим длину 3
+        const primes = [2, 3, 5, 7, 11, 13, 17, 19];
+        
+        let attempts = 0;
+        while (gcdFactors.length < 3 && attempts < 10) {
+            attempts++;
+            const p = getRandomEl(primes);
+            const currentVal = getProd(gcdFactors);
+            
+            if (currentVal * p <= 70) {
+                gcdFactors.push(p);
+            }
+        }
+
+        const gcdVal = getProd(gcdFactors);
+
+        // ==========================================
+        // ШАГ 3: Генерация чисел a и b
+        // ==========================================
+        // a = НОД * k1
+        // b = НОД * k2
+        // k1 и k2 должны быть взаимно простыми.
+        
+        // Генерируем добавки в виде простых множителей, чтобы легко вывести LaTeX
+        let extraFactorsA = [];
+        let extraFactorsB = [];
+
+        // Выбираем случайные простые добавки
+        // Набор A
+        extraFactorsA.push(getRandomEl([2, 3, 5]));
+        if (Math.random() > 0.5) extraFactorsA.push(getRandomEl([2, 3, 7]));
+
+        // Набор B (следим, чтобы не пересекался с A по составу, чтобы не увеличить НОД)
+        // Самый простой способ: набрать B, проверить общие, если есть - заменить.
+        // Но проще генерировать B из тех, которых нет в A (или аккуратно подбирать).
+        
+        // Для простоты: возьмем два случайных числа k1, k2, проверим gcd(k1,k2)==1
+        // и потом разложим их на множители.
+        
+        const gcdFunc = (x, y) => (!y ? x : gcdFunc(y, x % y));
+        
+        let k1, k2;
+        do {
+            k1 = getRandomInt(2, 12); // Не очень большие, чтобы пример не был монструозным
+            k2 = getRandomInt(2, 12);
+        } while (k1 === k2 || gcdFunc(k1, k2) !== 1);
+
+        // Функция разложения числа на простые множители
+        const getPrimeFactors = (n) => {
+            const factors = [];
+            let d = 2;
+            let temp = n;
+            while (d * d <= temp) {
+                while (temp % d === 0) {
+                    factors.push(d);
+                    temp /= d;
+                }
+                d++;
+            }
+            if (temp > 1) factors.push(temp);
+            return factors;
+        };
+
+        extraFactorsA = getPrimeFactors(k1);
+        extraFactorsB = getPrimeFactors(k2);
+
+        // Сборка итоговых массивов
+        const factorsA = [...gcdFactors, ...extraFactorsA];
+        const factorsB = [...gcdFactors, ...extraFactorsB];
+
+        // ==========================================
+        // ШАГ 4: Форматирование
+        // ==========================================
+        // Перемешиваем множители перед выводом
+        const displayA = formatFactorsToLatex(shuffleArray([...factorsA]));
+        const displayB = formatFactorsToLatex(shuffleArray([...factorsB]));
+
+        return {
+            variables: { 
+                gcdVal, 
+                answer: gcdVal 
+            },
+            problemText: `Найдите наибольший общий делитель (НОД) чисел $a$ и $b$:
+            $$a = ${displayA}$$
+            $$b = ${displayB}$$`
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.answer;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        // Очистка и парсинг
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        if (/[^0-9]/.test(cleanInput)) return false;
+        
+        return parseInt(cleanInput, 10) === vars.gcdVal;
+    }
+},
+
+{
+    type: " ",
+    number: "5count16",
+    tags: ["5_класс", "делители", "разложение_на_множители"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+
+        const shuffleArray = (array) => {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        };
+
+        const formatFactorsToLatex = (factors) => {
+            const counts = {};
+            factors.forEach(x => { counts[x] = (counts[x] || 0) + 1; });
+            const unique = Object.keys(counts).map(Number).sort((a, b) => a - b);
+            return unique.map(base => {
+                const deg = counts[base];
+                return deg > 1 ? `${base}^{${deg}}` : `${base}`;
+            }).join(" \\cdot ");
+        };
+
+        const getKey = (factors) => [...factors].sort((a, b) => a - b).join(',');
+
+        // ==========================================
+        // ШАГ 1: Генерируем БАЗУ (Глобальный НОД)
+        // ==========================================
+        let baseFactors = [];
+        let baseVal = 0;
+        
+        // ИЗМЕНЕНИЕ: Вероятность квадрата (ответ из 3 чисел) снижена до 20% (< 0.2)
+        // В 80% случаев будут разные простые (ответ из 4 чисел)
+        const isSquareBase = Math.random() < 0.2; 
+
+        if (isSquareBase) {
+            // Сценарий: НОД = p^2 (делители: 1, p, p^2) - их мало, поэтому делаем редко
+            const primes = [2, 3, 5, 7]; 
+            const p = getRandomEl(primes);
+            baseFactors = [p, p];
+            baseVal = p * p;
+        } else {
+            // Сценарий: НОД = p1 * p2 (делители: 1, p1, p2, p1*p2) - их много
+            const primes = [2, 3, 5, 7, 11, 13];
+            let p1, p2;
+            do {
+                p1 = getRandomEl(primes);
+                p2 = getRandomEl(primes.filter(x => x !== p1));
+                baseVal = p1 * p2;
+            } while (baseVal > 50);
+            baseFactors = [p1, p2];
+        }
+
+        // ==========================================
+        // ШАГ 2: Формируем три числа
+        // ==========================================
+        
+        let f1 = [...baseFactors];
+        let f2 = [...baseFactors];
+        let f3 = [...baseFactors];
+
+        // 1. Общий множитель для f1 и f2 (локальный НОД > глобального)
+        const commonFor1and2 = getRandomEl([2, 3, 5]); 
+        f1.push(commonFor1and2);
+        f2.push(commonFor1and2);
+
+        // 2. Индивидуальные добавки для f1 и f2
+        const extra1 = getRandomEl([2, 3, 5, 7]);
+        let extra2 = getRandomEl([2, 3, 5, 7]);
+        
+        while (extra2 === extra1) {
+            extra2 = getRandomEl([2, 3, 5, 7]);
+        }
+        f1.push(extra1);
+        f2.push(extra2);
+
+        // 3. Формируем f3
+        // 50% шанс: f3 = база
+        // 50% шанс: f3 = база * p (где p != commonFor1and2)
+        const isThirdNumberBase = Math.random() > 0.5;
+
+        if (!isThirdNumberBase) {
+            const possibleExtras = [2, 3, 5, 7].filter(x => x !== commonFor1and2);
+            f3.push(getRandomEl(possibleExtras));
+        }
+        
+        // ==========================================
+        // ШАГ 3: Проверка уникальности
+        // ==========================================
+        while (getKey(f1) === getKey(f3) || getKey(f2) === getKey(f3)) {
+            f3.push(2); 
+        }
+
+        // ==========================================
+        // ШАГ 4: Вывод
+        // ==========================================
+
+        const allFactors = shuffleArray([f1, f2, f3]);
+        const displays = allFactors.map(f => formatFactorsToLatex(f));
+
+        let commonDivisors = [];
+        for (let i = 1; i * i <= baseVal; i++) {
+            if (baseVal % i === 0) {
+                commonDivisors.push(i);
+                if (i * i !== baseVal) commonDivisors.push(baseVal / i);
+            }
+        }
+        commonDivisors.sort((a, b) => a - b);
+        const answerString = commonDivisors.join(", ");
+
+        return {
+            variables: { 
+                displays, 
+                divisors: commonDivisors, 
+                answer: answerString 
+            },
+            problemText: `Даны три числа, записанные в виде разложения на простые множители:
+            $$a = ${displays[0]}$$
+            $$b = ${displays[1]}$$
+            $$c = ${displays[2]}$$<br>
+            
+            Найдите и запишите все <b>общие делители</b> этих трёх чисел.`
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.answer;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        if (/[^0-9,]/.test(cleanInput)) return false;
+
+        let userDivisors = cleanInput.split(',').filter(el => el !== "").map(Number);
+        userDivisors = [...new Set(userDivisors)];
+        userDivisors.sort((a, b) => a - b);
+
+        const correctDivisors = vars.divisors;
+
+        if (userDivisors.length !== correctDivisors.length) return false;
+        for (let i = 0; i < correctDivisors.length; i++) {
+            if (userDivisors[i] !== correctDivisors[i]) return false;
+        }
+
+        return true;
+    }
+},
+
+{
+    type: " ",
+    number: "5count15",
+    tags: ["5_класс", "делители", "разложение_на_множители"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+        
+        // Хелпер: НОД
+        const gcd = (x, y) => (!y ? x : gcd(y, x % y));
+
+        // Хелпер: Получение всех делителей числа
+        const getDivisors = (n) => {
+            let res = [];
+            for (let i = 1; i * i <= n; i++) {
+                if (n % i === 0) {
+                    res.push(i);
+                    if (i * i !== n) res.push(n / i);
+                }
+            }
+            return res.sort((a, b) => a - b);
+        };
+
+        // Хелпер: Определение лимита согласно условию
+        const getMaxLimit = (n) => {
+            if (n % 10 === 0) return 300;
+            if (n % 5 === 0) return 150;
+            return 100;
+        };
+
+        // СПИСОК ВАЛИДНЫХ НОД (GCD)
+        // Условия: <= 30, произведение 2 или 3 простых, кол-во делителей от 3 до 6.
+        // Исключены: 30 (8 делителей), 16 (4 простых множителя), 24 (4 простых множителя) и т.д.
+        const validGCDs = [
+            4,  // 2*2 (3 делителя)
+            6,  // 2*3 (4 делителя)
+            8,  // 2*2*2 (4 делителя)
+            9,  // 3*3 (3 делителя)
+            10, // 2*5 (4 делителя)
+            12, // 2*2*3 (6 делителей)
+            14, // 2*7 (4 делителя)
+            15, // 3*5 (4 делителя)
+            18, // 2*3*3 (6 делителей)
+            20, // 2*2*5 (6 делителей)
+            21, // 3*7 (4 делителя)
+            22, // 2*11 (4 делителя)
+            25, // 5*5 (3 делителя)
+            26, // 2*13 (4 делителя)
+            27, // 3*3*3 (4 делителя)
+            28  // 2*2*7 (6 делителей)
+        ];
+
+        let numA, numB, chosenGCD;
+        let validPair = false;
+
+        // Генерируем, пока не попадем в условия диапазонов
+        while (!validPair) {
+            chosenGCD = getRandomEl(validGCDs);
+
+            // Генерируем множители k1 и k2
+            // Они должны быть взаимно простыми, чтобы НОД(a,b) остался равен chosenGCD
+            // Ограничим k небольшим числом, чтобы не улететь далеко за 300 сразу
+            let k1 = getRandomInt(2, 15);
+            let k2 = getRandomInt(2, 15);
+
+            if (k1 === k2) continue;
+            if (gcd(k1, k2) !== 1) continue;
+
+            numA = chosenGCD * k1;
+            numB = chosenGCD * k2;
+
+            // Проверка диапазонов
+            // Нижняя граница 10
+            if (numA < 10 || numB < 10) continue;
+
+            // Верхние границы по условию
+            if (numA > getMaxLimit(numA)) continue;
+            if (numB > getMaxLimit(numB)) continue;
+
+            validPair = true;
+        }
+
+        // Вычисляем правильный ответ (общие делители)
+        // Общие делители a и b — это все делители их НОД
+        const commonDivisors = getDivisors(chosenGCD);
+        const answerString = commonDivisors.join(", ");
+
+        return {
+            variables: { 
+                numA, 
+                numB, 
+                divisors: commonDivisors, 
+                answer: answerString 
+            },
+            problemText: `Найдите и запишите все общие делители чисел ${numA} и ${numB}`
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.answer;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        // Разрешаем цифры и запятые
+        if (/[^0-9,]/.test(cleanInput)) return false;
+
+        let userDivisors = cleanInput.split(',').filter(el => el !== "").map(Number);
+        
+        // Убираем дубли и сортируем
+        userDivisors = [...new Set(userDivisors)];
+        userDivisors.sort((a, b) => a - b);
+
+        const correctDivisors = vars.divisors;
+
+        if (userDivisors.length !== correctDivisors.length) return false;
+        for (let i = 0; i < correctDivisors.length; i++) {
+            if (userDivisors[i] !== correctDivisors[i]) return false;
+        }
+
+        return true;
+    }
+}, 
+
+{
+    type: " ",
+    number: "5count14",
+    tags: ["5_класс", "делители", "разложение_на_множители"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+        
+        const gcd = (x, y) => (!y ? x : gcd(y, x % y));
+        const lcm = (x, y) => (x * y) / gcd(x, y);
+
+        const formatFactorsToLatex = (factors) => {
+            const counts = {};
+            factors.forEach(x => { counts[x] = (counts[x] || 0) + 1; });
+            const unique = Object.keys(counts).map(Number).sort((a, b) => a - b);
+            return unique.map(base => {
+                const deg = counts[base];
+                return deg > 1 ? `${base}^{${deg}}` : `${base}`;
+            }).join(" \\cdot ");
+        };
+
+        let factorsA = [];
+        let factorsB = [];
+
+        // ВЕРОЯТНОСТЬ 1: Сценарий "Малые числа" (20%)
+        // Здесь ВСЕГДА есть степени в B.
+        const globalScenario = Math.random();
+
+        if (globalScenario < 0.2) {
+            const smallPrimes = [2, 3, 5, 7];
+            let valid = false;
+            while (!valid) {
+                factorsA = Array.from({length: 3}, () => getRandomEl(smallPrimes));
+                factorsB = Array.from({length: 5}, () => getRandomEl(smallPrimes));
+
+                const valA = factorsA.reduce((a, b) => a * b, 1);
+                const valB = factorsB.reduce((a, b) => a * b, 1);
+                const valLCM = lcm(valA, valB);
+
+                if (valLCM < 100 || (valLCM < 200 && valLCM % 10 === 0)) {
+                    valid = true;
+                }
+            }
+
+        } else {
+            // ВЕРОЯТНОСТЬ 2: Сценарий "Общий" (80%)
+            const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47];
+
+            // 1. Выбор p1, p2
+            let p1, p2;
+            do {
+                p1 = getRandomEl(primes);
+                p2 = getRandomEl(primes.filter(x => x !== p1));
+            } while (p1 * p2 >= 100);
+
+            // 2. Выбор p3, p4 (уникальные)
+            let remaining = primes.filter(x => x !== p1 && x !== p2);
+            const p3 = getRandomEl(remaining);
+            remaining = remaining.filter(x => x !== p3);
+            const p4 = getRandomEl(remaining);
+            remaining = remaining.filter(x => x !== p4);
+
+            // Формируем A
+            const typeA = Math.random() > 0.5 ? 'full' : 'short';
+            factorsA = (typeA === 'full') ? [p1, p2, p3] : [p1, p2];
+
+            // Формируем B
+            factorsB = [p1, p2, p4];
+
+            // --- БАЛАНСИРОВКА ВНУТРИ ОБЩЕГО СЦЕНАРИЯ ---
+            // Было > 0.75. Ставим > 0.6 (это даст 40% вероятность срабатывания ветки 'repeat')
+            // Итоговая вероятность степеней: 0.2 (сценарий 1) + 0.8 * 0.4 (сценарий 2) = 0.52
+            const typeB = Math.random() > 0.6 ? 'repeat' : 'standard';
+
+            if (typeB === 'repeat') {
+                factorsB.push(Math.random() > 0.5 ? p1 : p2);
+            } else {
+                // В этой ветке все множители будут уникальными (степеней нет)
+                const smallInBase = [p1, p2, p4].some(x => x < 10);
+                if (smallInBase) {
+                    const smallAvailable = remaining.filter(x => x < 10);
+                    if (smallAvailable.length > 0) {
+                        factorsB.push(getRandomEl(smallAvailable));
+                    }
+                }
+            }
+        }
+
+        // --- ФИНАЛИЗАЦИЯ ---
+        const numA = factorsA.reduce((a, b) => a * b, 1);
+        const numB = factorsB.reduce((a, b) => a * b, 1);
+
+        const gcdVal = gcd(numA, numB);
+        
+        let divisors = [];
+        for (let i = 1; i * i <= gcdVal; i++) {
+            if (gcdVal % i === 0) {
+                divisors.push(i);
+                if (i * i !== gcdVal) {
+                    divisors.push(gcdVal / i);
+                }
+            }
+        }
+        divisors.sort((a, b) => a - b);
+        const answerString = divisors.join(", ");
+
+        const displayA = formatFactorsToLatex(factorsA);
+        const displayB = formatFactorsToLatex(factorsB);
+
+        return {
+            variables: { 
+                factorsA, 
+                factorsB, 
+                divisors, 
+                answer: answerString 
+            },
+            problemText: `Даны два числа $a$ и $b$, записанные в виде произведения простых множителей:<br>
+            $$a = ${displayA}$$
+            $$b = ${displayB}$$<br>
+            Запишите все общие делители этих чисел.`
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.answer;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        if (/[^0-9,]/.test(cleanInput)) return false;
+
+        let userDivisors = cleanInput.split(',').filter(el => el !== "").map(Number);
+        userDivisors = [...new Set(userDivisors)];
+        userDivisors.sort((a, b) => a - b);
+
+        const correctDivisors = vars.divisors;
+
+        if (userDivisors.length !== correctDivisors.length) return false;
+        for (let i = 0; i < correctDivisors.length; i++) {
+            if (userDivisors[i] !== correctDivisors[i]) return false;
+        }
+
+        return true;
+    }
+},
+
+{
+    type: " ",
+    number: "5count13",
+    tags: ["5_класс", "делители", "степени", "разложение_на_множители"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+
+        let factors = [];
+        const scenario = Math.random() > 0.5 ? 1 : 2;
+
+        if (scenario === 1) {
+            // Сценарий 1: 3 одинаковых множителя (<= 7) + 1 множитель (от 7 до 19)
+            const baseCube = getRandomEl([2, 3, 5, 7]);
+            const singleMultiplier = getRandomEl([7, 11, 13, 17, 19]);
+            factors = [baseCube, baseCube, baseCube, singleMultiplier];
+
+        } else {
+            // Сценарий 2: Две пары одинаковых множителей.
+            // Первая пара: основание <= 5
+            const basePair1 = getRandomEl([2, 3, 5]);
+            
+            // Вторая пара: основание <= 7, но не равное первому
+            const group2Options = [2, 3, 5, 7].filter(x => x !== basePair1);
+            const basePair2 = getRandomEl(group2Options);
+
+            factors = [basePair1, basePair1, basePair2, basePair2];
+        }
+
+        // Вычисляем само число
+        const number = factors.reduce((a, b) => a * b, 1);
+
+        // --- НОВОЕ УСЛОВИЕ: Число должно быть не больше 300 ---
+        // Если число больше 300, генерируем заново
+        if (number > 300) {
+            return this.generate();
+        }
+
+        // --- Формирование строки со степенями (LaTeX) ---
+        factors.sort((a, b) => a - b);
+        
+        const counts = {};
+        factors.forEach(x => { counts[x] = (counts[x] || 0) + 1; });
+
+        const parts = [];
+        const uniqueFactors = Object.keys(counts).map(Number).sort((a, b) => a - b);
+        
+        uniqueFactors.forEach(base => {
+            const exponent = counts[base];
+            if (exponent > 1) {
+                parts.push(`${base}^{${exponent}}`);
+            } else {
+                parts.push(`${base}`);
+            }
+        });
+
+        const factorizationDisplay = parts.join(" \\cdot ");
+
+        // --- Поиск всех делителей ---
+        let divisors = [];
+        for (let i = 1; i * i <= number; i++) {
+            if (number % i === 0) {
+                divisors.push(i);
+                if (i * i !== number) {
+                    divisors.push(number / i);
+                }
+            }
+        }
+        
+        divisors.sort((a, b) => a - b);
+        const answerString = divisors.join(", ");
+
+        return {
+            variables: { number, divisors, answer: answerString },
+            problemText: `Число записано в виде произведения степеней простых множителей:<br><div class="problem-expression">$$${factorizationDisplay}$$</div><br>Найдите и запишите все делители этого числа.`
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.answer;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+
+        if (/[^0-9,]/.test(cleanInput)) return false;
+
+        let userDivisors = cleanInput.split(',').filter(el => el !== "").map(Number);
+        userDivisors.sort((a, b) => a - b);
+
+        const correctDivisors = vars.divisors;
+
+        if (userDivisors.length !== correctDivisors.length) return false;
+
+        for (let i = 0; i < correctDivisors.length; i++) {
+            if (userDivisors[i] !== correctDivisors[i]) return false;
+        }
+
+        return true;
+    }
+},
+
+{
+    type: " ",
+    number: "5count12",
+    tags: ["5_класс", "делители", "разложение_на_множители"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+
+        const groupSmall = [2, 3, 5];
+        const groupMedium = [7, 11, 13, 17, 19]; 
+
+        let factors = [];
+        
+        // --- Логика генерации числа (как заказывали) ---
+        const scenario = Math.random() > 0.5 ? 0 : 1;
+
+        if (scenario === 0) {
+            // Сценарий 1: 3-4 множителя (2, 3, 5), число <= 200
+            const count = getRandomInt(3, 4);
+            for (let i = 0; i < count; i++) {
+                factors.push(getRandomEl(groupSmall));
+            }
+            
+            const tempNumber = factors.reduce((a, b) => a * b, 1);
+            if (tempNumber > 200) return this.generate();
+
+        } else {
+            // Сценарий 2: 1 средний (7-19) + 2 малых (2, 3, 5)
+            factors.push(getRandomEl(groupMedium));
+            factors.push(getRandomEl(groupSmall));
+            factors.push(getRandomEl(groupSmall));
+        }
+
+        // Вычисляем само число
+        const number = factors.reduce((a, b) => a * b, 1);
+
+        // Сортируем множители для красивого отображения в условии
+        factors.sort((a, b) => a - b);
+        const factorizationDisplay = factors.join(" · ");
+
+        // --- Поиск всех делителей ---
+        let divisors = [];
+        for (let i = 1; i <= Math.sqrt(number); i++) {
+            if (number % i === 0) {
+                divisors.push(i);
+                if (i !== number / i) {
+                    divisors.push(number / i);
+                }
+            }
+        }
+        
+        // Сортируем делители по возрастанию
+        divisors.sort((a, b) => a - b);
+
+        // Строка правильного ответа
+        const answerString = divisors.join(", ");
+
+        return {
+            variables: { number, divisors, answer: answerString },
+            // В условии показываем разложение, а просим найти делители
+            problemText: `Число записано в виде разложения на простые множители: <div class="problem-expression">${factorizationDisplay}</div><br>Запишите все делители этого числа.`
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.answer;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+
+        // 1. Убираем пробелы
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+
+        // 2. Проверка символов (только цифры и запятые)
+        if (/[^0-9,]/.test(cleanInput)) return false;
+
+        // 3. Разбиваем строку и превращаем в числа
+        let userDivisors = cleanInput.split(',').filter(el => el !== "").map(Number);
+
+        // 4. Сортируем (чтобы порядок ввода не влиял на правильность, если ученик пропустит одно число, но напишет остальные вразнобой)
+        userDivisors.sort((a, b) => a - b);
+
+        const correctDivisors = vars.divisors;
+
+        // 5. Сравнение
+        if (userDivisors.length !== correctDivisors.length) return false;
+
+        for (let i = 0; i < correctDivisors.length; i++) {
+            if (userDivisors[i] !== correctDivisors[i]) return false;
+        }
+
+        return true;
+    }
+},
+
+{
+    type: " ",
+    number: "5count11",
+    tags: ["5_класс", "делители", "разложение_на_множители"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+
+        const groupSmall = [2, 3, 5];
+        const groupMedium = [7, 11, 13, 17, 19]; // Простые > 5 и < 20
+
+        let factors = [];
+        
+        // Выбираем сценарий: 
+        // 0 - только малые множители (2,3,5)
+        // 1 - есть один средний множитель
+        const scenario = Math.random() > 0.5 ? 0 : 1;
+
+        if (scenario === 0) {
+            // Условие: 3-4 множителя, только 2, 3 или 5. Число <= 200.
+            const count = getRandomInt(3, 4);
+            for (let i = 0; i < count; i++) {
+                factors.push(getRandomEl(groupSmall));
+            }
+            
+            const tempNumber = factors.reduce((a, b) => a * b, 1);
+            
+            // Если число превысило 200 - перегенерируем
+            if (tempNumber > 200) return this.generate();
+
+        } else {
+            // Условие: 3 множителя. Ровно 1 средний, остальные 2 малых.
+            factors.push(getRandomEl(groupMedium));
+            factors.push(getRandomEl(groupSmall));
+            factors.push(getRandomEl(groupSmall));
+            
+            // Здесь жесткого ограничения на 200 нет в описании, 
+            // но максимум будет 19 * 5 * 5 = 475, что приемлемо.
+        }
+
+        const number = factors.reduce((a, b) => a * b, 1);
+
+        // Находим все делители полученного числа
+        let divisors = [];
+        for (let i = 1; i <= Math.sqrt(number); i++) {
+            if (number % i === 0) {
+                divisors.push(i);
+                if (i !== number / i) {
+                    divisors.push(number / i);
+                }
+            }
+        }
+        
+        // Сортируем делители по возрастанию
+        divisors.sort((a, b) => a - b);
+
+        // Формируем строку ответа для подсказки
+        const answerString = divisors.join(", ");
+
+        return {
+            variables: { number, divisors, answer: answerString },
+            problemText: `Найдите все делители числа:<br><div class="problem-expression">${number}</div><br>`
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.answer;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+
+        // 1. Убираем пробелы
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+
+        // 2. Проверка на недопустимые символы
+        if (/[^0-9,]/.test(cleanInput)) return false;
+
+        // 3. Разбиваем строку ученика по запятой
+        let userDivisors = cleanInput.split(',').filter(el => el !== "").map(Number);
+
+        // 4. Сортируем массив ученика
+        userDivisors.sort((a, b) => a - b);
+
+        const correctDivisors = vars.divisors;
+
+        // 5. Сравнение
+        if (userDivisors.length !== correctDivisors.length) return false;
+
+        for (let i = 0; i < correctDivisors.length; i++) {
+            if (userDivisors[i] !== correctDivisors[i]) return false;
+        }
+
+        return true;
+    }
+},
+
+{
+    type: " ",
+    number: "5count10",
+    tags: ["5_класс", "разложение_на_множители"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+
+        const groupA = [2, 3, 5];
+        const groupB = [7, 11, 13];
+        const groupC = [17, 19, 23, 29, 31, 37, 41, 43, 47];
+        const groupA_restricted = [2, 5];
+
+        let factors = [];
+        
+        const getRestrictedA = (count) => {
+            const res = [];
+            const useThree = Math.random() > 0.5;
+            if (useThree) res.push(3);
+            while (res.length < count) {
+                res.push(getRandomEl(groupA_restricted));
+            }
+            return res;
+        };
+
+        const scenario = getRandomInt(1, 4);
+
+        if (scenario === 1) {
+            const count = getRandomInt(5, 6);
+            for (let i = 0; i < count; i++) factors.push(getRandomEl(groupA));
+            if (factors.every(x => x === 3)) return this.generate();
+
+        } else if (scenario === 2) {
+            factors.push(getRandomEl(groupB));
+            factors.push(getRandomEl(groupB));
+            factors.push(getRandomEl(groupA));
+
+        } else if (scenario === 3) {
+            factors.push(getRandomEl(groupB));
+            factors.push(...getRestrictedA(3));
+
+        } else {
+            factors.push(getRandomEl(groupC));
+            const countA = getRandomInt(2, 3);
+            factors.push(...getRestrictedA(countA));
+        }
+
+        const number = factors.reduce((a, b) => a * b, 1);
+
+        if (number < 50 || number > 3000) return this.generate();
+
+        // Сортируем правильные множители для порядка
+        factors.sort((a, b) => a - b);
+        
+        // Формируем эталонный ответ через *, без пробелов
+        const answerString = factors.join("*");
+
+        return {
+            variables: { number, factors, answer: answerString },
+            problemText: `Разложите число на простые множители:<br><div class="problem-expression">${number}</div>`
+        };
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.answer;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        
+        // 1. Убираем все пробелы
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        
+        // 2. Разбиваем по знаку *, преобразуем в числа и сортируем
+        const userFactors = cleanInput.split('*').map(Number).sort((a, b) => a - b);
+        
+        // 3. Берем эталонные множители (они уже отсортированы в generate, но для надежности можно и тут)
+        const correctFactors = vars.factors;
+
+        // 4. Сравниваем длину массивов
+        if (userFactors.length !== correctFactors.length) return false;
+
+        // 5. Поэлементное сравнение
+        for (let i = 0; i < correctFactors.length; i++) {
+            if (userFactors[i] !== correctFactors[i]) return false;
+        }
+
+        return true;
+    }
+},
 
 {
     type: " ",
