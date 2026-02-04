@@ -1,13 +1,15 @@
-// 5count26 - найти число, кратное данному числу в заданном промежутке
-// 5count25 - найти частное от деления a на b (оба записаны в виде произведения степеней простых чисел)
-// 5count24 - найти неизвестный простой множитель в разложении a, если известно, что a кратно b (b записано в десятичной системе счисления)
-// 5count23 - какое из чисел a, b, c кратно числу d? (a, b, c записаны в виде произведения, число d - в десятичном виде)
-// 5count22 - найти, сколько чисел из данного диапазона кратны данному числу
-// ПРОБЛЕМА 5count21 - среди ряда чисел выбрать то, которое не кратно данному 
+// [проверено] 5count25 - найти частное a : b. Число a записано в виде произведения степеней простых множителей, b - в виде произведения простых множителей.
+// [проверено] 5count24 - найти неизвестный простой множитель в разложении a, если известно, что a кратно b (b записано в десятичной системе счисления)
+// [проверено] 5count23 - какое из чисел a, b, c кратно числу d? (a, b, c записаны в виде произведения, число d - в десятичном виде)
+// [проверено] 5count22 - найти, сколько чисел из данного диапазона кратны данному числу
+// [проверено] 5count21 - среди ряда чисел выбрать то, которое не кратно данному (все числа записаны в десятичном виде). Основано на периодичности остатка
 // (нет) 5count20 - Найти НОД трёх чисел, записанных в десятичной системе счисления
 // (нет) 5count19 - найти НОД двух чисел, записанных в десятичной системе счисления
 // (нет) 5count18 - найти НОД трёх чисел, записанных в виде произведения простых множителей
-// 5count17 -  найти НОД двух чисел, записанных в виде произведения простых множителей
+// [проверено] 5count20 - найти НОД двух чисел, записанных в виде произведения простых (одно со степенями, второе без степеней)
+// [проверено] 5count19 - найти НОД двух чисел, записанных в виде разложения на простые множители
+// [проверено] 5count18 - найти НОД двух чисел, записанных в виде разложения на простые множители (без степеней)
+// [проверено] 5count17 -  найти НОД двух чисел, записанных в виде произведения простых множителей
 // 5count16 - найти общие делители трёх чисел, записанных в виде разложение на простые, со степенями
 // 5count15 - найти общие делители двух чисел, записанных в дес. системе счисления
 // 5count14 - найти общие делители чисел, записанных в виде произведения простых множителей (возможно, со степенями)
@@ -18,8 +20,8 @@
 
 {
     type: " ",
-    number: "5count26",
-    tags: ["5_класс", "кратные"],
+    number: "5count25",
+    tags: ["5_класс", "делимость", "разложение_на_множители"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -107,137 +109,6 @@
 
 {
     type: " ",
-    number: "5count25",
-    tags: ["5_класс", "степени", "разложение_на_множители"],
-    generate: function() {
-        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-        
-        // Хелпер для перемешивания массива
-        const shuffleArray = (array) => {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        };
-
-        // Хелпер: факторизация числа
-        const getPrimeFactors = (num) => {
-            const factors = {};
-            let d = 2;
-            let temp = num;
-            while (d * d <= temp) {
-                while (temp % d === 0) {
-                    factors[d] = (factors[d] || 0) + 1;
-                    temp /= d;
-                }
-                d++;
-            }
-            if (temp > 1) factors[temp] = (factors[temp] || 0) + 1;
-            return factors;
-        };
-
-        // Хелпер: Форматирование в LaTeX
-        const formatLatex = (factorsMap) => {
-            const bases = Object.keys(factorsMap).map(Number).sort((a, b) => a - b);
-            return bases.map(base => {
-                const exp = factorsMap[base];
-                return exp === 1 ? `${base}` : `${base}^{${exp}}`;
-            }).join(" \\cdot ");
-        };
-
-        // Основной цикл генерации
-        let problemData = null;
-        let attempts = 0;
-
-        while (!problemData && attempts < 1000) {
-            attempts++;
-            
-            // 1. Выбираем 3 разных простых основания для числа 'a'
-            // Берем маленькие, чтобы число не улетело в космос
-            const pool = [2, 3, 5, 7, 11]; 
-            const shuffledPool = shuffleArray([...pool]);
-            const bases = shuffledPool.slice(0, 3).sort((a, b) => a - b); // [p1, p2, p3]
-
-            // 2. Выбираем паттерн степеней для 'a'
-            // Либо {1, 2, 2}, либо {1, 1, 3}
-            const pattern = Math.random() > 0.5 ? [1, 2, 2] : [1, 1, 3];
-            const exps = shuffleArray(pattern);
-
-            // Собираем объект факторов для 'a'
-            const factorsA = {};
-            let valA = 1;
-            bases.forEach((base, idx) => {
-                const e = exps[idx];
-                factorsA[base] = e;
-                valA *= Math.pow(base, e);
-            });
-
-            // 3. Ищем подходящее число q (частное)
-            // Условия: 30 <= q <= 70
-            // b = a / q должно быть целым
-            // b должно иметь 2 или 3 множителя
-            
-            // Перебираем возможные q в диапазоне
-            // Для оптимизации: не перебираем все числа, а идем по делителям 'a'
-            // Но проще перебрать диапазон 30..70 и проверить делимость, т.к. диапазон маленький
-            
-            const validQs = [];
-            for (let q = 30; q <= 70; q++) {
-                if (valA % q === 0) {
-                    const valB = valA / q;
-                    const factorsB = getPrimeFactors(valB);
-                    const countDistinctB = Object.keys(factorsB).length;
-                    
-                    // Проверка условий для b:
-                    // 1. Количество различных простых множителей: 2 или 3
-                    if (countDistinctB >= 2 && countDistinctB <= 3) {
-                         validQs.push({ q, factorsB });
-                    }
-                }
-            }
-
-            if (validQs.length > 0) {
-                // Выбираем случайный подходящий вариант
-                const selected = validQs[getRandomInt(0, validQs.length - 1)];
-                
-                problemData = {
-                    q: selected.q,
-                    latexA: formatLatex(factorsA),
-                    latexB: formatLatex(selected.factorsB)
-                };
-            }
-        }
-
-        if (!problemData) return this.generate(); // Рестарт при неудаче
-
-        return {
-            variables: { 
-                q: problemData.q, 
-                latexA: problemData.latexA, 
-                latexB: problemData.latexB 
-            },
-            problemText: `Найдите частное от деления числа $a$ на число $b$:<br>
-            $$a = ${problemData.latexA}$$
-            $$b = ${problemData.latexB}$$<br>
-            Ответ запишите в виде натурального числа.`
-        };
-    },
-
-    calculateAnswer: function(vars) {
-        return vars.q;
-    },
-
-    check: function(userAnswer, vars) {
-        if (!userAnswer) return false;
-        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
-        if (/[^0-9]/.test(cleanInput)) return false;
-        return parseInt(cleanInput, 10) === vars.q;
-    }
-},
-
-{
-    type: " ",
     number: "5count24",
     tags: ["5_класс", "разложение_на_множители", "кратные"],
     generate: function() {
@@ -275,28 +146,30 @@
             bFactors = getPrimeFactors(b);
         } while (bFactors.length < 2);
 
-        // 2. Определяем n (то, чего не будет хватать в a)
+        // 2. Определяем n (то, чего не будет хватать в a для деления на b)
         const hiddenIndex = getRandomInt(0, bFactors.length - 1);
         const n = bFactors[hiddenIndex];
 
-        // 3. Формируем множители a (без n)
+        // 3. Формируем множители a (изначально копия b без одного n)
         let aFactors = [...bFactors];
         aFactors.splice(hiddenIndex, 1);
 
-        // --- ИСПРАВЛЕНИЕ ТУТ ---
-        // Чтобы a НЕ было кратно b, в aFactors не должно быть лишних n.
-        // Считаем, сколько раз n встречается в bFactors
-        const countNInB = bFactors.filter(x => x === n).length;
+        // --- ИЗМЕНЕНИЕ: Гарантируем a > 500 ---
         
-        // Создаем пул для шума, исключая из него n, 
-        // чтобы случайно не сделать a кратным b раньше времени.
-        const primesPool = [2, 3, 5, 7, 11, 13].filter(p => p !== n); 
+        // Пул простых чисел для "шума", исключая n
+        const primesPool = [2, 3, 5, 7, 11, 13].filter(p => p !== n);
         
-        const noiseCount = getRandomInt(1, 2);
-        for (let i = 0; i < noiseCount; i++) {
-            aFactors.push(getRandomEl(primesPool));
+        // Считаем текущее значение a (произведение имеющихся множителей * n)
+        // Нам нужно учитывать n, так как это часть числа a, хоть оно и скрыто переменной
+        let currentAValue = aFactors.reduce((acc, val) => acc * val, 1) * n;
+
+        // Добавляем случайные множители, пока число a не станет больше 500
+        while (currentAValue <= 500) {
+            const randomPrime = getRandomEl(primesPool);
+            aFactors.push(randomPrime);
+            currentAValue *= randomPrime;
         }
-        // -----------------------
+        // ---------------------------------------
 
         shuffleArray(aFactors);
         
@@ -308,8 +181,8 @@
                 b, 
                 n 
             },
-            problemText: `Дано число $a = ${displayA}$, где $n$ --- простое число.<br>
-            <br> Найдите, чему равно $n$, если известно, что $a$ кратно $${b}$.`
+            // Используем <br><br> для пустой строки
+            problemText: `Дано число $a = ${displayA}$, где $n$ --- простое число.<br><br>Найдите, чему равно $n$, если известно, что $a$ кратно $${b}$.`
         };
     },
 
@@ -327,9 +200,10 @@
 
 {
     type: " ",
-    number: "5count23",
-    tags: ["5_класс", "разложение_на_множители"],
+    number: "5count_23, 
+    tags: ["5_класс", "разложение_на_множители", "кратные"],
     generate: function() {
+        // --- Вспомогательные функции ---
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
 
@@ -341,81 +215,110 @@
             return array;
         };
 
-        const formatFactorsRaw = (factors) => {
-            return [...factors].sort((a, b) => a - b).join(" \\cdot ");
+        // Функция наполняет массив множителями, пока произведение <= 500
+        // forbiddenFactor - число, которое нельзя добавлять (чтобы неправильный ответ не стал правильным)
+        const fillTo500 = (factors, forbiddenFactor = null) => {
+            // Создаем копию входного массива, чтобы не мутировать оригинал
+            const currentFactors = [...factors]; 
+            let currentProduct = currentFactors.reduce((acc, val) => acc * val, 1);
+            
+            // Пул чисел для шума. Включаем основные простые числа.
+            let primesPool = [2, 3, 5, 7, 11, 13, 17, 19];
+            
+            // Если есть запрещенное число, убираем его из пула
+            if (forbiddenFactor !== null) {
+                primesPool = primesPool.filter(p => p !== forbiddenFactor);
+            }
+
+            while (currentProduct <= 500) {
+                const p = getRandomEl(primesPool);
+                currentFactors.push(p);
+                currentProduct *= p;
+            }
+            
+            return shuffleArray(currentFactors);
         };
 
-        const isDivisible = (factors, divisors) => {
-            let tempFactors = [...factors];
-            for (let d of divisors) {
-                const idx = tempFactors.indexOf(d);
-                if (idx === -1) return false;
-                tempFactors.splice(idx, 1);
-            }
-            return true;
+        // --- ЛОГИКА ГЕНЕРАЦИИ ЧИСЛА N ---
+        let targetFactors = [];
+        
+        // Решаем: 2 множителя или 3 множителя (50/50)
+        const scenario = Math.random() < 0.5 ? '2factors' : '3factors';
+
+        if (scenario === '2factors') {
+            const group1 = [3, 5, 7];
+            const group2 = [11, 13, 17];
+            
+            let p1, p2;
+            do {
+                p1 = getRandomEl(group1);
+                p2 = getRandomEl(group2);
+            } while (p1 === 7 && p2 === 17); // Исключаем 7 * 17 по условию
+            
+            targetFactors = [p1, p2];
+        } else {
+            // 3 множителя меньше 10 (2, 3, 5, 7)
+            const smallPrimes = [2, 3, 5, 7];
+            targetFactors = [
+                getRandomEl(smallPrimes),
+                getRandomEl(smallPrimes),
+                getRandomEl(smallPrimes)
+            ];
+        }
+
+        const targetNumber = targetFactors.reduce((acc, val) => acc * val, 1);
+
+        // --- ГЕНЕРАЦИЯ ВАРИАНТОВ ОТВЕТА ---
+
+        // 1. Правильный ответ: содержит все множители targetFactors
+        const correctFactors = fillTo500(targetFactors);
+
+        // Функция для создания неправильного ответа
+        // Мы берем targetFactors, убираем из них ОДИН случайный множитель
+        // И запрещаем добавлять его обратно.
+        const createWrongFactors = () => {
+            const tempFactors = [...targetFactors];
+            // Выбираем индекс элемента, который "забудем" положить
+            const removeIndex = getRandomInt(0, tempFactors.length - 1);
+            const removedFactor = tempFactors[removeIndex];
+            
+            // Удаляем этот элемент
+            tempFactors.splice(removeIndex, 1);
+            
+            // Добавляем шум, запрещая removedFactor
+            return fillTo500(tempFactors, removedFactor);
         };
 
-        // 1. Генерируем число "N" (делитель)
-        const p1 = getRandomEl([2, 3, 5, 7, 11, 13]);
-        const p2 = getRandomEl([2, 3, 5, 7]);
-        const divNumber = p1 * p2;
-        const divFactors = [p1, p2];
+        const wrongFactors1 = createWrongFactors();
+        const wrongFactors2 = createWrongFactors();
 
-        // 2. Генерируем варианты
-        const primesPool = [2, 3, 5, 7, 11, 13, 17, 19];
-
-        // Правильный вариант
-        let correctFactors = [...divFactors];
-        const extraCountCorrect = getRandomInt(1, 3);
-        for (let i = 0; i < extraCountCorrect; i++) {
-            correctFactors.push(getRandomEl(primesPool));
-        }
-
-        // Неправильные варианты
-        let wrongOptions = [];
-        while (wrongOptions.length < 2) {
-            const len = getRandomInt(3, 5);
-            let attempt = [];
-            for (let i = 0; i < len; i++) {
-                attempt.push(getRandomEl(primesPool));
-            }
-
-            if (!isDivisible(attempt, divFactors)) {
-                const strKey = attempt.sort().join();
-                const exists = wrongOptions.some(opt => opt.sort().join() === strKey);
-                if (!exists) wrongOptions.push(attempt);
-            }
-        }
-
-        // 3. Сборка
+        // Собираем опции
         const options = [
             { id: 'correct', factors: correctFactors },
-            { id: 'wrong1', factors: wrongOptions[0] },
-            { id: 'wrong2', factors: wrongOptions[1] }
+            { id: 'wrong', factors: wrongFactors1 },
+            { id: 'wrong', factors: wrongFactors2 }
         ];
 
         shuffleArray(options);
 
-        const labels = ['a', 'b', 'c'];
+        // --- ФОРМИРОВАНИЕ ТЕКСТА ---
         let correctLetter = '';
+        const letters = ['a', 'b', 'c'];
         
-        // --- ИЗМЕНЕНИЕ ЗДЕСЬ: используем "=" вместо ")" ---
-        const latexLines = options.map((opt, index) => {
-            const letter = labels[index];
-            if (opt.id === 'correct') correctLetter = letter;
-            
-            return `$$${letter} = ${formatFactorsRaw(opt.factors)}$$`;
+        const lines = options.map((opt, index) => {
+            const letter = letters[index];
+            if (opt.id === 'correct') {
+                correctLetter = letter;
+            }
+            const factorsStr = opt.factors.join(" \\cdot ");
+            return `$$${letter} = ${factorsStr}$$`;
         });
 
         return {
-            variables: { 
-                divNumber, 
-                correctLetter 
-            },
-            problemText: `Ниже записаны три числа в виде произведения простых множителей.
-            Какое из этих чисел кратно числу ${divNumber}?<br>
-            ${latexLines.join("")} <br>
-            (В ответе запишите только букву: $a$, $b$ или $c$.)`
+            variables: { correctLetter, targetNumber },
+            problemText: `Ниже записаны три числа в виде произведения простых множителей. Какое из этих чисел кратно числу ${targetNumber}?<br>
+            ${lines.join("")}
+            <br>(В ответе запишите только букву: $a$, $b$ или $c$.)`,
         };
     },
 
@@ -425,11 +328,17 @@
 
     check: function(userAnswer, vars) {
         if (!userAnswer) return false;
-        let clean = userAnswer.toString().toLowerCase().trim();
-        clean = clean.replace("а", "a").replace("в", "b").replace("с", "c");
-        const match = clean.match(/^[abc]/);
-        if (!match) return false;
-        return match[0] === vars.correctLetter;
+        const cleanInput = userAnswer.toString().trim().toLowerCase();
+        
+        const map = {
+            'а': 'a',
+            'б': 'b',
+            'с': 'c',
+            'в': 'b'
+        };
+        
+        const normalizedInput = map[cleanInput] || cleanInput;
+        return normalizedInput === vars.correctLetter;
     }
 },
 
@@ -483,7 +392,7 @@
             const selected = getRandomEl(validOptions);
             
             answer = selected.ans;
-            problemText = `Сколько существует натуральных чисел, меньших ${limit}, которые кратны <b>${selected.k}</b>?`;
+            problemText = `Сколько существует натуральных чисел, меньших ${limit}, которые кратны ${selected.k}?`;
 
         } else {
             // --- СЦЕНАРИЙ 2: "Сколько трёхзначных чисел..." ---
@@ -527,24 +436,20 @@
 {
     type: " ",
     number: "5count21",
-    tags: ["5_класс", "кратные"],
+    tags: ["5_класс", "кратные", "периодичность_остатка"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
 
-        // 1. Выбираем делитель (Base)
-        const base = getRandomEl([11, 13, 17, 19]);
+        // 1. Делитель от 11 до 19, исключая 15
+        const base = getRandomEl([11, 12, 13, 14, 16, 17, 18, 19]);
 
-        // 2. Длина ряда чисел (6-8 штук)
+        // 2. Длина ряда
         const length = getRandomInt(6, 8);
-
-        // 3. Старт последовательности
         const startMultiplier = 10;
 
         let numbers = [];
         let wrongNumber = 0;
-        
-        // 4. Выбираем позицию ошибки
         const wrongIndex = getRandomInt(3, length - 1);
 
         for (let i = 0; i < length; i++) {
@@ -552,8 +457,10 @@
             let val = base * currentMultiplier;
 
             if (i === wrongIndex) {
-                // Ломаем число: +1 или -1
-                const shift = Math.random() > 0.5 ? 1 : -1;
+                // ОПРЕДЕЛЯЕМ ШАГ: 2 для четных, 1 для нечетных
+                const step = (base % 2 === 0) ? 2 : 1;
+                const shift = Math.random() > 0.5 ? step : -step;
+                
                 val += shift;
                 wrongNumber = val;
             }
@@ -561,16 +468,14 @@
             numbers.push(val);
         }
 
-        // Формируем строку чисел
         const listString = numbers.join(", ");
 
         return {
             variables: { 
                 base, 
                 wrongNumber,
-                listString // ДОБАВЛЕНО: передаем строку в переменные
+                listString 
             },
-            // ИСПРАВЛЕНО: добавлена сама последовательность в текст задачи
             problemText: `В строку выписаны числа: ${listString}.<br>
             Все они, кроме одного, кратны ${base}. Найдите и запишите число, которое не кратно ${base}.`
         };
@@ -591,171 +496,696 @@
 
 {
     type: " ",
-    number: "5count17",
-    tags: ["5_класс", "НОД", "разложение_на_множители"],
+    number: "5count20",
+    tags: ["5_класс", "НОД"],
     generate: function() {
         const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+        
+        const fillerPrimes = [2, 3, 5];
+        const extraPrimesPool = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
+        const forbiddenGCDs = [49, 77, 91, 119, 133]; 
 
-        const shuffleArray = (array) => {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        };
-
-        const formatFactorsToLatex = (factors) => {
+        // --- ФОРМАТИРОВАНИЕ ---
+        const formatToPowers = (factors) => {
             const counts = {};
-            factors.forEach(x => { counts[x] = (counts[x] || 0) + 1; });
-            const unique = Object.keys(counts).map(Number).sort((a, b) => a - b);
-            return unique.map(base => {
-                const deg = counts[base];
-                return deg > 1 ? `${base}^{${deg}}` : `${base}`;
-            }).join(" \\cdot ");
+            factors.forEach(x => counts[x] = (counts[x] || 0) + 1);
+            const bases = Object.keys(counts).map(Number).sort((a, b) => a - b);
+            return bases.map(base => {
+                const power = counts[base];
+                return power > 1 ? `${base}<sup>${power}</sup>` : `${base}`;
+            }).join(' · ');
         };
 
-        // Хелпер: произведение массива
-        const getProd = (arr) => arr.reduce((a, b) => a * b, 1);
+        const formatToExpanded = (factors) => {
+            return [...factors].sort((a, b) => a - b).join(' · ');
+        };
 
-        // ==========================================
-        // ШАГ 1: Генерация ядра НОД (соблюдая условия)
-        // ==========================================
-        let gcdFactors = [];
-        const scenario = Math.random(); 
+        const getCounts = (arr) => {
+            const counts = {};
+            arr.forEach(x => counts[x] = (counts[x] || 0) + 1);
+            return counts;
+        };
 
-        if (scenario < 0.25) {
-            // --- СЦЕНАРИЙ 1: Высокая степень (3 или 4) ---
-            // База: 2 (степени 3,4,5,6) или 3 (степень 3). 
-            // 3^4 = 81 (>70), так что для тройки только куб.
-            const base = Math.random() > 0.3 ? 2 : 3;
-            let exponent = 3; 
-            
-            if (base === 2) {
-                // Для двойки допустимы степени 3 (8), 4 (16), 5 (32), 6 (64).
-                // Но в условии просили "3 или 4". Ок, ограничимся ими.
-                exponent = getRandomEl([3, 4]);
-            }
-            
-            // Заполняем массив
-            gcdFactors = Array(exponent).fill(base);
+        // --- ГЕНЕРАТОР БАЗЫ ---
+        const getBaseFactors = (minF, maxF) => {
+            let attempts = 0;
+            while (attempts < 500) {
+                attempts++;
+                let f = [];
+                // Стартовые наборы
+                const specialOptions = [
+                    [7], [7, 7], [11], [13], [17], [19], 
+                    [2, 2, 2], [2, 2, 2, 2], [3, 3, 3]
+                ];
+                const startSet = specialOptions[getRandomInt(0, specialOptions.length - 1)];
+                f.push(...startSet);
 
-        } else if (scenario < 0.75) {
-            // --- СЦЕНАРИЙ 2: Квадрат (степень 2) ---
-            // 50% вероятность
-            // Базы: 2, 3, 5, 7 (7^2=49, ок).
-            const base = getRandomEl([2, 3, 5, 7]);
-            gcdFactors = [base, base];
-
-        } else {
-            // --- СЦЕНАРИЙ 3: Линейный (все степени 1) ---
-            // Оставшиеся 25%
-            const startP = getRandomEl([2, 3, 5, 7, 11, 13]);
-            gcdFactors = [startP];
-        }
-
-        // ==========================================
-        // ШАГ 2: Дополнение НОД (до 3-х множителей, <= 70)
-        // ==========================================
-        // Пытаемся добавить еще множители, пока не превысим 70 и не превысим длину 3
-        const primes = [2, 3, 5, 7, 11, 13, 17, 19];
-        
-        let attempts = 0;
-        while (gcdFactors.length < 3 && attempts < 10) {
-            attempts++;
-            const p = getRandomEl(primes);
-            const currentVal = getProd(gcdFactors);
-            
-            if (currentVal * p <= 70) {
-                gcdFactors.push(p);
-            }
-        }
-
-        const gcdVal = getProd(gcdFactors);
-
-        // ==========================================
-        // ШАГ 3: Генерация чисел a и b
-        // ==========================================
-        // a = НОД * k1
-        // b = НОД * k2
-        // k1 и k2 должны быть взаимно простыми.
-        
-        // Генерируем добавки в виде простых множителей, чтобы легко вывести LaTeX
-        let extraFactorsA = [];
-        let extraFactorsB = [];
-
-        // Выбираем случайные простые добавки
-        // Набор A
-        extraFactorsA.push(getRandomEl([2, 3, 5]));
-        if (Math.random() > 0.5) extraFactorsA.push(getRandomEl([2, 3, 7]));
-
-        // Набор B (следим, чтобы не пересекался с A по составу, чтобы не увеличить НОД)
-        // Самый простой способ: набрать B, проверить общие, если есть - заменить.
-        // Но проще генерировать B из тех, которых нет в A (или аккуратно подбирать).
-        
-        // Для простоты: возьмем два случайных числа k1, k2, проверим gcd(k1,k2)==1
-        // и потом разложим их на множители.
-        
-        const gcdFunc = (x, y) => (!y ? x : gcdFunc(y, x % y));
-        
-        let k1, k2;
-        do {
-            k1 = getRandomInt(2, 12); // Не очень большие, чтобы пример не был монструозным
-            k2 = getRandomInt(2, 12);
-        } while (k1 === k2 || gcdFunc(k1, k2) !== 1);
-
-        // Функция разложения числа на простые множители
-        const getPrimeFactors = (n) => {
-            const factors = [];
-            let d = 2;
-            let temp = n;
-            while (d * d <= temp) {
-                while (temp % d === 0) {
-                    factors.push(d);
-                    temp /= d;
+                const targetCount = getRandomInt(minF, maxF);
+                while (f.length < targetCount) {
+                    f.push(fillerPrimes[getRandomInt(0, fillerPrimes.length - 1)]);
                 }
-                d++;
+
+                const val = f.reduce((acc, curr) => acc * curr, 1);
+                if (val > 1000) continue;
+                if (val > 400 && val % 100 !== 0) continue;
+                return f;
             }
-            if (temp > 1) factors.push(temp);
-            return factors;
+            return null;
         };
 
-        extraFactorsA = getPrimeFactors(k1);
-        extraFactorsB = getPrimeFactors(k2);
-
-        // Сборка итоговых массивов
-        const factorsA = [...gcdFactors, ...extraFactorsA];
-        const factorsB = [...gcdFactors, ...extraFactorsB];
-
-        // ==========================================
-        // ШАГ 4: Форматирование
-        // ==========================================
-        // Перемешиваем множители перед выводом
-        const displayA = formatFactorsToLatex(shuffleArray([...factorsA]));
-        const displayB = formatFactorsToLatex(shuffleArray([...factorsB]));
-
-        return {
-            variables: { 
-                gcdVal, 
-                answer: gcdVal 
-            },
-            problemText: `Найдите наибольший общий делитель (НОД) чисел $a$ и $b$:
-            $$a = ${displayA}$$
-            $$b = ${displayB}$$`
+        const calculateGCDFromFactors = (arrA, arrB) => {
+            let mapA = {};
+            arrA.forEach(p => mapA[p] = (mapA[p] || 0) + 1);
+            let common = []; 
+            let uniquePrimes = [...new Set([...arrA, ...arrB])]; 
+            
+            uniquePrimes.forEach(p => {
+                const countA = mapA[p] || 0;
+                const countB = arrB.filter(x => x === p).length;
+                const minCount = Math.min(countA, countB);
+                for (let k = 0; k < minCount; k++) common.push(p);
+            });
+            return { 
+                value: common.reduce((acc, x) => acc * x, 1), 
+                factors: common 
+            };
         };
+
+        // --- ОСНОВНОЙ ЦИКЛ ---
+        let attemptsMain = 0;
+        while (attemptsMain < 10000) { // Увеличен лимит попыток для сложных условий
+            attemptsMain++;
+            
+            // 1. Генерация базы
+            // Для a чуть увеличим кол-во множителей, чтобы повысить шанс на степени
+            let factorsA = getBaseFactors(4, 7); 
+            let factorsB = getBaseFactors(3, 5);
+            if (!factorsA || !factorsB) continue;
+
+            const baseGCDInfo = calculateGCDFromFactors(factorsA, factorsB);
+            const baseGCD = baseGCDInfo.value;
+            const valA = factorsA.reduce((a, b) => a * b, 1);
+            const valB = factorsB.reduce((a, b) => a * b, 1);
+
+            if (baseGCD === valA || baseGCD === valB) continue;
+            if (forbiddenGCDs.includes(baseGCD)) continue;
+            if (baseGCDInfo.factors.length < 2 || baseGCDInfo.factors.length > 4) continue;
+
+            // 2. Добавление "шума"
+            const tryAddExtra = () => {
+                let tempA = [...factorsA];
+                let tempB = [...factorsB];
+                // Добавляем по 2-3 множителя
+                const countAdd = 2; 
+                for(let i=0; i<countAdd; i++) tempA.push(extraPrimesPool[getRandomInt(0, extraPrimesPool.length-1)]);
+                for(let i=0; i<countAdd; i++) tempB.push(extraPrimesPool[getRandomInt(0, extraPrimesPool.length-1)]);
+                return { newA: tempA, newB: tempB };
+            };
+
+            let foundExtension = false;
+            let finalA = [], finalB = [];
+
+            for (let k = 0; k < 20; k++) {
+                const { newA, newB } = tryAddExtra();
+                const newGCDInfo = calculateGCDFromFactors(newA, newB);
+                if (newGCDInfo.value === baseGCD) {
+                    finalA = newA;
+                    finalB = newB;
+                    foundExtension = true;
+                    break;
+                }
+            }
+            if (!foundExtension) continue;
+
+            // --- БЛОК ПРОВЕРОК ---
+
+            const countsA = getCounts(finalA);
+            const countsB = getCounts(finalB);
+            const countsGCD = getCounts(baseGCDInfo.factors);
+
+            // ПРОВЕРКА 1: Максимальные степени (1..5)
+            const maxPowerAllowed = 5;
+            const checkMaxPowers = (counts) => Object.values(counts).every(c => c <= maxPowerAllowed);
+            if (!checkMaxPowers(countsA) || !checkMaxPowers(countsB)) continue;
+
+            // ПРОВЕРКА 2: Ограничения степеней в НОД
+            let gcdPowersValid = true;
+            for (let pStr in countsGCD) {
+                const p = parseInt(pStr, 10);
+                const pow = countsGCD[p];
+                if ((p === 2 || p === 3) && pow > 3) gcdPowersValid = false;
+                else if (p === 5 && pow > 2) gcdPowersValid = false;
+                else if (p >= 7 && pow > 1) gcdPowersValid = false;
+            }
+            if (!gcdPowersValid) continue;
+
+            // ПРОВЕРКА 3: Разные степени вхождения одного и того же множителя
+            let hasDifferentPowers = false;
+            for (let pStr in countsGCD) {
+                const p = parseInt(pStr, 10);
+                if (countsA[p] !== countsB[p]) {
+                    hasDifferentPowers = true;
+                    break;
+                }
+            }
+            if (!hasDifferentPowers) continue;
+
+            // ПРОВЕРКА 4: Сложность НОД (не только минимумы)
+            const minA = Math.min(...finalA);
+            const minB = Math.min(...finalB);
+            const gcdFactors = baseGCDInfo.factors;
+            let notOnlyMinPrimes = false;
+            for (let p of gcdFactors) {
+                if (p > minA || p > minB) {
+                    notOnlyMinPrimes = true;
+                    break;
+                }
+            }
+            if (!notOnlyMinPrimes) continue;
+
+            // === НОВОЕ УСЛОВИЕ ДЛЯ A ===
+            // В a ровно 2 или 3 числа входят в степени, не равной 1
+            let basesWithPowerGt1 = 0;
+            for (let p in countsA) {
+                if (countsA[p] > 1) basesWithPowerGt1++;
+            }
+            if (basesWithPowerGt1 < 2 || basesWithPowerGt1 > 3) continue;
+
+
+            // ПРОВЕРКА 5: Формат и дубликаты
+            const showAAsPowers = Math.random() < 0.5;
+            const checkDuplicates = (arr) => new Set(arr).size !== arr.length;
+            
+            if (showAAsPowers) {
+                // B развернуто -> должны быть повторы
+                if (!checkDuplicates(finalB)) continue;
+            } else {
+                // A развернуто -> должны быть повторы
+                // (Это условие почти всегда выполняется из-за проверки выше на 2-3 степени, но оставим для надежности)
+                if (!checkDuplicates(finalA)) continue;
+            }
+
+            // --- ФОРМИРОВАНИЕ ОТВЕТА ---
+            finalA.sort((x, y) => x - y);
+            finalB.sort((x, y) => x - y);
+
+            const strA = showAAsPowers ? formatToPowers(finalA) : formatToExpanded(finalA);
+            const strB = showAAsPowers ? formatToExpanded(finalB) : formatToPowers(finalB);
+
+            return {
+                variables: { 
+                    a_factors: finalA, 
+                    b_factors: finalB, 
+                    gcd: baseGCD 
+                },
+                problemText: `Найдите НОД чисел $a$ и $b$:<br><br>
+$a = ${strA}$<br>
+$b = ${strB}$<br><br>
+В ответ запишите натуральное число.`
+            };
+        }
+        return this.generate();
     },
 
     calculateAnswer: function(vars) {
-        return vars.answer;
+        return vars.gcd;
     },
 
     check: function(userAnswer, vars) {
         if (!userAnswer) return false;
-        // Очистка и парсинг
         const cleanInput = userAnswer.toString().replace(/\s+/g, '');
-        if (/[^0-9]/.test(cleanInput)) return false;
+        const val = parseInt(cleanInput, 10);
+        return val === vars.gcd;
+    }
+},
+
+{
+    type: " ",
+    number: "5count19",
+    tags: ["5_класс", "НОД"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
         
-        return parseInt(cleanInput, 10) === vars.gcdVal;
+        const fillerPrimes = [2, 3, 5];
+        const extraPrimesPool = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
+        const forbiddenGCDs = [49, 77, 91, 119, 133]; 
+
+        // Форматирование в HTML со степенями
+        const formatToPowers = (factors) => {
+            const counts = {};
+            factors.forEach(x => counts[x] = (counts[x] || 0) + 1);
+            const bases = Object.keys(counts).map(Number).sort((a, b) => a - b);
+            return bases.map(base => {
+                const power = counts[base];
+                return power > 1 ? `${base}<sup>${power}</sup>` : `${base}`;
+            }).join(' · ');
+        };
+
+        // Подсчет количества каждого множителя
+        const getCounts = (arr) => {
+            const counts = {};
+            arr.forEach(x => counts[x] = (counts[x] || 0) + 1);
+            return counts;
+        };
+
+        const getBaseFactors = (minF, maxF) => {
+            let attempts = 0;
+            while (attempts < 500) {
+                attempts++;
+                let f = [];
+                const specialOptions = [
+                    [7], [7, 7], [11], [13], [17], [19], 
+                    [2, 2, 2], [2, 2, 2, 2], [3, 3, 3]
+                ];
+                const startSet = specialOptions[getRandomInt(0, specialOptions.length - 1)];
+                f.push(...startSet);
+
+                const targetCount = getRandomInt(minF, maxF);
+                while (f.length < targetCount) {
+                    f.push(fillerPrimes[getRandomInt(0, fillerPrimes.length - 1)]);
+                }
+
+                const val = f.reduce((acc, curr) => acc * curr, 1);
+                if (val > 1000) continue;
+                if (val > 400 && val % 100 !== 0) continue;
+                return f;
+            }
+            return null;
+        };
+
+        const calculateGCDFromFactors = (arrA, arrB) => {
+            let mapA = {};
+            arrA.forEach(p => mapA[p] = (mapA[p] || 0) + 1);
+            let common = []; 
+            let uniquePrimes = [...new Set([...arrA, ...arrB])]; 
+            
+            uniquePrimes.forEach(p => {
+                const countA = mapA[p] || 0;
+                const countB = arrB.filter(x => x === p).length;
+                const minCount = Math.min(countA, countB);
+                for (let k = 0; k < minCount; k++) common.push(p);
+            });
+            return { 
+                value: common.reduce((acc, x) => acc * x, 1), 
+                factors: common 
+            };
+        };
+
+        let attemptsMain = 0;
+        while (attemptsMain < 3000) {
+            attemptsMain++;
+            
+            // 1. База
+            let factorsA = getBaseFactors(3, 5);
+            let factorsB = getBaseFactors(3, 4);
+            if (!factorsA || !factorsB) continue;
+
+            const baseGCDInfo = calculateGCDFromFactors(factorsA, factorsB);
+            const baseGCD = baseGCDInfo.value;
+            const valA = factorsA.reduce((a, b) => a * b, 1);
+            const valB = factorsB.reduce((a, b) => a * b, 1);
+
+            // Фильтры базы
+            if (baseGCD === valA || baseGCD === valB) continue;
+            if (forbiddenGCDs.includes(baseGCD)) continue;
+            if (baseGCDInfo.factors.length < 2 || baseGCDInfo.factors.length > 4) continue;
+
+            // 2. Добавление "шума"
+            const tryAddExtra = () => {
+                let tempA = [...factorsA];
+                let tempB = [...factorsB];
+                // Добавляем по 2 случайных множителя
+                for(let i=0; i<2; i++) tempA.push(extraPrimesPool[getRandomInt(0, extraPrimesPool.length-1)]);
+                for(let i=0; i<2; i++) tempB.push(extraPrimesPool[getRandomInt(0, extraPrimesPool.length-1)]);
+                return { newA: tempA, newB: tempB };
+            };
+
+            let foundExtension = false;
+            let finalA = [], finalB = [];
+
+            for (let k = 0; k < 15; k++) {
+                const { newA, newB } = tryAddExtra();
+                const newGCDInfo = calculateGCDFromFactors(newA, newB);
+                
+                if (newGCDInfo.value === baseGCD) {
+                    finalA = newA;
+                    finalB = newB;
+                    foundExtension = true;
+                    break;
+                }
+            }
+            if (!foundExtension) continue;
+
+            // 3. ПРОВЕРКИ СЛОЖНОСТИ
+
+            // А) Предыдущее условие: не состоит только из минимумов
+            const minA = Math.min(...finalA);
+            const minB = Math.min(...finalB);
+            const gcdFactors = baseGCDInfo.factors;
+            let notOnlyMinPrimes = false;
+            for (let p of gcdFactors) {
+                if (p > minA || p > minB) {
+                    notOnlyMinPrimes = true;
+                    break;
+                }
+            }
+            if (!notOnlyMinPrimes) continue;
+
+            // Б) НОВОЕ УСЛОВИЕ: Разные степени вхождения
+            // Проверяем, есть ли в НОД такой множитель, у которого степень в A не равна степени в B
+            const countsA = getCounts(finalA);
+            const countsB = getCounts(finalB);
+            // Берем уникальные простые множители из НОД
+            const uniqueGCDPrimes = [...new Set(gcdFactors)];
+            
+            let hasDifferentPowers = false;
+            for (let p of uniqueGCDPrimes) {
+                // Если количество в A не равно количеству в B, значит ученику придется выбирать
+                if (countsA[p] !== countsB[p]) {
+                    hasDifferentPowers = true;
+                    break;
+                }
+            }
+            
+            if (!hasDifferentPowers) continue;
+
+            // 4. Формирование ответа
+            const strA = formatToPowers(finalA);
+            const strB = formatToPowers(finalB);
+
+            return {
+                variables: { 
+                    a_factors: finalA, 
+                    b_factors: finalB, 
+                    gcd: baseGCD 
+                },
+                problemText: `Найдите НОД чисел $a$ и $b$:<br><br>
+$a = ${strA}$<br>
+$b = ${strB}$<br><br>
+В ответ запишите натуральное число.`
+            };
+        }
+        return this.generate();
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.gcd;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        const val = parseInt(cleanInput, 10);
+        return val === vars.gcd;
+    }
+},
+
+{
+    type: " ",
+    number: "5count18",
+    tags: ["5_класс", "НОД"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        
+        const fillerPrimes = [2, 3, 5];
+        // Расширенный пул для проверки НОД
+        const allPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
+        // Пул для добавки (до 30)
+        const extraPrimesPool = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
+
+        const forbiddenGCDs = [49, 77, 91, 119, 133]; 
+
+        // Генерация базовых множителей
+        const getBaseFactors = (minF, maxF) => {
+            let attempts = 0;
+            while (attempts < 500) {
+                attempts++;
+                let f = [];
+                
+                const specialOptions = [
+                    [7], [7, 7], [11], [13], [17], [19], 
+                    [2, 2, 2], [2, 2, 2, 2], [3, 3, 3]
+                ];
+                
+                const startSet = specialOptions[getRandomInt(0, specialOptions.length - 1)];
+                f.push(...startSet);
+
+                const targetCount = getRandomInt(minF, maxF);
+                while (f.length < targetCount) {
+                    f.push(fillerPrimes[getRandomInt(0, fillerPrimes.length - 1)]);
+                }
+
+                const val = f.reduce((acc, curr) => acc * curr, 1);
+
+                if (val > 1000) continue;
+                if (val > 400 && val % 100 !== 0) continue;
+
+                return f;
+            }
+            return null;
+        };
+
+        // Вспомогательная: НОД по массивам
+        const calculateGCDFromFactors = (arrA, arrB) => {
+            let mapA = {};
+            arrA.forEach(p => mapA[p] = (mapA[p] || 0) + 1);
+            
+            let common = []; // Массив простых множителей, входящих в НОД
+            let uniquePrimes = [...new Set([...arrA, ...arrB])]; // Чтобы пройтись по всем возможным
+            
+            uniquePrimes.forEach(p => {
+                const countA = mapA[p] || 0;
+                const countB = arrB.filter(x => x === p).length;
+                const minCount = Math.min(countA, countB);
+                for (let k = 0; k < minCount; k++) common.push(p);
+            });
+            
+            return { 
+                value: common.reduce((acc, x) => acc * x, 1), 
+                factors: common 
+            };
+        };
+
+        let attemptsMain = 0;
+        while (attemptsMain < 3000) {
+            attemptsMain++;
+            
+            // 1. Генерируем базу
+            let factorsA = getBaseFactors(3, 5);
+            let factorsB = getBaseFactors(3, 4);
+            
+            if (!factorsA || !factorsB) continue;
+
+            const baseGCDInfo = calculateGCDFromFactors(factorsA, factorsB);
+            const baseGCD = baseGCDInfo.value;
+            const valA = factorsA.reduce((a, b) => a * b, 1);
+            const valB = factorsB.reduce((a, b) => a * b, 1);
+
+            // Проверки базы
+            if (baseGCD === valA || baseGCD === valB) continue;
+            if (forbiddenGCDs.includes(baseGCD)) continue;
+            
+            // Проверка: 2-4 множителя в НОД
+            if (baseGCDInfo.factors.length < 2 || baseGCDInfo.factors.length > 4) continue;
+
+            // 2. Добавляем "шум" (по 2 множителя)
+            const tryAddExtra = () => {
+                let tempA = [...factorsA];
+                let tempB = [...factorsB];
+                
+                for(let i=0; i<2; i++) tempA.push(extraPrimesPool[getRandomInt(0, extraPrimesPool.length-1)]);
+                for(let i=0; i<2; i++) tempB.push(extraPrimesPool[getRandomInt(0, extraPrimesPool.length-1)]);
+                
+                return { newA: tempA, newB: tempB };
+            };
+
+            let foundExtension = false;
+            let finalA = [], finalB = [];
+
+            for (let k = 0; k < 15; k++) {
+                const { newA, newB } = tryAddExtra();
+                const newGCDInfo = calculateGCDFromFactors(newA, newB);
+                
+                // НОД должен сохраниться
+                if (newGCDInfo.value === baseGCD) {
+                    finalA = newA;
+                    finalB = newB;
+                    foundExtension = true;
+                    break;
+                }
+            }
+
+            if (!foundExtension) continue;
+
+            // 3. ФИНАЛЬНАЯ ПРОВЕРКА ПО ВАШЕМУ НОВОМУ УСЛОВИЮ
+            // НОД не должен состоять только из самых маленьких множителей a и b.
+            
+            const minA = Math.min(...finalA);
+            const minB = Math.min(...finalB);
+            
+            // Нам нужны именно множители НОДа (они те же, что у baseGCDInfo, так как НОД не менялся)
+            const gcdFactors = baseGCDInfo.factors;
+
+            // Условие: "Хотя бы в одном числе В НОД должен входить не наименьший простой множитель"
+            // То есть существует такой множитель p в составе НОД, что (p > minA) ИЛИ (p > minB).
+            
+            let complexityCheckPassed = false;
+            for (let p of gcdFactors) {
+                if (p > minA || p > minB) {
+                    complexityCheckPassed = true;
+                    break;
+                }
+            }
+
+            if (!complexityCheckPassed) continue; // Если НОД состоит только из минимумов, пропускаем
+
+            // Сортировка и вывод
+            finalA.sort((x, y) => x - y);
+            finalB.sort((x, y) => x - y);
+
+            const strA = finalA.join(' · ');
+            const strB = finalB.join(' · ');
+
+            return {
+                variables: { 
+                    a_factors: finalA, 
+                    b_factors: finalB, 
+                    gcd: baseGCD 
+                },
+                problemText: `Найдите НОД чисел a и b: <br><br>
+a = ${strA} <br><br>
+b = ${strB} <br><br> В ответ запишите натуральное число.`
+            };
+        }
+        return this.generate();
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.gcd;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        const val = parseInt(cleanInput, 10);
+        return val === vars.gcd;
+    }
+},
+
+{
+    type: " ",
+    number: "5count17",
+    tags: ["5_класс", "НОД"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        
+        // Базовые простые для заполнения "пустот" (только они безопасны для добавления)
+        const fillerPrimes = [2, 3, 5];
+        // Для подсчета множителей в НОД нам нужен полный список возможных простых
+        const allPrimes = [2, 3, 5, 7, 11, 13, 17, 19];
+
+        // Запрещенные значения НОД
+        const forbiddenGCDs = [49, 77, 91, 119, 133]; 
+
+        const getFactors = (minF, maxF) => {
+            let attempts = 0;
+            while (attempts < 500) {
+                attempts++;
+                let f = [];
+                
+                // 1. Выбираем СТРОГО ОДНУ обязательную базу
+                const specialOptions = [
+                    [7],           // Либо 7
+                    [7, 7],        // Либо 7*7
+                    [11],          // Либо 11
+                    [13],          // Либо 13
+                    [17],          // Либо 17
+                    [19],          // Либо 19
+                    [2, 2, 2],     // Либо 2^3
+                    [2, 2, 2, 2],  // Либо 2^4
+                    [3, 3, 3]      // Либо 3^3
+                ];
+                
+                const startSet = specialOptions[getRandomInt(0, specialOptions.length - 1)];
+                f.push(...startSet);
+
+                // 2. Добиваем количество множителей ТОЛЬКО числами 2, 3, 5
+                // Это гарантирует, что мы случайно не добавим 13 к 11 или 7 к 19
+                const targetCount = getRandomInt(minF, maxF);
+                while (f.length < targetCount) {
+                    f.push(fillerPrimes[getRandomInt(0, fillerPrimes.length - 1)]);
+                }
+
+                const val = f.reduce((acc, curr) => acc * curr, 1);
+
+                // 3. Проверки значений
+                if (val > 1000) continue;
+                if (val > 400 && val % 100 !== 0) continue;
+
+                return { val, factors: f };
+            }
+            return null;
+        };
+
+        let attemptsMain = 0;
+        while (attemptsMain < 2000) {
+            attemptsMain++;
+            
+            const aObj = getFactors(3, 5); 
+            const bObj = getFactors(3, 4); 
+            
+            if (!aObj || !bObj) continue;
+
+            const a = aObj.val;
+            const b = bObj.val;
+
+            // Функция НОД
+            const gcdFunc = (x, y) => y === 0 ? x : gcdFunc(y, x % y);
+            const currentGCD = gcdFunc(a, b);
+
+            // --- БЛОК ПРОВЕРОК НОД ---
+
+            // 1. НОД не равен самим числам
+            if (currentGCD === a || currentGCD === b) continue;
+
+            // 2. НОД не равен запрещенным комбинациям (7*7, 7*11 и т.д.)
+            if (forbiddenGCDs.includes(currentGCD)) continue;
+
+            // 3. Считаем количество простых множителей в НОД
+            const getPrimeFactorsCount = (num) => {
+                let count = 0;
+                let d = num;
+                for (let p of allPrimes) {
+                    while (d % p === 0) {
+                        count++;
+                        d /= p;
+                    }
+                }
+                return count;
+            };
+
+            const gcdFactorsCount = getPrimeFactorsCount(currentGCD);
+
+            // 4. В НОД должно быть от 2 до 4 простых множителей
+            if (gcdFactorsCount >= 2 && gcdFactorsCount <= 4) {
+                return {
+                    variables: { a, b, gcd: currentGCD },
+                    problemText: `Найдите наибольший общий делитель (НОД) чисел ${a} и ${b}.`
+                };
+            }
+        }
+        return this.generate(); 
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.gcd;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        const val = parseInt(cleanInput, 10);
+        return val === vars.gcd;
     }
 },
 
