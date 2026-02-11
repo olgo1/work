@@ -1,22 +1,2428 @@
+// 5count50 - текстовая задача, поиск количества пар делителей (детей делят на команды)
+// 5count49 - текстовая задача, поиск количества пар делителей (предметы делят между детьми)
+// 5count48 - текстовая задача, поиск количества пар делителей (площадь прямоугольника)
+// 5count47 - текстовая задача, НОК, чтение книги
+// 5count46 - текстовая задача, НОД, напиток в бидоне
+// 5count45 - текстовая задача, НОК, напиток в бидоне
+// 5count44 - текстовая задача, НОД, ученики на регате
+// 5count43 - текстовая задача, НОК, ученики на регате
+// 5count42 - текстовая задача, НОК, труба
+// 5count41 - текстовая задача, НОД, труба
+// 5count40 - текстовая задача, НОД, фрукты
+// 5count39 - текстовая задача, НОК, фрукты
+// 5count38 - текстовая задача, НОД, квадраты
+// 5count37 - текстовая задача, НОК, квадраты
+// 5count36 - текстовая задача, НОК, отрезки
+// 5count35 - текстовая задача, НОД, отрезки
+// 5count34 - текстовая задача, НОК, тетради
+// 5count33 - текстовая задача, НОД, тетради
+// 5count32 - текстовая задача, НОК, сладости
+// 5count31 - текстовая задача, НОД, сладости
+// 5count30 - найти НОД двух чисел среди данного набора 
+// 5count29 - найти НОД трёх чисел, записанных в виде произведения степеней
+// 5count28 - найти НОД трёх чисел, 2 из которых записаны в виде разложения на простые множители, а третье - по степеням
+// [проверено] 5count27 - найти НОД трёх чисел, записанных в виде разложения на простые множители
+// [проверено] 5count26 - найти НОД двух чисел, одно записано в виде разложения на простые множители (со степенями), второе в десятичном виде
 // [проверено] 5count25 - найти частное a : b. Число a записано в виде произведения степеней простых множителей, b - в виде произведения простых множителей.
 // [проверено] 5count24 - найти неизвестный простой множитель в разложении a, если известно, что a кратно b (b записано в десятичной системе счисления)
 // [проверено] 5count23 - какое из чисел a, b, c кратно числу d? (a, b, c записаны в виде произведения, число d - в десятичном виде)
 // [проверено] 5count22 - найти, сколько чисел из данного диапазона кратны данному числу
 // [проверено] 5count21 - среди ряда чисел выбрать то, которое не кратно данному (все числа записаны в десятичном виде). Основано на периодичности остатка
-// (нет) 5count20 - Найти НОД трёх чисел, записанных в десятичной системе счисления
-// (нет) 5count19 - найти НОД двух чисел, записанных в десятичной системе счисления
-// (нет) 5count18 - найти НОД трёх чисел, записанных в виде произведения простых множителей
 // [проверено] 5count20 - найти НОД двух чисел, записанных в виде произведения простых (одно со степенями, второе без степеней)
-// [проверено] 5count19 - найти НОД двух чисел, записанных в виде разложения на простые множители
+// [проверено] 5count19 - найти НОД двух чисел, записанных в виде разложения на простые множители (со степенями)
 // [проверено] 5count18 - найти НОД двух чисел, записанных в виде разложения на простые множители (без степеней)
-// [проверено] 5count17 -  найти НОД двух чисел, записанных в виде произведения простых множителей
-// 5count16 - найти общие делители трёх чисел, записанных в виде разложение на простые, со степенями
-// 5count15 - найти общие делители двух чисел, записанных в дес. системе счисления
+// [проверено] 5count17 -  найти НОД двух чисел, записанных в виде десятичных чисел
+// [проверено. сложно!] 5count16 - найти общие делители трёх чисел, записанных в виде разложение на простые, со степенями
+// [проверено] 5count15 - найти общие делители двух чисел, записанных в дес. системе счисления
 // 5count14 - найти общие делители чисел, записанных в виде произведения простых множителей (возможно, со степенями)
 //[проверено] 5count13 - найти все делители числа, разложенного на простые множители (разложение записано по степеням)
 // [проверено]  5count12 - найти все делители числа, разложенного на простые множители (разложение записано в виде произведения)
 // [проверено] 5count11 - найти все делители числа
 // [проверено] 5count10 - разложить число на простые множители
+{
+    type: " ",
+    number: "5count50",
+    tags: ["5_класс", "делители", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        
+        const getAllDivisors = (n) => {
+            let divs = [];
+            for (let i = 1; i <= n; i++) {
+                if (n % i === 0) divs.push(i);
+            }
+            return divs;
+        };
+
+        let attempts = 0;
+        while (attempts < 10000) {
+            attempts++;
+            
+            // Выбираем n из подходящих чисел (не кратных 10, чтобы k не было делителем)
+            const possibleN = [72, 84, 96, 108, 126, 132, 144, 156, 168];
+            const N = possibleN[getRandomInt(0, possibleN.length - 1)];
+            const allDivs = getAllDivisors(N);
+            
+            // Нам нужно 4, 5 или 6 ответов.
+            // При этом ответы (количество детей в команде) должны быть <= 15.
+            const smallDivs = allDivs.filter(d => d <= 15);
+            
+            const targetCount = getRandomInt(4, 6);
+            if (smallDivs.length < targetCount) continue;
+
+            // dMaxValid — это самый большой подходящий ответ (кол-во человек в команде).
+            const dMaxValid = smallDivs[targetCount - 1]; 
+            // dFirstInvalid — следующий делитель n, который уже не должен подходить.
+            const dFirstInvalid = allDivs[allDivs.indexOf(dMaxValid) + 1];
+            if (!dFirstInvalid) continue;
+
+            // Находим границы для k (количество команд):
+            // k <= N / d_max_valid  И  k > N / d_first_invalid
+            const lowerBound = N / dFirstInvalid;
+            const upperBound = N / dMaxValid;
+
+            // Ищем круглое число k, которое не делит N
+            let possibleLimits = [];
+            for (let k = 10; k <= 200; k += 10) {
+                if (k > lowerBound && k <= upperBound && N % k !== 0) {
+                    possibleLimits.push(k);
+                }
+            }
+
+            if (possibleLimits.length === 0) continue;
+
+            const limit = possibleLimits[getRandomInt(0, possibleLimits.length - 1)];
+            const resultDivs = smallDivs.slice(0, targetCount);
+
+            let question = `${N} детей нужно разделить на команды так, чтобы в каждой команде было одинаковое количество человек, причём в команде должно быть не больше 15 человек. Сколько детей может быть в одной команде? Перечислите все возможные варианты через запятую.`;
+
+            return {
+                variables: { 
+                    ans: resultDivs.join(", "), 
+                    total: N, 
+                    lim: limit 
+                },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '').toLowerCase();
+        const cleanAns = vars.ans.toString().replace(/\s+/g, '').toLowerCase();
+        return cleanInput === cleanAns;
+    }
+},
+
+{
+    type: " ",
+    number: "5count49",
+    tags: ["5_класс", "делители", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        
+        const getAllDivisors = (n) => {
+            let divs = [];
+            for (let i = 1; i <= n; i++) {
+                if (n % i === 0) divs.push(i);
+            }
+            return divs;
+        };
+
+        const itemsData = ["яблок", "конфет", "карандашей", "наклеек", "пряников"];
+
+        let attempts = 0;
+        while (attempts < 5000) {
+            attempts++;
+            
+            // Числа с большим количеством делителей
+            const possibleN = [60, 72, 80, 84, 90, 96, 100, 108, 120, 144, 150, 180];
+            const N = possibleN[getRandomInt(0, possibleN.length - 1)];
+            const allDivs = getAllDivisors(N);
+            
+            // Нам нужно 4, 5 или 6 ответов.
+            // Это значит, что нам нужны делители x такие, что x = N/D и D >= limit.
+            // Это эквивалентно x <= N/limit.
+            const targetCount = getRandomInt(4, 6);
+            if (allDivs.length <= targetCount) continue;
+
+            // Находим диапазон для limit:
+            // d_count <= N/limit < d_{count+1}
+            // Отсюда: N/d_{count+1} < limit <= N/d_count
+            const dLow = allDivs[targetCount - 1]; // d_count
+            const dHigh = allDivs[targetCount];   // d_{count+1}
+            
+            const lowerBound = N / dHigh;
+            const upperBound = N / dLow;
+
+            // Ищем кратное 10 в интервале (lowerBound, upperBound]
+            let possibleLimits = [];
+            for (let l = Math.floor(lowerBound / 10) * 10; l <= upperBound; l += 10) {
+                if (l > lowerBound && l <= upperBound) {
+                    possibleLimits.push(l);
+                }
+            }
+
+            if (possibleLimits.length === 0) continue;
+
+            // Стараемся выбрать limit, который не является делителем N
+            let limit = possibleLimits.find(l => N % l !== 0) || possibleLimits[0];
+
+            const itemWord = itemsData[getRandomInt(0, itemsData.length - 1)];
+            const resultDivs = allDivs.slice(0, targetCount);
+
+            let question = `${N} ${itemWord} разделили поровну между несколькими детьми. По сколько ${itemWord} мог получить каждый, если детей было не меньше ${limit}? Перечислите все возможные варианты через запятую.`;
+
+            return {
+                variables: { 
+                    ans: resultDivs.join(", "), 
+                    total: N, 
+                    lim: limit 
+                },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '').toLowerCase();
+        const cleanAns = vars.ans.toString().replace(/\s+/g, '').toLowerCase();
+        return cleanInput === cleanAns;
+    }
+},
+
+{
+    type: " ",
+    number: "5count48",
+    tags: ["5_класс", "делители", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        
+        const getDivisorPairsCount = (n) => {
+            let count = 0;
+            // Идем до корня из n, чтобы найти все пары
+            for (let i = 1; i <= Math.sqrt(n); i++) {
+                if (n % i === 0) {
+                    count++;
+                }
+            }
+            return count;
+        };
+
+        let attempts = 0;
+        while (attempts < 1000) {
+            attempts++;
+            
+            // Выбираем площадь. Диапазон 24-120 обычно дает интересное количество делителей.
+            const S = getRandomInt(24, 120);
+            
+            // Считаем количество возможных пар сторон
+            const answer = getDivisorPairsCount(S);
+            
+            // Пропускаем числа с малым количеством делителей (нужно минимум 3 варианта)
+            if (answer < 3) continue;
+
+            let question = `Площадь прямоугольника равна ${S}, а длины его сторон — целые числа. Сколько различных прямоугольников с такой площадью существует?`;
+
+            return {
+                variables: { ans: answer, area: S },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        return userAnswer.toString().trim() === vars.ans.toString();
+    }
+},
+
+{
+    type: " ",
+    number: "5count47",
+    tags: ["5_класс", "НОК", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        const lcm = (x, y) => (x * y) / gcd(x, y);
+
+        // Список имен из вашего запроса
+        const namesList = [
+            'Саша', 'Аня', 'Маша', 'Соня', 'Давид', 'Серёжа', 
+            'Гриша', 'Даня', 'Егор', 'Миша', 'Алиса', 'Алина', 'Катя', 'Ксюша'
+        ];
+
+        let attempts = 0;
+        while (attempts < 5000) {
+            attempts++;
+            
+            let a = getRandomInt(6, 15);
+            let b = getRandomInt(8, 20);
+            if (a > b) [a, b] = [b, a];
+
+            // Математические фильтры: НОД >= 3, большее не делится на меньшее
+            const currentGCD = gcd(a, b);
+            if (currentGCD < 3 || b % a === 0) continue;
+
+            const resLCM = lcm(a, b);
+            const mode = getRandomInt(1, 2); // 1 - один ответ, 2 - от 2 до 4 ответов
+            
+            let question, answer;
+
+            // Перемешиваем имена и берем два разных
+            const shuffledNames = [...namesList].sort(() => Math.random() - 0.5);
+            const p1 = shuffledNames[0];
+            const p2 = shuffledNames[1];
+
+            if (mode === 1) {
+                // Вариант с одним ответом
+                const targetP = resLCM;
+                if (targetP < 30 || targetP > 250) continue;
+                if (a % 10 === 0 && b % 10 === 0 && targetP % 10 === 0) continue;
+                if (targetP === a * b) continue;
+
+                // Ограничение кратно 10
+                const limit = Math.ceil((targetP + 5) / 10) * 10;
+                
+                let bCount = 0, lcmCount = 0;
+                for (let i = b; i <= limit; i += b) bCount++;
+                for (let i = resLCM; i <= limit; i += resLCM) lcmCount++;
+                
+                // Проверка ловушки и единственности НОК
+                if (lcmCount !== 1 || bCount < 2) continue;
+
+                question = `В книге не более ${limit} страниц. ${p1} прочитала её за ${a} дней, читая одинаковое количество страниц каждый день, а ${p2} — за ${b} дней (также читая одинаковое количество страниц каждый день). Сколько страниц в книге?`;
+                answer = targetP;
+            } else {
+                // Вариант с несколькими ответами (2-4 подходящих числа)
+                const count = getRandomInt(2, 4);
+                const lastTarget = resLCM * count;
+                if (lastTarget > 350) continue;
+
+                const limit = Math.ceil((lastTarget + 5) / 10) * 10;
+                
+                let foundLCMs = [];
+                let bCount = 0;
+                for (let i = 1; i <= limit; i++) {
+                    if (i % b === 0) bCount++;
+                    if (i % resLCM === 0) foundLCMs.push(i);
+                }
+                
+                // Проверка: количество НОК совпадает с задуманным, кратных b больше, чем НОК
+                if (foundLCMs.length !== count || bCount < count + 1) continue;
+
+                question = `В книге не более ${limit} страниц. ${p1} прочитала её за ${a} дней, читая одинаковое количество страниц каждый день, а ${p2} — за ${b} дней (также читая одинаковое количество страниц каждый день). Сколько страниц может быть в книге? Перечислите все возможные варианты через запятую.`;
+                answer = foundLCMs.join(", ");
+            }
+
+            return {
+                variables: { ans: answer },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '').toLowerCase();
+        const cleanAns = vars.ans.toString().replace(/\s+/g, '').toLowerCase();
+        return cleanInput === cleanAns;
+    }
+},
+
+{
+    type: " ",
+    number: "5count46",
+    tags: ["5_класс", "НОД", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        
+        const isComposite = (n) => {
+            if (n < 4) return false;
+            for (let i = 2; i <= Math.sqrt(n); i++) {
+                if (n % i === 0) return true;
+            }
+            return false;
+        };
+
+        const bookData = [
+            { a: 'учебников', b: 'словарей', loc: 'В библиотеку' },
+            { a: 'энциклопедий', b: 'атласов', loc: 'В книжный магазин' },
+            { a: 'детективов', b: 'романов', loc: 'На склад' },
+            { a: 'сказок', b: 'рассказов', loc: 'В школьную библиотеку' }
+        ];
+
+        let attempts = 0;
+        while (attempts < 3000) {
+            attempts++;
+            
+            const resGCD = getRandomInt(6, 18);
+            
+            if (resGCD < 3 || !isComposite(resGCD)) continue;
+
+            const k1 = getRandomInt(2, 9);
+            const k2 = getRandomInt(2, 9);
+            
+            if (k1 === k2 || gcd(k1, k2) !== 1) continue;
+
+            const totalA = resGCD * k1;
+            const totalB = resGCD * k2;
+
+            if (totalA % 10 === 0 && totalB % 10 === 0 && resGCD % 10 === 0) continue;
+            
+            if (totalA > 200 || totalB > 200 || totalA < 24 || totalB < 24) continue;
+
+            const item = bookData[getRandomInt(0, bookData.length - 1)];
+            const mode = getRandomInt(1, 2); 
+            
+            let question = `${item.loc} привезли ${totalA} ${item.a} и ${totalB} ${item.b}. `;
+            question += `Все эти книги нужно разложить в одинаковые пачки так, чтобы в каждой пачке было одинаковое количество книг и книги разных видов не смешивались. `;
+            
+            let answer;
+            if (mode === 1) {
+                question += `Какое наибольшее количество книг может быть в каждой такой пачке?`;
+                answer = resGCD;
+            } else {
+                const choice = getRandomInt(1, 2);
+                if (choice === 1) {
+                    question += `Сколько получится пачек с ${item.a}, если в каждой пачке будет максимально возможное количество книг?`;
+                    answer = k1;
+                } else {
+                    question += `Сколько получится пачек с ${item.b}, если в каждой пачке будет максимально возможное количество книг?`;
+                    answer = k2;
+                }
+            }
+
+            return {
+                variables: { ans: answer },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        return userAnswer.toString().trim() === vars.ans.toString();
+    }
+},
+
+{
+    type: " ",
+    number: "5count45",
+    tags: ["5_класс", "НОД", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        const lcm = (x, y) => (x * y) / gcd(x, y);
+
+        const liquidData = [
+            { nom: 'молоко', gen: 'молока', pron: 'всё это', loc: 'На ферме' },
+            { nom: 'ряженка', gen: 'ряженки', pron: 'всю эту', loc: 'На ферме' },
+            { nom: 'компот', gen: 'компота', pron: 'весь этот', loc: 'На фабрике' },
+            { nom: 'морс', gen: 'морса', pron: 'весь этот', loc: 'На фабрике' },
+            { nom: 'кисель', gen: 'киселя', pron: 'весь этот', loc: 'В столовой' }
+        ];
+
+        let attempts = 0;
+        while (attempts < 5000) {
+            attempts++;
+            
+            let a = getRandomInt(6, 24);
+            let b = getRandomInt(9, 30);
+            if (a > b) [a, b] = [b, a];
+
+            const currentGCD = gcd(a, b);
+            
+            if (currentGCD < 3) continue;
+            if (b % a === 0) continue;
+
+            const resLCM = lcm(a, b);
+            const multiplier = getRandomInt(1, 2);
+            const targetV = resLCM * multiplier;
+
+            if (targetV < 40 || targetV > 360) continue;
+            if (a % 10 === 0 && b % 10 === 0 && targetV % 10 === 0) continue;
+            if (targetV === a * b) continue;
+
+            const trapV = (targetV - b > 0) ? targetV - b : targetV + b;
+            const minBound = Math.min(targetV, trapV);
+            const maxBound = Math.max(targetV, trapV);
+            
+            const lower = minBound - getRandomInt(3, 7);
+            const upper = maxBound + getRandomInt(3, 7);
+
+            let lcmCount = 0;
+            let bCount = 0;
+            for (let i = lower + 1; i < upper; i++) {
+                if (i % resLCM === 0) lcmCount++;
+                if (i % b === 0) bCount++;
+            }
+            if (lcmCount !== 1 || bCount < 2) continue;
+
+            const item = liquidData[getRandomInt(0, liquidData.length - 1)];
+            const mode = getRandomInt(1, 2); 
+            
+            let question = `${item.loc} имеется больше ${lower}, но меньше ${upper} л ${item.gen}. `;
+            question += `Оказалось, что ${item.pron} ${item.nom} можно без остатка разлить и в бидоны по ${a} л, и в бидоны по ${b} л. `;
+            
+            let answer;
+            if (mode === 1) {
+                question += `Сколько литров ${item.gen} в наличии?`;
+                answer = targetV;
+            } else {
+                const choice = getRandomInt(1, 2);
+                const binSize = (choice === 1) ? a : b;
+                question += `Сколько потребуется бидонов вместимостью ${binSize} л, чтобы разлить ${item.pron} ${item.nom}?`;
+                answer = targetV / binSize;
+            }
+
+            return {
+                variables: { ans: answer },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        return userAnswer.toString().trim() === vars.ans.toString();
+    }
+},
+
+{
+    type: " ",
+    number: "5count44",
+    tags: ["5_класс", "НОД", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        
+        const isComposite = (n) => {
+            if (n < 4) return false;
+            for (let i = 2; i <= Math.sqrt(n); i++) {
+                if (n % i === 0) return true;
+            }
+            return false;
+        };
+
+        const events = [
+            { name: "математической регате", prep: "на регату" },
+            { name: "олимпиаду", prep: "на олимпиаду" },
+            { name: "математическом бое", prep: "на бой" },
+            { name: "соревновании", prep: "на соревнование" },
+            { name: "турнире", prep: "на турнир" }
+        ];
+
+        const groups = [
+            { a: "мальчиков", b: "девочек" },
+            { a: "пятиклассников", b: "шестиклассников" },
+            { a: "учеников с Крупской", b: "учеников с Новаторов" }
+        ];
+
+        let attempts = 0;
+        while (attempts < 3000) {
+            attempts++;
+            
+            const resGCD = getRandomInt(4, 16);
+            if (!isComposite(resGCD)) continue;
+
+            const k1 = getRandomInt(2, 9);
+            const k2 = getRandomInt(2, 9);
+            if (k1 === k2 || gcd(k1, k2) !== 1) continue;
+
+            const totalA = resGCD * k1;
+            const totalB = resGCD * k2;
+
+            if (totalA % 10 === 0 && totalB % 10 === 0 && resGCD % 10 === 0) continue;
+            
+            if (totalA > 150 || totalB > 150 || totalA < 20 || totalB < 20) continue;
+
+            const event = events[getRandomInt(0, events.length - 1)];
+            const group = groups[getRandomInt(0, groups.length - 1)];
+            const mode = getRandomInt(1, 2); 
+            
+            let question = `Для участия в ${event.name} собрались ${totalA} ${group.a} и ${totalB} ${group.b}. `;
+            question += `Их нужно разделить на одинаковые команды так, чтобы во всех командах было одинаковое количество ${group.a} и одинаковое количество ${group.b}. `;
+            
+            let answer;
+            if (mode === 1) {
+                question += `Какое наибольшее количество таких команд может получиться?`;
+                answer = resGCD;
+            } else {
+                const choice = getRandomInt(1, 2);
+                if (choice === 1) {
+                    question += `Сколько ${group.a} будет в каждой такой команде, если количество команд максимально возможное?`;
+                    answer = k1;
+                } else {
+                    question += `Сколько ${group.b} будет в каждой такой команде, если количество команд максимально возможное?`;
+                    answer = k2;
+                }
+            }
+
+            return {
+                variables: { ans: answer },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        return userAnswer.toString().trim() === vars.ans.toString();
+    }
+},
+
+{
+    type: " ",
+    number: "5count43",
+    tags: ["5_класс", "НОК", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        const lcm = (x, y) => (x * y) / gcd(x, y);
+
+        const events = [
+            { name: "математическую регату", prep: "на регату" },
+            { name: "олимпиаду", prep: "на олимпиаду" },
+            { name: "математический бой", prep: "на бой" },
+            { name: "соревнование", prep: "на соревнование" },
+            { name: "турнир", prep: "на турнир" }
+        ];
+
+        let attempts = 0;
+        while (attempts < 5000) {
+            attempts++;
+            
+            let a = getRandomInt(6, 12);
+            let b = getRandomInt(8, 15);
+            if (a > b) [a, b] = [b, a];
+
+            if (gcd(a, b) === 1 || b % a === 0) continue;
+
+            const resLCM = lcm(a, b);
+            const multiplier = getRandomInt(1, 3);
+            const targetN = resLCM * multiplier;
+            
+            if (targetN < 40 || targetN > 180) continue;
+
+            if (a % 10 === 0 && b % 10 === 0 && targetN % 10 === 0) continue;
+            if (targetN === a * b) continue;
+
+            const trapN = (Math.random() > 0.5) ? targetN - b : targetN + b;
+            const minBound = Math.min(targetN, trapN);
+            const maxBound = Math.max(targetN, trapN);
+            
+            const lower = minBound - getRandomInt(2, 5);
+            const upper = maxBound + getRandomInt(2, 5);
+
+            let commonMultiplesCount = 0;
+            let bCount = 0;
+            for (let i = lower + 1; i < upper; i++) {
+                if (i % resLCM === 0) commonMultiplesCount++;
+                if (i % b === 0) bCount++;
+            }
+            if (commonMultiplesCount !== 1 || bCount < 2) continue;
+
+            const event = events[getRandomInt(0, events.length - 1)];
+
+            let question = `На ${event.name} пришло больше ${lower}, но меньше ${upper} учеников. `;
+            question += `Оказалось, что их можно разделить и на команды по ${a} человек, и на команды по ${b} человек. `;
+            question += `Сколько учеников пришли ${event.prep}?`;
+
+            return {
+                variables: { ans: targetN },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        return userAnswer.toString().trim() === vars.ans.toString();
+    }
+},
+
+{
+    type: " ",
+    number: "5count42",
+    tags: ["5_класс", "НОК", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        const lcm = (x, y) => (x * y) / gcd(x, y);
+
+        const pluralizeFeet = (n) => {
+            const cases = [2, 0, 1, 1, 1, 2];
+            const titles = ['фут', 'фута', 'футов'];
+            return titles[(n % 100 > 4 && n % 100 < 20) ? 2 : cases[(n % 10 < 5) ? n % 10 : 5]];
+        };
+
+        const unitsData = [
+            { abbr: 'м', isMetric: true },
+            { abbr: 'дм', isMetric: true },
+            { abbr: 'фут', isMetric: false }
+        ];
+
+        let attempts = 0;
+        while (attempts < 3000) {
+            attempts++;
+            
+            const a = getRandomInt(4, 18);
+            const b = getRandomInt(4, 20);
+            const bigger = Math.max(a, b);
+            
+            if (a === b || gcd(a, b) === 1) continue;
+
+            const resLCM = lcm(a, b);
+            const multiplier = getRandomInt(1, 2);
+            const targetL = resLCM * multiplier;
+            
+            if (targetL > 280 || targetL < 20) continue;
+            if (a % 10 === 0 && b % 10 === 0 && targetL % 10 === 0) continue;
+            if (targetL === a * b) continue;
+
+            const unit = unitsData[getRandomInt(0, unitsData.length - 1)];
+            const phrasingType = getRandomInt(1, 2); 
+            
+            let rangeText = "";
+            if (phrasingType === 1) {
+                const trapL = (targetL - bigger > 0) ? targetL - bigger : targetL + bigger;
+                const minB = Math.min(targetL, trapL);
+                const maxB = Math.max(targetL, trapL);
+                
+                const lower = Math.floor((minB - 2) / 10) * 10;
+                const upper = Math.ceil((maxB + 2) / 10) * 10;
+                
+                let bCount = 0, lcmCount = 0;
+                for(let i = lower + 1; i < upper; i++) {
+                    if (i % bigger === 0) bCount++;
+                    if (i % resLCM === 0) lcmCount++;
+                }
+                if (lcmCount !== 1 || bCount < 2 || lower === upper) continue;
+                
+                const unitUpper = unit.isMetric ? unit.abbr : pluralizeFeet(upper);
+                rangeText = `от ${lower} до ${upper} ${unitUpper}`;
+            } else {
+                const limit = Math.ceil((targetL + 5) / 10) * 10;
+                if (limit >= targetL + resLCM || limit <= targetL) continue;
+                
+                const unitLimit = unit.isMetric ? unit.abbr : pluralizeFeet(limit);
+                rangeText = `не более ${limit} ${unitLimit}`;
+            }
+
+            const mode = getRandomInt(1, 3); 
+            const unitA = unit.isMetric ? unit.abbr : pluralizeFeet(a);
+            const unitB = unit.isMetric ? unit.abbr : pluralizeFeet(b);
+
+            let question = `Чтобы получить трубу требуемой длины (известно, что эта длина ${rangeText}), можно стыковать либо куски по ${a} ${unitA}, либо по ${b} ${unitB}. `;
+            let answer;
+
+            if (mode === 1) {
+                question += `Найдите длину трубы. Дайте ответ в ${unit.isMetric ? unit.abbr : 'футах'}.`;
+                answer = targetL;
+            } else if (mode === 2) {
+                question += `Сколько потребуется кусков по ${a} ${unitA}?`;
+                answer = targetL / a;
+            } else {
+                question += `Сколько потребуется кусков по ${b} ${unitB}?`;
+                answer = targetL / b;
+            }
+
+            return {
+                variables: { ans: answer },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        return userAnswer.toString().trim() === vars.ans.toString();
+    }
+},
+
+{
+    type: " ",
+    number: "5count41",
+    tags: ["5_класс", "НОД", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        const lcm = (x, y) => (x * y) / gcd(x, y);
+
+        const pluralizeFeet = (n) => {
+            const cases = [2, 0, 1, 1, 1, 2];
+            const titles = ['фут', 'фута', 'футов'];
+            return titles[(n % 100 > 4 && n % 100 < 20) ? 2 : cases[(n % 10 < 5) ? n % 10 : 5]];
+        };
+
+        const unitsData = [
+            { name: 'см', prep: 'см', needPlural: false },
+            { name: 'дм', prep: 'дм', needPlural: false },
+            { name: 'фут', prep: 'футах', needPlural: true }
+        ];
+
+        const materials = [
+            'алюминиевую', 
+            'стальную', 
+            'медную', 
+            'пластиковую', 
+            'железную'
+        ];
+
+        let attempts = 0;
+        while (attempts < 2000) {
+            attempts++;
+            
+            const a = getRandomInt(4, 20);
+            const b = getRandomInt(4, 25);
+            
+            if (a === b || gcd(a, b) === 1) continue;
+
+            const resLCM = lcm(a, b);
+            if (resLCM > 300 || resLCM < 20) continue;
+
+            const mat = materials[getRandomInt(0, materials.length - 1)];
+            const unit = unitsData[getRandomInt(0, unitsData.length - 1)];
+            
+            const unitA = unit.needPlural ? pluralizeFeet(a) : unit.name;
+            const unitB = unit.needPlural ? pluralizeFeet(b) : unit.name;
+
+            let question = `${mat.charAt(0).toUpperCase() + mat.slice(1)} трубу можно разрезать без остатка на куски длиной ${a} ${unitA} и ${b} ${unitB}. `;
+            question += `Найдите наименьшую возможную длину трубы. Дайте ответ в ${unit.prep}.`;
+
+            return {
+                variables: { ans: resLCM },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        return userAnswer.toString().trim() === vars.ans.toString();
+    }
+},
+
+{
+    type: " ",
+    number: "5count40",
+    tags: ["5_класс", "НОД", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        
+        const isComposite = (n) => {
+            if (n < 4) return false;
+            for (let i = 2; i <= Math.sqrt(n); i++) {
+                if (n % i === 0) return true;
+            }
+            return false;
+        };
+
+        const locations = [
+            "На складе",
+            "В магазине",
+            "На оптовой базе",
+            "В хранилище",
+            "В распределительном центре"
+        ];
+
+        const fruits = [
+            { nom: 'апельсины', gen: 'апельсинов', instr: 'апельсинами' },
+            { nom: 'яблоки', gen: 'яблок', instr: 'яблоками' },
+            { nom: 'груши', gen: 'груш', instr: 'грушами' },
+            { nom: 'сливы', gen: 'слив', instr: 'сливами' },
+            { nom: 'мандарины', gen: 'мандаринов', instr: 'мандаринами' }
+        ];
+
+        let attempts = 0;
+        while (attempts < 3000) {
+            attempts++;
+            
+            const commonDiv = getRandomInt(4, 15);
+            if (!isComposite(commonDiv)) continue;
+
+            const k1 = getRandomInt(2, 8);
+            const k2 = getRandomInt(2, 8);
+            if (k1 === k2 || gcd(k1, k2) !== 1) continue;
+
+            const weightA = commonDiv * k1;
+            const weightB = commonDiv * k2;
+
+            if (weightA > 120 || weightB > 120 || weightA < 20 || weightB < 20) continue;
+
+            const loc = locations[getRandomInt(0, locations.length - 1)];
+            const shuffled = [...fruits].sort(() => Math.random() - 0.5);
+            const f1 = shuffled[0];
+            const f2 = shuffled[1];
+
+            const mode = getRandomInt(1, 2); 
+            
+            let question = `${loc} ${weightA} кг ${f1.gen} и ${weightB} кг ${f2.gen}. Все фрукты нужно разложить в ящики одинаковой массы так, чтобы все ящики были полными и фрукты в них не смешивались. `;
+            let answer;
+
+            if (mode === 1) {
+                question += `Какую наибольшую массу может иметь один такой ящик? Дайте ответ в кг.`;
+                answer = commonDiv;
+            } else {
+                const choice = getRandomInt(1, 2);
+                if (choice === 1) {
+                    question += `Сколько получится ящиков с ${f1.instr}?`;
+                    answer = k1;
+                } else {
+                    question += `Сколько получится ящиков с ${f2.instr}?`;
+                    answer = k2;
+                }
+            }
+
+            return {
+                variables: { ans: answer },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        return userAnswer.toString().trim() === vars.ans.toString();
+    }
+},
+
+{
+    type: " ",
+    number: "5count39",
+    tags: ["5_класс", "НОК", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        const lcm = (x, y) => (x * y) / gcd(x, y);
+
+        const fruits = [
+            { nom: 'апельсины', gen: 'апельсинов', instr: 'апельсинами' },
+            { nom: 'яблоки', gen: 'яблок', instr: 'яблоками' },
+            { nom: 'груши', gen: 'груш', instr: 'грушами' },
+            { nom: 'сливы', gen: 'слив', instr: 'сливами' },
+            { nom: 'мандарины', gen: 'мандаринов', instr: 'мандаринами' }
+        ];
+
+        let attempts = 0;
+        while (attempts < 2000) {
+            attempts++;
+            const a = getRandomInt(6, 18);
+            const b = getRandomInt(6, 20);
+            const bigger = Math.max(a, b);
+            
+            if (a === b || gcd(a, b) === 1) continue;
+
+            const resLCM = lcm(a, b);
+            if (resLCM > 80 || resLCM < 18) continue;
+
+            const limit = resLCM + getRandomInt(5, Math.min(20, resLCM - 1));
+
+            const shuffled = [...fruits].sort(() => Math.random() - 0.5);
+            const f1 = shuffled[0];
+            const f2 = shuffled[1];
+
+            const mode = getRandomInt(1, 5); 
+            
+            let question = `Коробка вмещает либо ${a} кг ${f1.gen}, либо ${b} кг ${f2.gen}. `;
+            question += `В таких коробках в магазин привезли поровну ${f1.gen} и ${f2.gen} (не больше ${limit} кг каждого вида). `;
+            
+            let answer;
+            switch(mode) {
+                case 1:
+                    question += `Сколько кг ${f1.gen} привезли?`;
+                    answer = resLCM;
+                    break;
+                case 2:
+                    question += `Сколько кг ${f2.gen} привезли?`;
+                    answer = resLCM;
+                    break;
+                case 3:
+                    question += `Сколько привезли коробок с ${f1.instr}?`;
+                    answer = resLCM / a;
+                    break;
+                case 4:
+                    question += `Сколько привезли коробок с ${f2.instr}?`;
+                    answer = resLCM / b;
+                    break;
+                case 5:
+                    question += `Сколько всего коробок с фруктами привезли в магазин?`;
+                    answer = (resLCM / a) + (resLCM / b);
+                    break;
+            }
+
+            return {
+                variables: { ans: answer },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        return userAnswer.toString().trim() === vars.ans.toString();
+    }
+},
+
+{
+    type: " ",
+    number: "5count38",
+    tags: ["5_класс", "НОД", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        
+        const isComposite = (n) => {
+            if (n < 4) return false;
+            for (let i = 2; i <= Math.sqrt(n); i++) {
+                if (n % i === 0) return true;
+            }
+            return false;
+        };
+
+        let attempts = 0;
+        while (attempts < 3000) {
+            attempts++;
+            const a = getRandomInt(16, 80);
+            const b = getRandomInt(16, 90);
+            
+            const resGCD = gcd(a, b);
+            
+            if (resGCD <= 2 || !isComposite(resGCD) || a === b || resGCD === a || resGCD === b) continue;
+
+            const units = ["см", "дм", "м"][getRandomInt(0, 2)];
+            const mode = getRandomInt(1, 2); 
+            
+            let question = `Прямоугольник со сторонами ${a} ${units} и ${b} ${units} нужно разрезать на одинаковые квадраты без остатка. `;
+            let answer;
+
+            if (mode === 1) {
+                question += `Какую наибольшую длину стороны может иметь такой квадрат? Дайте ответ в ${units}.`;
+                answer = resGCD;
+            } else {
+                question += `На какое наименьшее число таких квадратов можно разрезать этот прямоугольник?`;
+                answer = (a / resGCD) * (b / resGCD);
+            }
+
+            return {
+                variables: { ans: answer },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        return userAnswer.toString().trim() === vars.ans.toString();
+    }
+},
+
+{
+    type: " ",
+    number: "5count37",
+    tags: ["5_класс", "НОК", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        const lcm = (x, y) => (x * y) / gcd(x, y);
+
+        let attempts = 0;
+        while (attempts < 2000) {
+            attempts++;
+            const a = getRandomInt(4, 16);
+            const b = getRandomInt(4, 18);
+            
+            if (a === b || gcd(a, b) === 1) continue;
+            
+            const resLCM = lcm(a, b);
+            if (resLCM > 60 || resLCM <= Math.max(a, b)) continue;
+
+            const units = ["см", "дм", "м"][getRandomInt(0, 2)];
+            const mode = getRandomInt(1, 2); 
+            
+            let question = `Квадрат можно разрезать как на квадратики со стороной ${a} ${units}, так и на квадратики со стороной ${b} ${units}. `;
+            let answer;
+
+            if (mode === 1) {
+                question += `Какую наименьшую длину стороны может иметь такой квадрат? Дайте ответ в ${units}.`;
+                answer = resLCM;
+            } else {
+                question += `Какую наименьшую площадь может иметь такой квадрат? Дайте ответ в ${units}².`;
+                answer = resLCM * resLCM;
+            }
+
+            return {
+                variables: { ans: answer },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '').toLowerCase();
+        return cleanInput === vars.ans.toString();
+    }
+},
+
+{
+    type: " ",
+    number: "5count36",
+    tags: ["5_класс", "НОК", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        const lcm = (x, y) => (x * y) / gcd(x, y);
+
+        const pluralizeGenitive = (n, titles) => {
+            if (n % 10 === 1 && n % 100 !== 11) return titles[0]; 
+            return titles[1]; 
+        };
+
+        const unitsData = [
+            { abbr: 'см', titles: ['сантиметр', 'сантиметра', 'сантиметров'], gen: ['сантиметра', 'сантиметров'] },
+            { abbr: 'дм', titles: ['дециметр', 'дециметра', 'дециметров'], gen: ['дециметра', 'дециметров'] },
+            { abbr: 'м', titles: ['метр', 'метра', 'метров'], gen: ['метра', 'метров'] }
+        ];
+
+        const characterGroups = [
+            [
+                { name: 'ученик', dative: 'ученику', verb: 'купил', acc: 'медную', gender: 'm', prefix: 'Один', other: 'другой' },
+                { name: 'ученица', dative: 'ученице', verb: 'купила', acc: 'медную', gender: 'f', prefix: 'Одна', other: 'другая' }
+            ],
+            [
+                { name: 'студент', dative: 'студенту', verb: 'купил', acc: 'медную', gender: 'm', prefix: 'Один', other: 'другой' },
+                { name: 'студентка', dative: 'студентке', verb: 'купила', acc: 'медную', gender: 'f', prefix: 'Одна', other: 'другая' }
+            ]
+        ];
+
+        const wireMaterials = [
+            { nom: 'медная', acc: 'медную' },
+            { nom: 'стальная', acc: 'стальную' },
+            { nom: 'алюминиевая', acc: 'алюминиевую' },
+            { nom: 'латунная', acc: 'латунную' }
+        ];
+
+        const ribbonColors = [
+            { nom: 'белая', acc: 'белую' }, { nom: 'синяя', acc: 'синюю' }, { nom: 'красная', acc: 'красную' },
+            { nom: 'зелёная', acc: 'зелёную' }, { nom: 'жёлтая', acc: 'жёлтую' }, { nom: 'розовая', acc: 'розовую' }
+        ];
+
+        let attempts = 0;
+        while (attempts < 10000) {
+            attempts++;
+            
+            const a = getRandomInt(4, 18);
+            const b = getRandomInt(4, 18);
+            const bigger = Math.max(a, b);
+            if (a === b || (gcd(a, b) === 1 && (a > 12 || b > 12))) continue;
+
+            const m1 = lcm(a, b);
+            const targetL = m1 * getRandomInt(2, 5);
+            if (targetL < 40 || targetL > 250) continue;
+
+            const trapL = (targetL - bigger > 0) ? targetL - bigger : targetL + bigger;
+            const minB = Math.min(targetL, trapL);
+            const maxB = Math.max(targetL, trapL);
+            
+            const lower = minB - getRandomInt(2, 5);
+            const upper = maxB + getRandomInt(2, 5);
+
+            let lcmCount = 0;
+            let bCount = 0;
+            for (let i = lower + 1; i < upper; i++) {
+                if (i % m1 === 0) lcmCount++;
+                if (i % bigger === 0) bCount++;
+            }
+            if (lcmCount !== 1 || bCount < 2) continue;
+
+            const unit = unitsData[getRandomInt(0, unitsData.length - 1)];
+            const isWire = getRandomInt(0, 1) === 0;
+            let itemA, itemB, nounGen;
+
+            if (isWire) {
+                const mats = [...wireMaterials].sort(() => Math.random() - 0.5);
+                itemA = mats[0]; itemB = mats[1]; nounGen = "проволоки";
+            } else {
+                const colors = [...ribbonColors].sort(() => Math.random() - 0.5);
+                itemA = colors[0]; itemB = colors[1]; nounGen = "ленты";
+            }
+
+            const group = characterGroups[getRandomInt(0, 1)];
+            const p1 = group[getRandomInt(0, 1)];
+            const p2 = group[getRandomInt(0, 1)];
+
+            let personalNeeds = `Каждому `;
+            if (p1.name === p2.name) {
+                personalNeeds += `${p1.dative} `;
+            } else {
+                personalNeeds += `${p1.dative} и ${p2.dative} `;
+            }
+
+            const nameA_Nom = `${itemA.nom} ${isWire ? 'проволока' : 'лента'}`;
+            const nameB_Nom = `${itemB.nom} ${isWire ? 'проволока' : 'лента'}`;
+
+            let question = `${nameA_Nom.charAt(0).toUpperCase() + nameA_Nom.slice(1)} продается кусками по ${a} ${unit.abbr}, а ${nameB_Nom} — по ${b} ${unit.abbr} (куски не режут). `;
+            question += `${personalNeeds} нужно от ${lower} до ${upper} ${pluralizeGenitive(upper, unit.gen)} ${nounGen}. `;
+            question += `${p1.prefix} ${p1.name} ${p1.verb} ${itemA.acc}, а ${p2.gender === 'f' ? 'другая' : 'другой'} ${p2.name} — ${itemB.acc}. `;
+            question += `Оказалось, что у них получилась одинаковая общая длина. Какая? Дайте ответ в ${unit.abbr}.`;
+
+            return {
+                variables: { ans: targetL },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: (vars) => vars.ans,
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        return userAnswer.toString().trim() === vars.ans.toString();
+    }
+},
+
+{
+    type: " ",
+    number: "5count35",
+    tags: ["5_класс", "НОД", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        
+        const pluralize = (n, titles) => {
+            const cases = [2, 0, 1, 1, 1, 2];
+            return titles[(n % 100 > 4 && n % 100 < 20) ? 2 : cases[(n % 10 < 5) ? n % 10 : 5]];
+        };
+
+        const locations = [
+            { start: "В ателье", action: "купили два куска" },
+            { start: "Для уроков труда", action: "подготовили два куска" },
+            { start: "Во флористическом магазине", action: "использовали два куска" }
+        ];
+
+        const itemsData = [
+            { name: 'ленты', unit: ['сантиметр', 'сантиметра', 'сантиметров'], prepUnit: 'сантиметрах' },
+            { name: 'проволоки', unit: ['сантиметр', 'сантиметра', 'сантиметров'], prepUnit: 'сантиметрах' }
+        ];
+
+        let attempts = 0;
+        while (attempts < 10000) {
+            attempts++;
+            
+            const trueGCD = getRandomInt(8, 30);
+            const k1 = getRandomInt(2, 7);
+            const k2 = getRandomInt(2, 7);
+            
+            if (k1 === k2 || gcd(k1, k2) !== 1) continue;
+
+            const valA = trueGCD * k1; 
+            const valB = trueGCD * k2;
+
+            if (valA > 250 || valB > 250) continue;
+
+            const commonDivs = [];
+            for (let i = 2; i <= trueGCD; i++) {
+                if (valA % i === 0 && valB % i === 0) commonDivs.push(i);
+            }
+            if (commonDivs.length < 2) continue;
+
+            const loc = locations[getRandomInt(0, locations.length - 1)];
+            const item = itemsData[getRandomInt(0, itemsData.length - 1)];
+            
+            const unitA = pluralize(valA, item.unit);
+            const unitB = pluralize(valB, item.unit);
+
+            const mode = getRandomInt(1, 4);
+            
+            let question = `${loc.start} ${loc.action} ${item.name} длиной ${valA} ${unitA} и ${valB} ${unitB}. Оба куска разрезали на равные части без остатка. `;
+            let answer;
+
+            if (mode === 1) {
+                question += `Какова наибольшая возможная длина каждой части в ${item.prepUnit}?`;
+                answer = trueGCD;
+            } else if (mode === 2) {
+                const totalPieces = k1 + k2;
+                question += `На какое наименьшее количество таких частей разрезали эти куски ${item.name}?`;
+                answer = totalPieces;
+            } else if (mode === 3) {
+                question += `Какими могут быть длины частей (в ${item.prepUnit}), если они должны быть одинаковыми? Перечислите все возможные варианты через запятую в порядке возрастания.`;
+                answer = commonDivs.join(", ");
+            } else {
+                const sorted = commonDivs.sort((a, b) => a - b);
+                const secondMax = sorted[sorted.length - 2];
+                const lower = secondMax + getRandomInt(1, Math.floor((trueGCD - secondMax) / 2) + 1);
+                const upper = trueGCD + getRandomInt(2, 10);
+                
+                question += `Какова длина каждой части, если в ${item.prepUnit} она выражается числом больше ${lower}, но меньше ${upper}?`;
+                answer = trueGCD;
+            }
+
+            return {
+                variables: { ans: answer },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '').toLowerCase();
+        const cleanAns = vars.ans.toString().replace(/\s+/g, '').toLowerCase();
+        return cleanInput === cleanAns;
+    }
+},
+
+{
+    type: " ",
+    number: "5count34",
+    tags: ["5_класс", "НОК", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        const lcm = (x, y) => (x * y) / gcd(x, y);
+
+        const locationStarts = [
+            "Для подготовительных курсов", "Для школы", "Для занятий в кружке", "Для творческой мастерской"
+        ];
+
+        const stationeryData = [
+            { titles: ['тетрадь в клетку', 'тетради в клетку', 'тетрадей в клетку', 'тетрадями в клетку'] },
+            { titles: ['тетрадь в линейку', 'тетради в линейку', 'тетрадей в линейку', 'тетрадями в линейку'] },
+            { titles: ['альбом', 'альбомы', 'альбомов', 'альбомами'] },
+            { titles: ['скетчбук', 'скетчбуки', 'скетчбуков', 'скетчбуками'] },
+            { titles: ['блокнот', 'блокноты', 'блокнотов', 'блокнотами'] }
+        ];
+
+        let attempts = 0;
+        while (attempts < 10000) {
+            attempts++;
+            const a = getRandomInt(4, 15);
+            const b = getRandomInt(4, 15);
+            const bigger = Math.max(a, b);
+            
+            if (a === b || (gcd(a, b) === 1 && (a > 10 || b > 10))) continue; 
+
+            const m1 = lcm(a, b);
+            if (m1 > 90 || m1 < 12) continue;
+
+            const shuffled = [...stationeryData].sort(() => Math.random() - 0.5);
+            const item1 = shuffled[0];
+            const item2 = shuffled[1];
+            const start = locationStarts[getRandomInt(0, locationStarts.length - 1)];
+
+            const mode = getRandomInt(1, 4);
+            
+            const name1Acc = item1.titles[1]; 
+            const name2Acc = item2.titles[1]; 
+            const name1NomCap = name1Acc.charAt(0).toUpperCase() + name1Acc.slice(1);
+            const name1Ins = item1.titles[3]; 
+
+            let question = `${start} решили закупить ${name1Acc} и ${name2Acc}. ${name1NomCap} продаются в упаковках по ${a} штук, а ${name2Acc} — по ${b} штук. Закупили одинаковое количество предметов каждого вида, причём лишних штук в упаковках не осталось. `;
+            let answer;
+
+            if (mode === 1) {
+                question += `Какое наименьшее количество предметов каждого вида было закуплено?`;
+                answer = m1;
+            } else if (mode === 2) {
+                question += `Какое наименьшее количество упаковок с ${name1Ins} пришлось купить?`;
+                answer = m1 / a;
+            } else {
+                const targetMultiple = (mode === 3) ? m1 * 2 : m1 * 3;
+                
+                const trapL = (Math.random() > 0.5) ? targetMultiple - bigger : targetMultiple + bigger;
+                const minB = Math.min(targetMultiple, trapL);
+                const maxB = Math.max(targetMultiple, trapL);
+                
+                const lower = minB - getRandomInt(2, 5);
+                const upper = maxB + getRandomInt(2, 5);
+                
+                let bCount = 0, lcmCount = 0;
+                for (let i = lower + 1; i < upper; i++) {
+                    if (i % bigger === 0) bCount++;
+                    if (i % m1 === 0) lcmCount++;
+                }
+                if (lcmCount !== 1 || bCount < 2) continue;
+
+                question += `Сколько предметов каждого вида купили, если известно, что их было больше ${lower}, но меньше ${upper}?`;
+                answer = targetMultiple;
+            }
+
+            return {
+                variables: { ans: answer },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '').toLowerCase();
+        const cleanAns = vars.ans.toString().replace(/\s+/g, '').toLowerCase();
+        return cleanInput === cleanAns;
+    }
+},
+
+{
+    type: " ",
+    number: "5count33",
+    tags: ["5_класс", "НОД", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        
+        const pluralize = (n, titles) => {
+            const cases = [2, 0, 1, 1, 1, 2];
+            return titles[(n % 100 > 4 && n % 100 < 20) ? 2 : cases[(n % 10 < 5) ? n % 10 : 5]];
+        };
+
+        const locations = [
+            "Для подготовительных курсов", "Для школы", "Для занятий в кружке", "Для творческой мастерской"
+        ];
+
+        const stationeryData = [
+            { titles: ['тетрадь в клетку', 'тетради в клетку', 'тетрадей в клетку'], genPlural: 'тетрадей в клетку' },
+            { titles: ['тетрадь в линейку', 'тетради в линейку', 'тетрадей в линейку'], genPlural: 'тетрадей в линейку' },
+            { titles: ['альбом', 'альбома', 'альбомов'], genPlural: 'альбомов' },
+            { titles: ['скетчбук', 'скетчбука', 'скетчбуков'], genPlural: 'скетчбуков' },
+            { titles: ['блокнот', 'блокнота', 'блокнотов'], genPlural: 'блокнотов' }
+        ];
+
+        let attempts = 0;
+        while (attempts < 10000) {
+            attempts++;
+            const trueGCD = getRandomInt(12, 36);
+            const k1 = getRandomInt(2, 6);
+            const k2 = getRandomInt(2, 6);
+            if (k1 === k2 || gcd(k1, k2) !== 1) continue;
+
+            const valA = trueGCD * k1; 
+            const valB = trueGCD * k2;
+
+            const commonDivs = [];
+            for (let i = 2; i <= trueGCD; i++) {
+                if (valA % i === 0 && valB % i === 0) commonDivs.push(i);
+            }
+            if (commonDivs.length < 2) continue;
+
+            const loc = locations[getRandomInt(0, locations.length - 1)];
+            const shuffled = [...stationeryData].sort(() => Math.random() - 0.5);
+            const item1 = shuffled[0];
+            const item2 = shuffled[1];
+
+            const mode = getRandomInt(1, 4);
+            let question = `${loc} купили ${valA} ${pluralize(valA, item1.titles)} и ${valB} ${pluralize(valB, item2.titles)}. Их раздали поровну участникам, причём ни ${item1.genPlural}, ни ${item2.genPlural} не осталось. `;
+            let answer;
+
+            if (mode === 1) {
+                question += `Какое наибольшее количество человек могло получить эти предметы?`;
+                answer = trueGCD;
+            } else if (mode === 2) {
+                const perPerson = (valA + valB) / trueGCD;
+                question += `Сколько всего предметов получил каждый участник, если их раздали максимально возможному количеству человек?`;
+                answer = perPerson;
+            } else if (mode === 3) {
+                question += `Сколько человек могли получить эти предметы? Перечислите все возможные варианты через запятую в порядке возрастания.`;
+                answer = commonDivs.join(", ");
+            } else {
+                const sorted = commonDivs.sort((a, b) => a - b);
+                const secondMax = sorted[sorted.length - 2];
+                question += `Сколько человек получили эти предметы, если известно, что их было больше ${secondMax}?`;
+                answer = trueGCD;
+            }
+
+            return {
+                variables: { ans: answer },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) { return vars.ans; },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '').toLowerCase();
+        const cleanAns = vars.ans.toString().replace(/\s+/g, '').toLowerCase();
+        return cleanInput === cleanAns;
+    }
+},
+
+{
+    type: " ",
+    number: "5count32",
+    tags: ["5_класс", "НОК", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        const lcm = (x, y) => (x * y) / gcd(x, y);
+        
+        const sweetsData = [
+            { titles: ['конфета', 'конфеты', 'конфет'], genPlural: 'конфет', group: 'сладостей' },
+            { titles: ['пряник', 'пряники', 'пряников'], genPlural: 'пряников', group: 'сладостей' },
+            { titles: ['зефирка', 'зефирки', 'зефирок'], genPlural: 'зефирок', group: 'сладостей' },
+            { titles: ['шоколадка', 'шоколадки', 'шоколадок'], genPlural: 'шоколадок', group: 'сладостей' },
+            { titles: ['вафля', 'вафли', 'вафель'], genPlural: 'вафель', group: 'сладостей' },
+            { titles: ['леденец', 'леденцы', 'леденцов'], genPlural: 'леденцов', group: 'сладостей' },
+            { titles: ['мармеладка', 'мармеладки', 'мармеладок'], genPlural: 'мармеладок', group: 'сладостей' }
+        ];
+
+        let attempts = 0;
+        while (attempts < 10000) {
+            attempts++;
+
+            const a = getRandomInt(4, 20);
+            const b = getRandomInt(4, 20);
+            
+            if (a === b) continue;
+            const resLCM = lcm(a, b);
+            if (resLCM > 120 || resLCM < 20) continue;
+
+            const shuffledSweets = [...sweetsData].sort(() => Math.random() - 0.5);
+            const item1 = shuffledSweets[0];
+            const item2 = shuffledSweets[1];
+
+            const name1 = item1.titles[1]; 
+            const name2 = item2.titles[1];
+
+            const mode = getRandomInt(1, 3);
+            let question = `${name1.charAt(0).toUpperCase() + name1.slice(1)} продаются в упаковках по ${a} штук, а ${name2} — по ${b} штук. Для подарков решили купить одинаковое количество этих ${item1.group}, причём ни ${item1.genPlural}, ни ${item2.genPlural} в упаковках остаться не должно. `;
+            let answer;
+
+            if (mode === 1) {
+                question += `Какое наименьшее количество ${item1.genPlural} каждого вида нужно купить?`;
+                answer = resLCM;
+            } else if (mode === 2) {
+                const packsA = resLCM / a;
+                question += `Какое наименьшее количество упаковок ${item1.genPlural} придётся купить?`;
+                answer = packsA;
+            } else {
+                question += `Сколько ${item1.group} каждого вида могло быть закуплено? Перечислите три первых возможных варианта через запятую в порядке возрастания.`;
+                answer = `${resLCM}, ${resLCM * 2}, ${resLCM * 3}`;
+            }
+
+            return {
+                variables: { ans: answer },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) {
+        return vars.ans;
+    },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '').toLowerCase();
+        const cleanAns = vars.ans.toString().replace(/\s+/g, '').toLowerCase();
+        return cleanInput === cleanAns;
+    }
+},
+
+{
+    type: " ",
+    number: "5count31",
+    tags: ["5_класс", "НОД", "текстовая_задача"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const gcd = (x, y) => (y === 0 ? x : gcd(y, x % y));
+        
+        const pluralize = (n, titles) => {
+            const cases = [2, 0, 1, 1, 1, 2];
+            return titles[(n % 100 > 4 && n % 100 < 20) ? 2 : cases[(n % 10 < 5) ? n % 10 : 5]];
+        };
+
+        const sweetsData = [
+            { titles: ['конфету', 'конфеты', 'конфет'], genPlural: 'конфет', group: 'сладостей' },
+            { titles: ['пряник', 'пряника', 'пряников'], genPlural: 'пряников', group: 'сладостей' },
+            { titles: ['зефирку', 'зефирки', 'зефирок'], genPlural: 'зефирок', group: 'сладостей' },
+            { titles: ['шоколадку', 'шоколадки', 'шоколадок'], genPlural: 'шоколадок', group: 'сладостей' },
+            { titles: ['вафлю', 'вафли', 'вафель'], genPlural: 'вафель', group: 'сладостей' },
+            { titles: ['крендель', 'кренделя', 'кренделей'], genPlural: 'кренделей', group: 'выпечки' },
+            { titles: ['леденец', 'леденца', 'леденцов'], genPlural: 'леденцов', group: 'сладостей' },
+            { titles: ['булочка', 'булочки', 'булочек'], genPlural: 'булочек', group: 'выпечки' },
+            { titles: ['пончик', 'пончика', 'пончиков'], genPlural: 'пончиков', group: 'выпечки' },
+            { titles: ['мармеладку', 'мармеладки', 'мармеладок'], genPlural: 'мармеладок', group: 'сладостей' }
+        ];
+
+        let attempts = 0;
+        while (attempts < 10000) {
+            attempts++;
+
+            const trueGCD = getRandomInt(6, 30);
+            const k1 = getRandomInt(2, 7);
+            const k2 = getRandomInt(2, 7);
+            if (k1 === k2 || gcd(k1, k2) !== 1) continue;
+
+            const valA = trueGCD * k1; 
+            const valB = trueGCD * k2;
+            if (valA > 200 || valB > 200) continue;
+
+            const commonDivs = [];
+            for (let i = 2; i <= trueGCD; i++) {
+                if (valA % i === 0 && valB % i === 0) commonDivs.push(i);
+            }
+            if (commonDivs.length < 3) continue;
+
+            const shuffledSweets = [...sweetsData].sort(() => Math.random() - 0.5);
+            const item1 = shuffledSweets[0];
+            const item2 = shuffledSweets[1];
+
+            const sweetsOptions = commonDivs
+                .map(d => (valA + valB) / d)
+                .sort((x, y) => x - y);
+
+            const mode = getRandomInt(1, 3);
+            let question = `Для детских подарков купили ${valA} ${pluralize(valA, item1.titles)} и ${valB} ${pluralize(valB, item2.titles)}. Из них составили одинаковые подарки, причём ни ${item1.genPlural}, ни ${item2.genPlural} не осталось. `;
+            let answer;
+
+            if (mode === 1) {
+                question += `Какое наибольшее количество одинаковых подарков можно составить?`;
+                answer = trueGCD;
+            } else if (mode === 2) {
+                question += `Какое наибольшее количество ${item1.group} может быть в одном подарке?`;
+                answer = Math.max(...sweetsOptions);
+            } else {
+                question += `Сколько ${item1.group} могло быть в одном подарке? Перечислите все возможные варианты через запятую в порядке возрастания.`;
+                answer = sweetsOptions.join(", ");
+            }
+
+            return {
+                variables: { ans: answer },
+                problemText: question
+            };
+        }
+        return this.generate();
+    },
+    calculateAnswer: function(vars) {
+        return vars.ans;
+    },
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '').toLowerCase();
+        const cleanAns = vars.ans.toString().replace(/\s+/g, '').toLowerCase();
+        return cleanInput === cleanAns;
+    }
+},
+
+{
+    type: " ",
+    number: "5count30",
+    tags: ["5_класс", "НОД"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const shuffle = (arr) => arr.sort(() => Math.random() - 0.5);
+
+        // --- Вспомогательные функции ---
+        const gcd = (x, y) => {
+            while (y) {
+                let t = y;
+                y = x % y;
+                x = t;
+            }
+            return x;
+        };
+
+        const getDivisors = (n) => {
+            const res = [];
+            for (let i = 1; i <= Math.sqrt(n); i++) {
+                if (n % i === 0) {
+                    res.push(i);
+                    if (i !== n / i) res.push(n / i);
+                }
+            }
+            return res.sort((a, b) => a - b);
+        };
+
+        const isPrime = (num) => {
+            if (num <= 1) return false;
+            for (let i = 2; i <= Math.sqrt(num); i++) {
+                if (num % i === 0) return false;
+            }
+            return true;
+        };
+
+        // Условия по величине чисел
+        const checkLimit = (val) => {
+            if (val % 10 === 0) return val <= 500;
+            if (val % 5 === 0) return val <= 200;
+            return val <= 150;
+        };
+
+        let attempts = 0;
+        while (attempts < 50000) {
+            attempts++;
+
+            // 1. Генерируем числа a и b
+            const baseGCD = getRandomInt(4, 50);
+            if (isPrime(baseGCD)) continue; // НОД должен быть составным
+
+            const k1 = getRandomInt(1, 10);
+            const k2 = getRandomInt(1, 10);
+            
+            // Числа должны быть разными и взаимно простыми относительно базы
+            if (k1 === k2 || gcd(k1, k2) !== 1) continue;
+
+            const valA = baseGCD * k1;
+            const valB = baseGCD * k2;
+
+            // Проверка лимитов
+            if (!checkLimit(valA) || !checkLimit(valB)) continue;
+
+            const trueGCD = baseGCD; 
+            const minVal = Math.min(valA, valB);
+
+            // 2. Формируем варианты ответов (a1...a5)
+            // Условие: ни одно число не больше min(valA, valB)
+            
+            const options = new Set();
+            options.add(trueGCD); // 1. Верный ответ
+
+            // 2. и 3. Два общих делителя, не равных 1 (делители НОД)
+            const commonDivs = getDivisors(trueGCD).filter(d => d !== 1 && d !== trueGCD);
+            if (commonDivs.length < 2) continue;
+            
+            shuffle(commonDivs);
+            options.add(commonDivs[0]);
+            options.add(commonDivs[1]);
+
+            // 4. Ловушка: "1" или "minVal"
+            // (maxVal добавлять нельзя, так как это нарушит условие "не больше меньшего")
+            const trapType = Math.random() < 0.5 ? 1 : minVal;
+            if (options.has(trapType)) continue;
+            options.add(trapType);
+
+            // 5. Ловушка: Делитель одного, но не другого (Partial Divisor)
+            // Вместо кратного (которое > minVal) берем число, которое делит minVal, но не делит maxVal.
+            // Или просто случайное число < minVal, чтобы заполнить слот.
+            // Попробуем найти "правдоподобный" делитель.
+            const divsMin = getDivisors(minVal);
+            const badDivisors = divsMin.filter(d => valA % d !== 0 || valB % d !== 0);
+            
+            let filler;
+            if (badDivisors.length > 0) {
+                filler = badDivisors[getRandomInt(0, badDivisors.length - 1)];
+            } else {
+                // Если такого нет (редкий случай), берем просто случайное число меньше minVal
+                filler = getRandomInt(2, minVal - 1);
+            }
+            
+            if (options.has(filler)) continue;
+            options.add(filler);
+
+            if (options.size !== 5) continue;
+
+            const finalOptions = Array.from(options);
+            // Расположить НЕ в порядке возрастания
+            shuffle(finalOptions);
+
+            return {
+                variables: {
+                    a: valA,
+                    b: valB,
+                    options: finalOptions,
+                    ans: trueGCD
+                },
+                problemText: `Даны числа $a = ${valA}$ и $b = ${valB}$.<br>
+Одно из чисел:<br><br>
+${finalOptions.join('; ')}<br><br>
+является НОД($a$; $b$). Какое?`
+            };
+        }
+        return this.generate();
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.ans;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        const val = parseInt(cleanInput, 10);
+        return val === vars.ans;
+    }
+},
+
+{
+    type: " ",
+    number: "5count29",
+    tags: ["5_класс", "НОД"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+
+        const primesPool = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
+
+        // Функция форматирования: превращает объект {base: power, ...} в строку
+        const formatPowers = (powersObj) => {
+            const bases = Object.keys(powersObj).map(Number).sort((a, b) => a - b);
+            return bases.map(base => {
+                const p = powersObj[base];
+                return p > 1 ? `${base}<sup>${p}</sup>` : `${base}`;
+            }).join(' · ');
+        };
+
+        let attempts = 0;
+        while (attempts < 100000) {
+            attempts++;
+
+            // 1. Генерируем НОД (2-4 множителя, значение < 200)
+            const gcdLen = getRandomInt(2, 4);
+            const gcdBases = [];
+            
+            // Набираем уникальные основания для НОД
+            const shuffledPrimes = [...primesPool].sort(() => Math.random() - 0.5);
+            for(let i=0; i<gcdLen; i++) gcdBases.push(shuffledPrimes[i]);
+            
+            const gcdVal = gcdBases.reduce((a, b) => a * b, 1);
+            
+            // Если НОД слишком велик или мал (на всякий случай > 1)
+            if (gcdVal >= 200 || gcdVal === 1) continue;
+
+            // 2. Генерируем числа a, b, c
+            const nums = [];
+            
+            for (let i = 0; i < 3; i++) {
+                // База числа начинается с баз НОД
+                let currentBases = [...gcdBases];
+                
+                // Добиваем до 1-4 уникальных множителей (но не меньше, чем в НОД)
+                // Т.к. базы НОД обязаны быть, то min = gcdBases.length
+                const targetLen = getRandomInt(gcdBases.length, 4);
+                
+                while (currentBases.length < targetLen) {
+                    const p = getRandomEl(primesPool);
+                    if (!currentBases.includes(p)) {
+                        currentBases.push(p);
+                    }
+                }
+
+                // Генерируем степени (1-5)
+                const powers = {};
+                let hasPowerGt1 = false;
+
+                currentBases.forEach(base => {
+                    const pow = getRandomInt(1, 5);
+                    powers[base] = pow;
+                    if (pow > 1) hasPowerGt1 = true;
+                });
+
+                // ТРЕБОВАНИЕ: В каждом числе должна быть хотя бы одна степень > 1
+                if (!hasPowerGt1) {
+                    const randomBase = getRandomEl(currentBases);
+                    powers[randomBase] = getRandomInt(2, 5);
+                }
+
+                nums.push(powers);
+            }
+
+            // 3. КОРРЕКЦИЯ НОД
+            // Сейчас степени случайны (1-5). НОД может оказаться больше задуманного gcdVal.
+            // Нам нужно, чтобы для каждого основания из gcdBases минимальная степень среди a,b,c была равна 1.
+            // (Так как мы определили gcdVal как произведение простых чисел в 1 степени).
+            
+            gcdBases.forEach(base => {
+                // Выбираем случайное число (a, b или c), которое будет иметь этот множитель в степени 1.
+                // Остальные могут иметь степень > 1.
+                const limiterIdx = getRandomInt(0, 2);
+                nums[limiterIdx][base] = 1;
+            });
+
+            // 4. ПРОВЕРКИ
+            
+            // 4.1. Наличие 31 в любом из чисел
+            let has31 = false;
+            nums.forEach(n => {
+                if (n[31]) has31 = true;
+            });
+            if (!has31) continue;
+
+            // 4.2. Расчет реального НОД (проверка на случайные совпадения добавочных множителей)
+            // Собираем все встреченные основания
+            const allBases = new Set();
+            nums.forEach(n => Object.keys(n).forEach(k => allBases.add(Number(k))));
+
+            let realGcd = 1;
+            allBases.forEach(p => {
+                const pA = nums[0][p] || 0;
+                const pB = nums[1][p] || 0;
+                const pC = nums[2][p] || 0;
+                const minPow = Math.min(pA, pB, pC);
+                if (minPow > 0) {
+                    realGcd *= Math.pow(p, minPow);
+                }
+            });
+
+            if (realGcd !== gcdVal) continue;
+
+            // 4.3. Проверка на тривиальность (НОД != произведение самых малых оснований, взятых по 1 разу)
+            // Хотя при условии степеней это менее актуально, но оставим.
+            
+            return {
+                variables: {
+                    gcd: gcdVal
+                },
+                problemText: `Найдите наибольший общий делитель трёх чисел $a$, $b$ и $c$:<br><br>
+$a = ${formatPowers(nums[0])}$<br><br>
+$b = ${formatPowers(nums[1])}$<br><br>
+$c = ${formatPowers(nums[2])}$<br><br>
+В ответ запишите натуральное число.`
+            };
+        }
+        return this.generate();
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.gcd;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        const val = parseInt(cleanInput, 10);
+        return val === vars.gcd;
+    }
+},
+
+{
+    type: " ",
+    number: "5count28",
+    tags: ["5_класс", "НОД"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+        const shuffle = (arr) => arr.sort(() => Math.random() - 0.5);
+
+        const primesPool = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
+
+        // Форматирование: собираем в степени
+        const formatToPowers = (factors) => {
+            const counts = {};
+            factors.forEach(x => counts[x] = (counts[x] || 0) + 1);
+            const bases = Object.keys(counts).map(Number).sort((a, b) => a - b);
+            return bases.map(base => {
+                const power = counts[base];
+                return power > 1 ? `${base}<sup>${power}</sup>` : `${base}`;
+            }).join(' · ');
+        };
+
+        // Форматирование: просто через точку
+        const formatSimple = (factors) => {
+            return [...factors].sort((a, b) => a - b).join(' · ');
+        };
+
+        let attempts = 0;
+        while (attempts < 100000) {
+            attempts++;
+
+            // 1. Генерируем НОД (2-4 множителя, < 200)
+            const gcdLen = getRandomInt(2, 4);
+            let gcdFactors = [];
+            for (let i = 0; i < gcdLen; i++) {
+                gcdFactors.push(getRandomEl(primesPool));
+            }
+            const gcdVal = gcdFactors.reduce((a, b) => a * b, 1);
+            if (gcdVal >= 200) continue;
+
+            // 2. Инициализируем массивы множителей для a, b, c
+            let factors = [[], [], []];
+            
+            // Выбираем, кто будет "Power Number" (со степенями)
+            const pIdx = getRandomInt(0, 2);
+            // Индексы простых чисел
+            const sIdxs = [0, 1, 2].filter(i => i !== pIdx);
+
+            // --- ГЕНЕРАЦИЯ СТЕПЕННОГО ЧИСЛА (Power Number) ---
+            // Требования: 3-4 РАЗЛИЧНЫХ основания. Одна степень >=3, одна >=2.
+            
+            // Начинаем с уникальных оснований, которые есть в НОД (они обязаны быть)
+            let pBases = [...new Set(gcdFactors)];
+            
+            // Добиваем количество уникальных оснований до 3 или 4
+            const targetUniqueCount = getRandomInt(3, 4);
+            while (pBases.length < targetUniqueCount) {
+                const newP = getRandomEl(primesPool);
+                if (!pBases.includes(newP)) {
+                    pBases.push(newP);
+                }
+            }
+
+            // Теперь распределяем степени для этих оснований
+            // Нам нужно гарантировать: одна >= 3, одна >= 2.
+            // Перемешаем основания, чтобы высокие степени падали на случайные числа
+            shuffle(pBases);
+
+            let pFactorsExpanded = [];
+            
+            // 1-е основание: степень 3 или 4
+            const pow1 = getRandomInt(3, 4);
+            for(let k=0; k<pow1; k++) pFactorsExpanded.push(pBases[0]);
+
+            // 2-е основание: степень 2 или 3
+            const pow2 = getRandomInt(2, 3);
+            for(let k=0; k<pow2; k++) pFactorsExpanded.push(pBases[1]);
+
+            // Остальные основания (если есть): степень 1 или 2
+            for(let i=2; i<pBases.length; i++) {
+                const pow = getRandomInt(1, 2);
+                for(let k=0; k<pow; k++) pFactorsExpanded.push(pBases[i]);
+            }
+
+            factors[pIdx] = pFactorsExpanded;
+
+
+            // --- ГЕНЕРАЦИЯ ПРОСТЫХ ЧИСЕЛ (Simple Numbers) ---
+            // Одно длиной 3-4, другое 5-6 (гарантированно разные диапазоны)
+            const lensForSimple = [getRandomInt(3, 4), getRandomInt(5, 6)];
+            shuffle(lensForSimple);
+
+            // Функция заполнения
+            const fillFactors = (idx, targetLen) => {
+                let current = [...gcdFactors]; // Начинаем с НОД
+                while(current.length < targetLen) {
+                    current.push(getRandomEl(primesPool));
+                }
+                factors[idx] = current;
+            };
+
+            fillFactors(sIdxs[0], lensForSimple[0]);
+            fillFactors(sIdxs[1], lensForSimple[1]);
+
+
+            // 4. ПРОВЕРКИ
+            const allFactors = [...factors[0], ...factors[1], ...factors[2]];
+
+            // 4.1. Обязательное наличие 31
+            if (!allFactors.includes(31)) continue;
+
+            // 4.2. Проверка реального НОД
+            const getCounts = (arr) => {
+                const c = {};
+                arr.forEach(x => c[x] = (c[x] || 0) + 1);
+                return c;
+            };
+
+            const maps = factors.map(f => getCounts(f));
+            const uniquePrimesTotal = [...new Set(allFactors)];
+            
+            let realGcdVal = 1;
+            uniquePrimesTotal.forEach(p => {
+                const minPow = Math.min(
+                    (maps[0][p] || 0),
+                    (maps[1][p] || 0),
+                    (maps[2][p] || 0)
+                );
+                if (minPow > 0) realGcdVal *= Math.pow(p, minPow);
+            });
+
+            if (realGcdVal !== gcdVal) continue;
+
+            // 4.3. НОД не равен произведению первых встречных (тривиальность)
+            factors[0].sort((a,b)=>a-b);
+            factors[1].sort((a,b)=>a-b);
+            factors[2].sort((a,b)=>a-b);
+            const minProd = factors[0][0] * factors[1][0] * factors[2][0];
+            if (gcdVal === minProd) continue;
+
+            // 5. ФОРМИРОВАНИЕ СТРОК
+            const strVals = factors.map((f, i) => {
+                return (i === pIdx) ? formatToPowers(f) : formatSimple(f);
+            });
+
+            return {
+                variables: {
+                    a_factors: factors[0],
+                    b_factors: factors[1],
+                    c_factors: factors[2],
+                    gcd: gcdVal
+                },
+                problemText: `Найдите наибольший общий делитель трёх чисел $a$, $b$ и $c$:<br><br>
+$a = ${strVals[0]}$<br><br>
+$b = ${strVals[1]}$<br><br>
+$c = ${strVals[2]}$<br><br>
+В ответ запишите полученное натуральное число.`
+            };
+        }
+        return this.generate();
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.gcd;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        const val = parseInt(cleanInput, 10);
+        return val === vars.gcd;
+    }
+},
+
+{
+    type: " ",
+    number: "5count27",
+    tags: ["5_класс", "НОД"],
+    generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+
+        // Пул простых чисел (включая 31, как требовалось)
+        const primesPool = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
+
+        let attempts = 0;
+        while (attempts < 50000) {
+            attempts++;
+
+            // 1. Генерируем ядро НОД (от 2 до 4 множителей)
+            const gcdLen = getRandomInt(2, 4);
+            let gcdFactors = [];
+            for (let i = 0; i < gcdLen; i++) {
+                gcdFactors.push(getRandomEl(primesPool));
+            }
+
+            // Вычисляем значение НОД
+            const gcdVal = gcdFactors.reduce((a, b) => a * b, 1);
+
+            // Условие: НОД строго меньше 200
+            if (gcdVal >= 200) continue;
+
+            // 2. Определяем длины для чисел a, b, c
+            // Условия: одно 5-6, одно 3-4, одно случайное 3-6
+            const lens = [
+                getRandomInt(5, 6), 
+                getRandomInt(3, 4), 
+                getRandomInt(3, 6)
+            ];
+            // Перемешиваем длины, чтобы a, b, c не имели предсказуемую длину
+            lens.sort(() => Math.random() - 0.5);
+
+            // 3. Заполняем множители
+            let fA = [...gcdFactors];
+            let fB = [...gcdFactors];
+            let fC = [...gcdFactors];
+
+            const fillArray = (arr, targetLen) => {
+                while (arr.length < targetLen) {
+                    arr.push(getRandomEl(primesPool));
+                }
+                arr.sort((a, b) => a - b);
+            };
+
+            fillArray(fA, lens[0]);
+            fillArray(fB, lens[1]);
+            fillArray(fC, lens[2]);
+
+            // 4. ПРОВЕРКИ
+
+            // 4.1. Обязательное наличие числа 31 в любом из чисел
+            const allFactors = [...fA, ...fB, ...fC];
+            if (!allFactors.includes(31)) continue;
+
+            // 4.2. Проверка реального НОД
+            // Генерация случайных хвостов могла случайно увеличить НОД. Проверяем это.
+            const getCounts = (arr) => {
+                const c = {};
+                arr.forEach(x => c[x] = (c[x] || 0) + 1);
+                return c;
+            };
+
+            const cA = getCounts(fA);
+            const cB = getCounts(fB);
+            const cC = getCounts(fC);
+
+            // Собираем уникальные простые из всех трех чисел
+            const uniquePrimes = [...new Set(allFactors)];
+            
+            let realGcdVal = 1;
+            uniquePrimes.forEach(p => {
+                // Берем минимальную степень вхождения p во все три числа
+                const minPow = Math.min(
+                    (cA[p] || 0),
+                    (cB[p] || 0),
+                    (cC[p] || 0)
+                );
+                if (minPow > 0) {
+                    realGcdVal *= Math.pow(p, minPow);
+                }
+            });
+
+            // Если случайно сгенерированный хвост испортил НОД, пробуем снова
+            if (realGcdVal !== gcdVal) continue;
+
+            // 4.3. НОД не равен произведению наименьших простых множителей
+            // (защита от решения "взять первое число в каждой строке")
+            const minProd = fA[0] * fB[0] * fC[0];
+            if (gcdVal === minProd) continue;
+
+            // Если всё ок, возвращаем задачу
+            const formatFactors = (arr) => arr.join(' · ');
+
+            return {
+                variables: {
+                    a_factors: fA,
+                    b_factors: fB,
+                    c_factors: fC,
+                    gcd: gcdVal
+                },
+                problemText: `Найдите наибольший общий делитель трёх чисел $a$, $b$ и $c$, записанных в виде произведения простых множителей:<br><br>
+$a = ${formatFactors(fA)}$<br><br>$b = ${formatFactors(fB)}$<br><br>$c = ${formatFactors(fC)}$<br><br>
+В ответ запишите полученное натуральное число.`
+            };
+        }
+        // Если за 50000 попыток не вышло (крайне маловероятно), рекурсия
+        return this.generate();
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.gcd;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        const val = parseInt(cleanInput, 10);
+        return val === vars.gcd;
+    }
+},
+
+{
+       type: " ",
+    number: "5count26",
+    tags: ["5_класс", "НОД"],
+        generate: function() {
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const getRandomEl = (arr) => arr[getRandomInt(0, arr.length - 1)];
+        
+        // Пулы чисел
+        const groupSmall = [2, 3, 5];
+        const groupLarge = [7, 11, 13, 17, 19];
+        const extraPrimesPool = [2, 3, 5, 7, 11, 13, 17, 19]; 
+        const forbiddenGCDs = [49, 77, 91, 119, 133]; 
+
+        // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
+        const formatToPowers = (factors) => {
+            const counts = {};
+            factors.forEach(x => counts[x] = (counts[x] || 0) + 1);
+            const bases = Object.keys(counts).map(Number).sort((a, b) => a - b);
+            return bases.map(base => {
+                const power = counts[base];
+                return power > 1 ? `${base}<sup>${power}</sup>` : `${base}`;
+            }).join(' · ');
+        };
+
+        const getCounts = (arr) => {
+            const counts = {};
+            arr.forEach(x => counts[x] = (counts[x] || 0) + 1);
+            return counts;
+        };
+
+        const calculateGCDFromFactors = (arrA, arrB) => {
+            let mapA = {};
+            arrA.forEach(p => mapA[p] = (mapA[p] || 0) + 1);
+            let common = []; 
+            let uniquePrimes = [...new Set([...arrA, ...arrB])]; 
+            
+            uniquePrimes.forEach(p => {
+                const countA = mapA[p] || 0;
+                const countB = arrB.filter(x => x === p).length;
+                const minCount = Math.min(countA, countB);
+                for (let k = 0; k < minCount; k++) common.push(p);
+            });
+            return { 
+                value: common.reduce((acc, x) => acc * x, 1), 
+                factors: common 
+            };
+        };
+
+        const checkDuplicates = (arr) => new Set(arr).size !== arr.length;
+
+        // --- ГЕНЕРАТОРЫ ---
+
+        let attemptsMain = 0;
+        while (attemptsMain < 10000) {
+            attemptsMain++;
+            
+            // 1. Выбираем ОБЯЗАТЕЛЬНЫЙ большой множитель для НОД
+            const requiredLarge = getRandomEl(groupLarge);
+
+            // 2. Генерируем "Натуральное число" (Strict)
+            // Новые условия: < 1000; если > 499, то кратно 100; large входит 1 раз.
+            let factorsStrict = [];
+            let strictAttempts = 0;
+            let successStrict = false;
+            
+            while(strictAttempts < 50) {
+                strictAttempts++;
+                // Инициализируем сразу с одним большим множителем (условие: входит ровно 1 раз)
+                let f = [requiredLarge]; 
+                
+                // Добиваем малыми (2, 3, 5). 
+                // Чтобы получить шанс на 700 (7*2*2*5*5), нужно разрешить до 5-6 множителей.
+                const targetLen = getRandomInt(3, 6);
+                while(f.length < targetLen) {
+                    f.push(getRandomEl(groupSmall));
+                }
+
+                // Проверка на дубликаты (они обязаны быть)
+                if (!checkDuplicates(f)) continue;
+
+                // Вычисляем значение
+                const val = f.reduce((a, b) => a * b, 1);
+
+                // --- НОВЫЕ ПРОВЕРКИ ---
+                // 1) Число меньше 1000
+                if (val >= 1000) continue;
+
+                // 2) Если число больше 499, оно должно быть кратно 100
+                if (val > 499 && val % 100 !== 0) continue;
+
+                factorsStrict = f;
+                successStrict = true;
+                break;
+            }
+            if (!successStrict) continue;
+
+
+            // 3. Генерируем "Степенное число" (Rich)
+            // Требования: requiredLarge >= 2 раз; структурная сложность.
+            let factorsRich = [];
+            let richAttempts = 0;
+            let successRich = false;
+
+            while(richAttempts < 20) {
+                richAttempts++;
+                let f = [];
+                // Обязательно добавляем requiredLarge ДВА раза (минимум)
+                f.push(requiredLarge, requiredLarge);
+                
+                // Добавляем еще случайных простых
+                const extraBase = getRandomEl(groupSmall); 
+                f.push(extraBase, extraBase); 
+
+                const countExtras = getRandomInt(0, 3);
+                for(let i=0; i<countExtras; i++) {
+                    f.push(getRandomEl(extraPrimesPool));
+                }
+                
+                // Проверка: структурная сложность (2-3 основания со степенью > 1)
+                const c = getCounts(f);
+                let basesWithPowerGt1 = 0;
+                for (let p in c) {
+                    if (c[p] > 1) basesWithPowerGt1++;
+                }
+                
+                if (basesWithPowerGt1 < 2 || basesWithPowerGt1 > 3) continue;
+
+                factorsRich = f;
+                successRich = true;
+                break;
+            }
+            if (!successRich) continue;
+
+
+            // --- СБОРКА И ПРОВЕРКИ НОД ---
+
+            const baseGCDInfo = calculateGCDFromFactors(factorsStrict, factorsRich);
+            const baseGCD = baseGCDInfo.value;
+            const valStrict = factorsStrict.reduce((a, b) => a * b, 1);
+            const valRichApprox = factorsRich.reduce((a, b) => a * b, 1);
+
+            // 1. НОД не равен самим числам
+            if (baseGCD === valStrict || baseGCD === valRichApprox) continue;
+
+            // 2. В НОД от 2 до 4 простых множителей
+            if (baseGCDInfo.factors.length < 2 || baseGCDInfo.factors.length > 4) continue;
+
+            // 3. Large Prime в НОД (гарантировано, но проверим)
+            if (!baseGCDInfo.factors.includes(requiredLarge)) continue; 
+
+            // 4. Лимиты степеней в НОД
+            const countsGCD = getCounts(baseGCDInfo.factors);
+            let gcdPowersValid = true;
+            for (let pStr in countsGCD) {
+                const p = parseInt(pStr, 10);
+                const pow = countsGCD[p];
+                if ((p === 2 || p === 3) && pow > 3) gcdPowersValid = false;
+                else if (p === 5 && pow > 2) gcdPowersValid = false;
+                else if (p >= 7 && pow > 1) gcdPowersValid = false;
+            }
+            if (!gcdPowersValid) continue;
+
+            // 5. Разные степени вхождения (Strict=1, Rich>=2 для Large Prime это гарантирует)
+            const countsStrict = getCounts(factorsStrict);
+            const countsRich = getCounts(factorsRich);
+            if (countsStrict[requiredLarge] !== 1 || countsRich[requiredLarge] < 2) continue;
+            
+            // --- ФОРМИРОВАНИЕ ОТВЕТА ---
+
+            const showStrictAsA = Math.random() < 0.5;
+
+            factorsStrict.sort((a, b) => a - b);
+            factorsRich.sort((a, b) => a - b);
+
+            const strStrict = valStrict.toString();
+            const strRich = formatToPowers(factorsRich);
+
+            let strA, strB, factorsA, factorsB;
+
+            if (showStrictAsA) {
+                strA = strStrict;
+                strB = strRich;
+                factorsA = factorsStrict;
+                factorsB = factorsRich;
+            } else {
+                strA = strRich;
+                strB = strStrict;
+                factorsA = factorsRich;
+                factorsB = factorsStrict;
+            }
+
+            return {
+                variables: { 
+                    a_factors: factorsA, 
+                    b_factors: factorsB, 
+                    gcd: baseGCD 
+                },
+                problemText: `Найдите НОД чисел $a$ и $b$:<br><br>
+$a = ${strA}$<br>
+$b = ${strB}$<br><br>
+В ответ запишите натуральное число.`
+            };
+        }
+        return this.generate();
+    },
+
+    calculateAnswer: function(vars) {
+        return vars.gcd;
+    },
+
+    check: function(userAnswer, vars) {
+        if (!userAnswer) return false;
+        const cleanInput = userAnswer.toString().replace(/\s+/g, '');
+        const val = parseInt(cleanInput, 10);
+        return val === vars.gcd;
+    }
+},
 
 {
     type: " ",
@@ -1308,12 +3714,12 @@ b = ${strB} <br><br> В ответ запишите натуральное чи�
                 divisors: commonDivisors, 
                 answer: answerString 
             },
-            problemText: `Даны три числа, записанные в виде разложения на простые множители:
-            $$a = ${displays[0]}$$
-            $$b = ${displays[1]}$$
-            $$c = ${displays[2]}$$<br>
+            problemText: `Даны три числа, записанные в виде разложения на простые множители: <br><br>
+            $a = ${displays[0]}$<br><br>
+            $b = ${displays[1]}$<br><br>
+            $c = ${displays[2]}$<br><br>
             
-            Найдите и запишите все <b>общие делители</b> этих трёх чисел.`
+            Найдите и запишите все общие делители этих трёх чисел.`
         };
     },
 
